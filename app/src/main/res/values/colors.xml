@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">@color/grey_light</color>
+
+    <color name="black">#000000</color>
+
+    <color name="grey">#0c0c17</color>
+    <color name="grey_light">#33333D</color>
+    <color name="grey_lighter">#373740</color>
+
+    <color name="white_dark">#5F5F66</color>
+    <color name="white_ish">#E6E6E8</color>
+    <color name="white">#ffffff</color>
+
+    <color name="green_700">#007D51</color>
+    <color name="green_500">#1EB980</color>
+    <color name="green_300">#37EFBA</color>
+
+    <color name="dark_green_700">#045D56</color>
+
+    <color name="orange_300">#ff6859</color>
+    <color name="orange_200">#FF857C</color>
+    <color name="orange_50">#FFD7D0</color>
+
+    <color name="yellow_500">#FFAC12</color>
+    <color name="yellow_300">#ffcf44</color>
+    <color name="yellow_200">#FFDC78</color>
+
+    <color name="purple_300">#A932FF</color>
+    <color name="purple_200">#b15dff</color>
+    <color name="purple_50">#DECAF7</color>
+
+    <color name="blue_700">#0082FB</color>
+    <color name="blue_200">#72deff</color>
+    <color name="blue_100">#B2F2FF</color>
+</resources>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.rates.RatesFragment">
+
+    <data>
+
+        <import type="androidx.core.content.ContextCompat" />
+
+        <variable
+            name="position"
+            type="int" />
+
+        <variable
+            name="model"
+            type="ro.edi.xbnr.ui.rates.RatesViewModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/currency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+        <!--android:onClick="@{() -> viewModel.onItemClick(position)}"-->
+
+        <ImageView
+            android:id="@+id/currency_flag"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@{ContextCompat.getDrawable(context, model.getCurrencyIconRes(position))}"
+            tools:src="@drawable/ic_flag_usd" />
+
+        <!--app:imageUrl='@{viewModel.images[viewModel.getDogBreedAt(position).breed]}'-->
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/currency_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_condensed_medium"
+                android:includeFontPadding="false"
+                android:text="@{model.getCurrency(position).code}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                tools:text="USD" />
+
+            <TextView
+                android:id="@+id/currency_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:lines="1"
+                android:text="@{model.getCurrencyNameRes(position)}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                tools:text="US Dollar" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/currency_ron"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/eczar_regular"
+            android:paddingStart="3sp"
+            android:paddingTop="3sp"
+            android:paddingEnd="3sp"
+            android:text="@string/symbol_ron"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:textColor="@color/white_dark" />
+
+        <TextView
+            android:id="@+id/currency_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/eczar_medium"
+            android:text="@{String.valueOf(model.getCurrency(position).rate)}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            tools:text="4.1235" />
+    </LinearLayout>
+</layout>

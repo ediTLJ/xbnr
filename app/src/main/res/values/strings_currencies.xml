@@ -1,0 +1,71 @@
+<resources>
+    <string name="name_aed">United Arab Emirates dirham</string>
+    <string name="name_aud">Australian dollar</string>
+    <string name="name_bgn">Bulgarian lev</string>
+    <string name="name_brl">Brazilian real</string>
+    <string name="name_cad">Canadian dollar</string>
+    <string name="name_chf">Swiss franc</string>
+    <string name="name_cny">Chinese yuan</string>
+    <string name="name_czk">Czech koruna</string>
+    <string name="name_dkk">Danish krone</string>
+    <string name="name_egp">Egyptian pound</string>
+    <string name="name_eur">Euro</string>
+    <string name="name_gbp">British pound</string>
+    <string name="name_hrk">Croatian kuna</string>
+    <string name="name_huf">Hungarian forint</string>
+    <string name="name_inr">Indian rupee</string>
+    <string name="name_jpy">Japanese yen</string>
+    <string name="name_krw">South Korean won</string>
+    <string name="name_mdl">Moldovan leu</string>
+    <string name="name_mxn">Mexican peso</string>
+    <string name="name_nok">Norwegian krone</string>
+    <string name="name_nzd">New Zealand dollar</string>
+    <string name="name_pln">Polish złoty</string>
+    <string name="name_rsd">Serbian dinar</string>
+    <string name="name_rub">Russian ruble</string>
+    <string name="name_sek">Swedish krona</string>
+    <string name="name_thb">Thai baht</string>
+    <string name="name_try">Turkish lira</string>
+    <string name="name_uah">Ukrainian hryvnia</string>
+    <string name="name_usd">United States dollar</string>
+    <string name="name_xau">Gold (1 gram)</string>
+    <string name="name_xdr">SDR</string>
+    <string name="name_zar">South African rand</string>
+    <string name="name_ron">Romanian leu</string>
+    <string name="name_default" />
+
+    <string name="symbol_aed" translatable="false">د.إ</string>
+    <string name="symbol_aud" translatable="false">$</string>
+    <string name="symbol_bgn" translatable="false">лв</string>
+    <string name="symbol_brl" translatable="false">R$</string>
+    <string name="symbol_cad" translatable="false">	$</string>
+    <string name="symbol_chf" translatable="false">Fr</string>
+    <string name="symbol_cny" translatable="false">¥</string>
+    <string name="symbol_czk" translatable="false">Kč</string>
+    <string name="symbol_dkk" translatable="false">kr</string>
+    <string name="symbol_egp" translatable="false">£</string>
+    <string name="symbol_eur" translatable="false">€</string>
+    <string name="symbol_gbp" translatable="false">£</string>
+    <string name="symbol_hrk" translatable="false">kn</string>
+    <string name="symbol_huf" translatable="false">Ft</string>
+    <string name="symbol_inr" translatable="false">₹</string>
+    <string name="symbol_jpy" translatable="false">¥</string>
+    <string name="symbol_krw" translatable="false">₩</string>
+    <string name="symbol_mdl" translatable="false">L</string>
+    <string name="symbol_mxn" translatable="false">$</string>
+    <string name="symbol_nok" translatable="false">kr</string>
+    <string name="symbol_nzd" translatable="false">$</string>
+    <string name="symbol_pln" translatable="false">zł</string>
+    <string name="symbol_rsd" translatable="false">din.</string>
+    <string name="symbol_rub" translatable="false">₽</string>
+    <string name="symbol_sek" translatable="false">kr</string>
+    <string name="symbol_thb" translatable="false">฿</string>
+    <string name="symbol_try" translatable="false">₺</string>
+    <string name="symbol_uah" translatable="false">₴</string>
+    <string name="symbol_usd" translatable="false">$</string>
+    <string name="symbol_xau" translatable="false">g</string>
+    <string name="symbol_xdr" translatable="false">SDR</string>
+    <string name="symbol_zar" translatable="false">R</string>
+    <string name="symbol_ron" translatable="false">lei</string>
+    <string name="symbol_default" translatable="false" />
+</resources>

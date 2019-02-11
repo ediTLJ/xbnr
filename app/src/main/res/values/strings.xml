@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">xbnr</string>
+
+    <string name="exchange_rates">Exchange Rates</string>
+
+    <string name="no_data_found">No data found.</string>
+</resources>
