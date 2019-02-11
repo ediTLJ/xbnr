@@ -2,7 +2,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.rates.RatesFragment">
+    tools:context=".ui.RatesFragment">
 
     <data>
 
@@ -14,7 +14,7 @@
 
         <variable
             name="model"
-            type="ro.edi.xbnr.ui.rates.RatesViewModel" />
+            type="ro.edi.xbnr.ui.viewmodel.RatesViewModel" />
     </data>
 
     <LinearLayout

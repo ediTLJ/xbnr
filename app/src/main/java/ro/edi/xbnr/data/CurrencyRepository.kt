@@ -9,6 +9,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ro.edi.xbnr.data.model.Rates
 
 object CurrencyRepository {
     // private const val TAG = "CURRENCY.REPO"

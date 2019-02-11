@@ -1,10 +1,10 @@
-package ro.edi.xbnr.ui.rates
+package ro.edi.xbnr.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import ro.edi.xbnr.data.Currency
+import ro.edi.xbnr.data.model.Currency
 import ro.edi.xbnr.data.CurrencyRepository
-import ro.edi.xbnr.data.Rates
+import ro.edi.xbnr.data.model.Rates
 import ro.edi.xbnr.util.Helper
 
 class RatesViewModel internal constructor() : ViewModel() {

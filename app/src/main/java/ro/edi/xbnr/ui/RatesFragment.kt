@@ -1,4 +1,4 @@
-package ro.edi.xbnr.ui.rates
+package ro.edi.xbnr.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.RatesFragmentBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
+import ro.edi.xbnr.ui.viewmodel.RatesViewModel
 
 class RatesFragment : Fragment() {
     private var ratesModel: RatesViewModel? = null

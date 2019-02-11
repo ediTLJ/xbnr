@@ -1,4 +1,4 @@
-package ro.edi.xbnr.data
+package ro.edi.xbnr.data.model
 
 class Currency {
     lateinit var code: String
