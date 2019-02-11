@@ -8,11 +8,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import ro.edi.xbnr.data.model.Rates
+import retrofit2.converter.moshi.MoshiConverterFactory
+import ro.edi.xbnr.data.model.BnrRates
 
-object CurrencyRepository {
-    // private const val TAG = "CURRENCY.REPO"
+object RatesManager {
+    // private const val TAG = "RATES.MANAGER"
 
     private const val API_BASE_URL = "https://xbnr-api.herokuapp.com/"
     // private const val API_KEY = "whatever" // FIXME
@@ -41,27 +41,26 @@ object CurrencyRepository {
 
         bnrService = Retrofit.Builder()
             .baseUrl(API_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
             .client(clientBuilder.build())
             .build()
             .create(BnrService::class.java)
     }
 
-    fun getLatestRates(): LiveData<Rates> {
-        val data = MutableLiveData<Rates>()
-        // data.value = Rates() // FIXME hmm...
+    fun getLatestRates(): LiveData<BnrRates> {
+        val data = MutableLiveData<BnrRates>()
 
-        bnrService.latestRates.enqueue(object : Callback<Rates> {
-            override fun onResponse(call: Call<Rates>, response: Response<Rates>) {
+        bnrService.latestRates.enqueue(object : Callback<BnrRates> {
+            override fun onResponse(call: Call<BnrRates>, response: Response<BnrRates>) {
                 val rates = response.body() ?: return
 
                 // FIXME check rates date
                 data.value = rates
             }
 
-            override fun onFailure(call: Call<Rates>, t: Throwable) {
+            override fun onFailure(call: Call<BnrRates>, t: Throwable) {
                 // FIXME show error
-                data.value = Rates()
+                data.value = BnrRates(null, null)
             }
         })
         return data
