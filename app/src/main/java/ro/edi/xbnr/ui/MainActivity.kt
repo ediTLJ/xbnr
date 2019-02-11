@@ -1,6 +1,8 @@
 package ro.edi.xbnr.ui
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import ro.edi.xbnr.R
@@ -13,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.title = getString(R.string.exchange_rates).toUpperCase()
+        toolbar.title = ""
         setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
@@ -25,5 +27,17 @@ class MainActivity : AppCompatActivity() {
         // FIXME
         // val f: RatesFragment = supportFragmentManager.findFragmentById(R.code.container) as RatesFragment
         toolbar.subtitle = "2019-01-10" // f.ratesModel?.getRates()?.value?.date
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_info -> TODO("add info popup")
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 }

@@ -12,12 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/grey_light"
-        android:gravity="center_vertical"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:theme="@style/ToolbarTheme"
-        app:navigationIcon="@drawable/ic_action_rates"
-        app:titleMarginStart="10dp" />
+        app:logo="@drawable/logo"
+        app:logoDescription="@string/exchange_rates"
+        app:subtitleTextColor="@color/white_dark"
+        app:titleMarginStart="16dp"
+        app:titleMarginTop="28dp" />
 
     <FrameLayout
         android:id="@+id/container"
