@@ -4,6 +4,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class BnrRates(
-    var date: String?,
-    var currencies: List<BnrCurrency>?
+    val date: String?,
+    val currencies: List<BnrCurrency>?
 )

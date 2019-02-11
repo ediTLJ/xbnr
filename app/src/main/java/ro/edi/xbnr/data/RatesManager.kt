@@ -54,6 +54,9 @@ object RatesManager {
             override fun onResponse(call: Call<BnrRates>, response: Response<BnrRates>) {
                 val rates = response.body() ?: return
 
+                rates.date ?: return
+                rates.currencies ?: return
+
                 // FIXME check rates date
                 data.value = rates
             }

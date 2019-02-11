@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class BnrCurrency(
-    var code: String,
-    var factor: Int = 0,
-    var rate: Double = 0.0
+    val code: String,
+    val factor: Int = 0,
+    val rate: Double
 )
