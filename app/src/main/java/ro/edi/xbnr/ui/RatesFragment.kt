@@ -17,8 +17,6 @@ import ro.edi.xbnr.ui.viewmodel.RatesViewModel
 class RatesFragment : Fragment() {
     private val ratesModel: RatesViewModel by lazy {
         ViewModelProviders.of(this).get(RatesViewModel::class.java)
-    }.apply {
-
     }
 
     companion object {
@@ -47,12 +45,12 @@ class RatesFragment : Fragment() {
         val adapter = RatesAdapter(ratesModel)
         adapter.setHasStableIds(true)
 
-        ratesModel.getRates()
+        ratesModel.getCurrencies()
             .observe(this, Observer {
                 binding.loading.hide()
 
                 // FIXME replace with databinding
-                if (it.currencies.isNullOrEmpty()) {
+                if (it.isNullOrEmpty()) {
                     binding.empty.visibility = View.VISIBLE
                     binding.rates.visibility = View.GONE
                 } else {
@@ -60,6 +58,9 @@ class RatesFragment : Fragment() {
                     binding.rates.visibility = View.VISIBLE
                 }
                 adapter.notifyDataSetChanged()
+
+                (activity as MainActivity).supportActionBar?.subtitle =
+                    ratesModel.getCurrency(0)?.date
             })
 
         // binding.model = ratesModel

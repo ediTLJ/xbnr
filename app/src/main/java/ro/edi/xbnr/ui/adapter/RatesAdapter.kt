@@ -8,15 +8,15 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
     BaseAdapter() {
 
     override fun getItemId(position: Int): Long {
-        return ratesModel.getCurrency(position).hashCode().toLong()
-    }
-
-    override fun getItemCount(): Int {
-        ratesModel.getRates().value?.currencies?.let {
-            return it.size
+        ratesModel.getCurrency(position)?.let {
+            return it.id.toLong()
         }
 
         return 0
+    }
+
+    override fun getItemCount(): Int {
+        return ratesModel.getCurrencies().value?.size ?: 0
     }
 
     override fun getModel(): ViewModel {
