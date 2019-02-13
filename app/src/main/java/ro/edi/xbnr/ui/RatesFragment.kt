@@ -45,7 +45,7 @@ class RatesFragment : Fragment() {
         val adapter = RatesAdapter(ratesModel)
         adapter.setHasStableIds(true)
 
-        ratesModel.getCurrencies()
+        ratesModel.currencies
             .observe(this, Observer {
                 binding.loading.hide()
 

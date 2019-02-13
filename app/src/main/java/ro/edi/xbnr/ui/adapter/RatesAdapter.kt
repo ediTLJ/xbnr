@@ -16,7 +16,7 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
     }
 
     override fun getItemCount(): Int {
-        return ratesModel.getCurrencies().value?.size ?: 0
+        return ratesModel.currencies.value?.size ?: 0
     }
 
     override fun getModel(): ViewModel {
