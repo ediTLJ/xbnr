@@ -1,4 +1,4 @@
-package ro.edi.xbnr.data.model
+package ro.edi.xbnr.data.remote.model
 
 import com.squareup.moshi.JsonClass
 

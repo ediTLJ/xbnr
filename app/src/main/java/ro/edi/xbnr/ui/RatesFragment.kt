@@ -15,7 +15,11 @@ import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
 
 class RatesFragment : Fragment() {
-    private var ratesModel: RatesViewModel? = null
+    private val ratesModel: RatesViewModel by lazy {
+        ViewModelProviders.of(this).get(RatesViewModel::class.java)
+    }.apply {
+
+    }
 
     companion object {
         fun newInstance(): RatesFragment {
@@ -40,12 +44,10 @@ class RatesFragment : Fragment() {
             R.layout.rates_fragment, container, false
         )
 
-        ratesModel = ViewModelProviders.of(this).get(RatesViewModel::class.java)
-
-        val adapter = RatesAdapter(ratesModel!!)
+        val adapter = RatesAdapter(ratesModel)
         adapter.setHasStableIds(true)
 
-        ratesModel!!.getRates()
+        ratesModel.getRates()
             .observe(this, Observer {
                 binding.loading.hide()
 

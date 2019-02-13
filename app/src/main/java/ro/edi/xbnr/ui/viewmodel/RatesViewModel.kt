@@ -1,18 +1,19 @@
 package ro.edi.xbnr.ui.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import ro.edi.xbnr.data.RatesManager
-import ro.edi.xbnr.data.model.BnrCurrency
-import ro.edi.xbnr.data.model.BnrRates
+import ro.edi.xbnr.data.DataManager
+import ro.edi.xbnr.data.remote.model.BnrCurrency
+import ro.edi.xbnr.data.remote.model.BnrRates
 import ro.edi.xbnr.util.Helper
 
-class RatesViewModel internal constructor() : ViewModel() {
+class RatesViewModel(application: Application) : AndroidViewModel(application) {
     private var rates: LiveData<BnrRates>? = null
 
     fun getRates(): LiveData<BnrRates> {
         if (rates == null) {
-            rates = RatesManager.getLatestRates()
+            rates = DataManager.getInstance(getApplication()).getLatestRates()
         }
         return rates as LiveData<BnrRates>
     }

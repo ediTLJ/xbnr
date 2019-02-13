@@ -1,27 +1,32 @@
 package ro.edi.xbnr.data
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ro.edi.xbnr.data.model.BnrRates
+import ro.edi.xbnr.data.db.RatesDatabase
+import ro.edi.xbnr.data.db.entity.Rates
+import ro.edi.xbnr.data.remote.BnrService
+import ro.edi.xbnr.data.remote.model.BnrRates
+import ro.edi.xbnr.util.SingletonHolder
 
-object RatesManager {
+class DataManager private constructor(application: Application) {
     // private const val TAG = "RATES.MANAGER"
-
-    // simple in-memory cache
-    // private UserCache userCache;
-
-    //        LiveData<User> cached = userCache.get(userId);
-    //        if (cached != null) {
-    //            return cached;
-    //        }
-    //        userCache.put(userId, data);
+    // private val db: RatesDatabase = RatesDatabase.getInstance(application)
 
     init {
-
+        // ...
     }
+
+    companion object : SingletonHolder<DataManager, Application>(::DataManager)
+
+//    fun getRates(): LiveData<List<Rates>> {
+//        getLatestRates()
+//
+//        return db.currencyDao().getRates()
+//    }
 
     fun getLatestRates(): LiveData<BnrRates> {
         val data = MutableLiveData<BnrRates>()
@@ -45,11 +50,3 @@ object RatesManager {
         return data
     }
 }
-
-//class RatesManager private constructor(context: Context) {
-//    init {
-//        // init using context argument
-//    }
-//
-//    companion object : SingletonHolder<RatesManager, Context>(::RatesManager)
-//}

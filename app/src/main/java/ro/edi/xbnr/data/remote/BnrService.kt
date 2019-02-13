@@ -1,4 +1,4 @@
-package ro.edi.xbnr.data
+package ro.edi.xbnr.data.remote
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -6,7 +6,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
-import ro.edi.xbnr.data.model.BnrRates
+import ro.edi.xbnr.data.remote.model.BnrRates
 
 interface BnrService {
     @get:GET("rates/latest")
