@@ -24,9 +24,7 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 
-        // FIXME
-        // val f: RatesFragment = supportFragmentManager.findFragmentById(R.code.container) as RatesFragment
-        toolbar.subtitle = "2019-01-10" // f.ratesModel?.getRates()?.value?.date
+        toolbar.subtitle = "2019-01-10" // FIXME
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
