@@ -23,8 +23,6 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, RatesFragment.newInstance())
                 .commitNow()
         }
-
-        toolbar.subtitle = "2019-01-10" // FIXME
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

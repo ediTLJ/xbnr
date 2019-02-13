@@ -45,13 +45,15 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:1.0.2"
     implementation "androidx.core:core-ktx:1.0.1"
+    // implementation "android.arch.work:work-runtime-ktx:1.0.0-beta05"
+
     implementation "androidx.recyclerview:recyclerview:1.0.0"
     implementation 'com.google.android.material:material:1.0.0'
 
     // Architecture Components: LiveData, ViewModel...
-    // implementation "androidx.lifecycle:lifecycle-common-java8:2.0.0"
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
 
     // Data Binding
     kapt "com.android.databinding:compiler:3.1.4"
@@ -59,10 +61,6 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:2.0.0"
     kapt "androidx.room:room-compiler:2.0.0"
-
-    // Dagger
-    // implementation "com.google.dagger:dagger:2.20"
-    // annotationProcessor "com.google.dagger:dagger-compiler:2.20"
 
     // OkHttp
     implementation "com.squareup.okhttp3:okhttp:3.12.1"
@@ -81,6 +79,7 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:2.0.0"
     testImplementation "androidx.room:room-testing:2.0.0"
     androidTestImplementation "androidx.arch.core:core-testing:2.0.0"
+    // androidTestImplementation "android.arch.work:work-testing:1.0.0-beta05"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:3.1.1"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.1.1"
     androidTestImplementation "androidx.test.espresso:espresso-intents:3.1.1"

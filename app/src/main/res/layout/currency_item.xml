@@ -31,10 +31,9 @@
             android:id="@+id/currency_flag"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:contentDescription="@{model.getCurrency(position).code}"
             android:src="@{ContextCompat.getDrawable(context, model.getCurrencyIconRes(position))}"
             tools:src="@drawable/ic_flag_usd" />
-
-        <!--app:imageUrl='@{viewModel.images[viewModel.getDogBreedAt(position).breed]}'-->
 
         <LinearLayout
             android:layout_width="0dp"
