@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import ro.edi.xbnr.BR
 
-abstract class BaseAdapter() :
+abstract class BaseAdapter :
     RecyclerView.Adapter<BaseAdapter.BaseViewHolder>() {
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {

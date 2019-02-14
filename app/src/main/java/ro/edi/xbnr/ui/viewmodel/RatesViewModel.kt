@@ -13,7 +13,7 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getCurrency(position: Int): Currency? {
-        return currencies.value?.get(position)
+        return currencies.value?.getOrNull(position)
     }
 
     fun getCurrencyIconRes(position: Int): Int {

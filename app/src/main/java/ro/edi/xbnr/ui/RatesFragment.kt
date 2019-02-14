@@ -20,6 +20,8 @@ class RatesFragment : Fragment() {
     }
 
     companion object {
+        // private const val TAG = "RATES.FRAGMENT"
+
         fun newInstance(): RatesFragment {
             return RatesFragment()
         }
@@ -56,11 +58,12 @@ class RatesFragment : Fragment() {
                 } else {
                     binding.empty.visibility = View.GONE
                     binding.rates.visibility = View.VISIBLE
-                }
-                adapter.notifyDataSetChanged()
 
-                (activity as MainActivity).supportActionBar?.subtitle =
-                    ratesModel.getCurrency(0)?.date
+                    adapter.notifyDataSetChanged()
+
+                    (activity as MainActivity).supportActionBar?.subtitle =
+                        ratesModel.getCurrency(0)?.date
+                }
             })
 
         // binding.model = ratesModel
