@@ -5,6 +5,6 @@ import androidx.room.ColumnInfo
 data class CurrencyMinimal(
     val id: Int,
     val code: String,
-    val factor: Int = 0,
+    val multiplier: Int = 0,
     @ColumnInfo(name = "is_favorite", index = true) var isFavorite: Boolean = false
 )

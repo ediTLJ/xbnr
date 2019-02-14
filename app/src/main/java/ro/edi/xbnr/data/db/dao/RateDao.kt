@@ -18,7 +18,7 @@ abstract class RateDao : BaseDao<DbRate> {
 //    order by id;
 
     @Transaction
-    @Query("SELECT currency_id, code, factor, is_favorite, date, rate FROM rates LEFT OUTER JOIN currencies ON (rates.currency_id = currencies.id) ORDER BY date DESC LIMIT (SELECT count(*) FROM currencies)")
+    @Query("SELECT currency_id, code, multiplier, is_favorite, date, rate FROM rates LEFT OUTER JOIN currencies ON (rates.currency_id = currencies.id) ORDER BY date DESC LIMIT (SELECT count(*) FROM currencies)")
     protected abstract fun query(): LiveData<List<Currency>>
 
     @Transaction
