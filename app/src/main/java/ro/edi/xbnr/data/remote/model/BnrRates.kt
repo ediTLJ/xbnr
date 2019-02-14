@@ -1,9 +1,17 @@
 package ro.edi.xbnr.data.remote.model
 
-import com.squareup.moshi.JsonClass
+import com.tickaroo.tikxml.annotation.Attribute
+import com.tickaroo.tikxml.annotation.Element
+import com.tickaroo.tikxml.annotation.Path
+import com.tickaroo.tikxml.annotation.Xml
 
-@JsonClass(generateAdapter = true)
+@Xml(name = "DataSet")
 data class BnrRates(
-    val date: String?,
+    @Path("Body/Cube")
+    @Attribute val
+    date: String?,
+
+    @Path("Body/Cube")
+    @Element
     val currencies: List<BnrCurrency>?
 )
