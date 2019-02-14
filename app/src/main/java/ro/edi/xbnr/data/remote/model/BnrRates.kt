@@ -8,8 +8,8 @@ import com.tickaroo.tikxml.annotation.Xml
 @Xml(name = "DataSet")
 data class BnrRates(
     @Path("Body/Cube")
-    @Attribute val
-    date: String?,
+    @Attribute
+    val date: String?,
 
     @Path("Body/Cube")
     @Element

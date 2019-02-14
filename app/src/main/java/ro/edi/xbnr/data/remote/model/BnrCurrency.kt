@@ -10,7 +10,7 @@ data class BnrCurrency(
     val code: String,
 
     @Attribute
-    val multiplier: Int = 0,
+    val multiplier: Int = 1,
 
     @TextContent
     val rate: String

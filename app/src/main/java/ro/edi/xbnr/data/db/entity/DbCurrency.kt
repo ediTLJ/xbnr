@@ -8,6 +8,6 @@ import androidx.room.PrimaryKey
 data class DbCurrency(
     @PrimaryKey val id: Int,
     val code: String,
-    val multiplier: Int = 0,
-    @ColumnInfo(name = "is_favorite", index = true) var isFavorite: Boolean = false
+    val multiplier: Int = 1,
+    @ColumnInfo(name = "is_favorite", index = true) val isFavorite: Boolean = false
 )

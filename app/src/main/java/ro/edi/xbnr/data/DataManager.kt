@@ -71,7 +71,10 @@ class DataManager private constructor(application: Application) {
                         Log.i(TAG, "currency: ", currency)
                         val id: Int = currency.code.hashCode()
 
-                        val dbCurrency = DbCurrency(id, currency.code, currency.multiplier, false)
+                        // apparently the tikXML library ignores the default value set in the model
+                        val multiplier = if (currency.multiplier > 0) currency.multiplier else 1
+
+                        val dbCurrency = DbCurrency(id, currency.code, multiplier, false)
                         db.currencyDao().insert(dbCurrency)
 
                         val dbRate = DbRate(0, id, rates.date, currency.rate.toDouble())

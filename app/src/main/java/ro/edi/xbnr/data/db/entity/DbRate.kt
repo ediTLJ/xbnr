@@ -15,7 +15,7 @@ import androidx.room.ForeignKey.CASCADE
 )
 data class DbRate(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo(name = "currency_id") var currencyId: Int,
+    @ColumnInfo(name = "currency_id") val currencyId: Int,
     val date: String,
     val rate: Double
 )
