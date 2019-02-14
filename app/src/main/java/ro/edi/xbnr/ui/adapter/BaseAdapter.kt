@@ -11,7 +11,7 @@ import ro.edi.xbnr.BR
 abstract class BaseAdapter() :
     RecyclerView.Adapter<BaseAdapter.BaseViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             layoutInflater, viewType, parent, false
@@ -19,11 +19,11 @@ abstract class BaseAdapter() :
         return BaseViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    final override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         holder.bind(getModel(), position)
     }
 
-    override fun getItemViewType(position: Int): Int {
+    final override fun getItemViewType(position: Int): Int {
         return getItemLayoutId(position)
     }
 

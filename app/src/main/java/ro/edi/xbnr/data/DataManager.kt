@@ -7,7 +7,7 @@ import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
 import ro.edi.xbnr.model.Currency
-import ro.edi.xbnr.util.SingletonHolder
+import ro.edi.xbnr.util.Singleton
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -26,15 +26,20 @@ import java.util.concurrent.Executors
 class DataManager private constructor(application: Application) {
     // private const val TAG = "RATES.MANAGER"
 
-    private val db: RatesDatabase = RatesDatabase.getInstance(application)
-    private val executor: ExecutorService = Executors.newSingleThreadExecutor()
+    private val db: RatesDatabase by lazy { RatesDatabase.getInstance(application) }
+    private val executor: ExecutorService by lazy { Executors.newSingleThreadExecutor() }
 
     init {
         // ...
     }
 
-    companion object : SingletonHolder<DataManager, Application>(::DataManager)
+    companion object : Singleton<DataManager, Application>(::DataManager)
 
+    /**
+     * Get latest available rates.
+     *
+     * This also triggers a call to get latest data from the server, if needed.
+     */
     fun getRates(): LiveData<List<Currency>> {
         fetchLatestRates()
 

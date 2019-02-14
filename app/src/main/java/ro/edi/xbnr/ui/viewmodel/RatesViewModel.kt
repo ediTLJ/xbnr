@@ -2,12 +2,13 @@ package ro.edi.xbnr.ui.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.util.Helper
 
 class RatesViewModel(application: Application) : AndroidViewModel(application) {
-    val currencies by lazy {
+    val currencies: LiveData<List<Currency>> by lazy(LazyThreadSafetyMode.NONE) {
         DataManager.getInstance(getApplication()).getRates()
     }
 

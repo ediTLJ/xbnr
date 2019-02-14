@@ -15,7 +15,7 @@ import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
 
 class RatesFragment : Fragment() {
-    private val ratesModel: RatesViewModel by lazy {
+    private val ratesModel: RatesViewModel by lazy(LazyThreadSafetyMode.NONE) {
         ViewModelProviders.of(this).get(RatesViewModel::class.java)
     }
 

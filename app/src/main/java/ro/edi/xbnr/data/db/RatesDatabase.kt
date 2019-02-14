@@ -8,14 +8,14 @@ import ro.edi.xbnr.data.db.dao.CurrencyDao
 import ro.edi.xbnr.data.db.dao.RateDao
 import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
-import ro.edi.xbnr.util.SingletonHolder
+import ro.edi.xbnr.util.Singleton
 
 @Database(entities = [DbCurrency::class, DbRate::class], version = 1, exportSchema = false)
 abstract class RatesDatabase : RoomDatabase() {
     abstract fun currencyDao(): CurrencyDao
     abstract fun rateDao(): RateDao
 
-    companion object : SingletonHolder<RatesDatabase, Application>({
+    companion object : Singleton<RatesDatabase, Application>({
         Room.databaseBuilder(it, RatesDatabase::class.java, "rates.db")
             .fallbackToDestructiveMigration().build()
     })
