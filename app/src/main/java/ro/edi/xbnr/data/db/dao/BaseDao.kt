@@ -25,19 +25,6 @@ interface BaseDao<T> {
         if (id == -1L) update(obj)
     }
 
-    // FIXME this apparently doesn't work... huh?!
-//    @Transaction
-//    fun insertOrUpdate(objList: List<T>) {
-//        val insertResult = insert(objList)
-//        val updateList = mutableListOf<T>()
-//
-//        for (i in insertResult.indices) {
-//            if (insertResult[i] == -1L) updateList.add(objList[i])
-//        }
-//
-//        if (!updateList.isEmpty()) update(updateList)
-//    }
-
     @Delete
     fun delete(obj: T)
 

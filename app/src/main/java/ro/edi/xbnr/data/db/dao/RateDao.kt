@@ -11,7 +11,7 @@ import ro.edi.xbnr.model.RateMinimal
 @Dao
 abstract class RateDao : BaseDao<DbRate> {
     @Transaction
-    @Query("SELECT currency_id, code, multiplier, is_favorite, date, rate FROM rates LEFT OUTER JOIN currencies ON (rates.currency_id = currencies.id) WHERE date = (SELECT MAX(date) FROM rates) ORDER BY code ASC")
+    @Query("SELECT currency_id, code, multiplier, is_favorite, date, rate FROM rates LEFT OUTER JOIN currencies ON rates.currency_id = currencies.id WHERE date = (SELECT MAX(date) FROM rates) ORDER BY code ASC")
     protected abstract fun query(): LiveData<List<Currency>>
 
     @Transaction
