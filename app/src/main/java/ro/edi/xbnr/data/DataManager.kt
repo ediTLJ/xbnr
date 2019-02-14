@@ -2,7 +2,7 @@ package ro.edi.xbnr.data
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import ro.edi.xbnr.data.db.RatesDatabase
+import ro.edi.xbnr.data.db.AppDatabase
 import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
@@ -26,7 +26,7 @@ import java.util.concurrent.Executors
  * **This shouldn't expose any of the underlying data to the application layers above.**
  */
 class DataManager private constructor(application: Application) {
-    private val db: RatesDatabase by lazy { RatesDatabase.getInstance(application) }
+    private val db: AppDatabase by lazy { AppDatabase.getInstance(application) }
     private val executor: ExecutorService by lazy { Executors.newSingleThreadExecutor() }
 
     init {
