@@ -7,13 +7,20 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.GET
-import ro.edi.xbnr.data.remote.model.BnrRates
+import retrofit2.http.Path
+import ro.edi.xbnr.data.remote.model.BnrDays
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLSession
 
 interface BnrService {
     @get:GET("nbrfxrates.xml")
-    val latestRates: Call<BnrRates>
+    val latestRates: Call<BnrDays>
+
+    @get:GET("nbrfxrates10days.xml")
+    val last10Rates: Call<BnrDays>
+
+    @GET("/files/xml/years/nbrfxrates{year}.xml")
+    fun rates(@Path("year") year: Int): Call<BnrDays>
 
     companion object {
         private const val API_BASE_URL = "https://bnr.ro/"

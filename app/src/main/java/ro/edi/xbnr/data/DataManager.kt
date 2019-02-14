@@ -43,43 +43,67 @@ class DataManager private constructor(application: Application) {
      * This also triggers a call to get latest data from the server, if needed.
      */
     fun getRates(): LiveData<List<Currency>> {
-        fetchLatestRates()
+        // FIXME add date conditions, for example:
+        // #1 after 1pm and rateDao().getRates() returns a previous workday => fetchLatestRates()
+        // OR
+        // #2  rateDao().getRates() returns an older workday => fetchRates(int count), where days == days count
 
+        fetchRates(10)
+
+        // FIXME is the db query done async?
         return db.rateDao().getRates()
     }
 
-    private fun fetchLatestRates() {
+    /**
+     * Get all rates for the specified interval.
+     *
+     * @param interval
+     *     1 => 1 day (latest rates)
+     *     10 => 10 days (last 10 days)
+     *     2005 or more => year 2005 or more
+     *     other => 1 day (latest rates)
+     */
+    private fun fetchRates(interval: Int) {
         executor.execute {
-            // FIXME add date conditions, for example:
-            // #1 after 1pm and rateDao().getRates() returns a previous workday => fetchLatestRates()
-            // OR
-            // #2  rateDao().getRates() returns an older workday => fetchRates(int count), where days == days count
 
-            val response =
-                kotlin.runCatching { BnrService.instance.latestRates.execute() }.getOrNull()
+            val call =
+                when (interval) {
+                    1 -> BnrService.instance.latestRates
+                    10 -> BnrService.instance.last10Rates
+                    in 2005..Int.MAX_VALUE -> BnrService.instance.rates(interval)
+                    else -> BnrService.instance.latestRates
+                }
+
+            val response = runCatching { call.execute() }.getOrNull()
             response ?: return@execute
 
             if (response.isSuccessful) {
-                val rates = response.body() ?: return@execute
-
-                logd(TAG, "rates: ", rates)
-
-                rates.date ?: return@execute
-                rates.currencies ?: return@execute
+                val days = response.body() ?: return@execute
+                days.ratesList ?: return@execute
 
                 db.runInTransaction {
-                    for (currency in rates.currencies) {
-                        logd(TAG, "currency: ", currency)
-                        val id: Int = currency.code.hashCode()
+                    for (rates in days.ratesList) {
+                        rates.date ?: return@runInTransaction
+                        rates.currencies ?: return@runInTransaction
 
-                        // apparently the tikXML library ignores the default value set in the model
-                        val multiplier = if (currency.multiplier > 0) currency.multiplier else 1
+                        logd(TAG, "date: ", rates.date)
 
-                        val dbCurrency = DbCurrency(id, currency.code, multiplier, false)
-                        db.currencyDao().insert(dbCurrency)
+                        for (currency in rates.currencies) {
+                            // logd(TAG, "currency: ", currency)
+                            val id: Int = currency.code.hashCode()
 
-                        val dbRate = DbRate(0, id, rates.date, currency.rate.toDouble())
-                        db.rateDao().insert(dbRate)
+                            // the tikXML library ignores the default value set in the model
+                            val multiplier = if (currency.multiplier > 0) currency.multiplier else 1
+
+                            // some rates are missing (having the "-" value, for example)
+                            currency.rate.toDoubleOrNull()?.let {
+                                val dbCurrency = DbCurrency(id, currency.code, multiplier, false)
+                                db.currencyDao().insert(dbCurrency)
+
+                                val dbRate = DbRate(0, id, rates.date, it)
+                                db.rateDao().insert(dbRate)
+                            } // else skip this currency rate
+                        }
                     }
                 }
             } else {
