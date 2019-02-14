@@ -7,8 +7,9 @@ import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
 import ro.edi.xbnr.model.Currency
-import ro.edi.xbnr.util.Log
 import ro.edi.xbnr.util.Singleton
+import ro.edi.xbnr.util.logd
+import ro.edi.xbnr.util.loge
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -61,14 +62,14 @@ class DataManager private constructor(application: Application) {
             if (response.isSuccessful) {
                 val rates = response.body() ?: return@execute
 
-                Log.i(TAG, "rates: ", rates)
+                logd(TAG, "rates: ", rates)
 
                 rates.date ?: return@execute
                 rates.currencies ?: return@execute
 
                 db.runInTransaction {
                     for (currency in rates.currencies) {
-                        Log.i(TAG, "currency: ", currency)
+                        logd(TAG, "currency: ", currency)
                         val id: Int = currency.code.hashCode()
 
                         // apparently the tikXML library ignores the default value set in the model
@@ -82,6 +83,7 @@ class DataManager private constructor(application: Application) {
                     }
                 }
             } else {
+                loge(TAG, response.errorBody())
                 // FIXME handle errors
             }
         }

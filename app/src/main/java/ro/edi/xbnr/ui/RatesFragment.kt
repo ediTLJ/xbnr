@@ -27,12 +27,9 @@ class RatesFragment : Fragment() {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        // RatesFragmentBinding binding = DataBindingUtil.setContentView(this, R.layout.rates_fragment)
-        // binding.setModel(ratesModel)
-    }
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//        super.onActivityCreated(savedInstanceState)
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,8 +41,8 @@ class RatesFragment : Fragment() {
             R.layout.rates_fragment, container, false
         )
 
-        val adapter = RatesAdapter(ratesModel)
-        adapter.setHasStableIds(true)
+        val ratesAdapter = RatesAdapter(ratesModel)
+        ratesAdapter.setHasStableIds(true)
 
         ratesModel.currencies
             .observe(this, Observer {
@@ -59,22 +56,24 @@ class RatesFragment : Fragment() {
                     binding.empty.visibility = View.GONE
                     binding.rates.visibility = View.VISIBLE
 
-                    adapter.notifyDataSetChanged()
+                    ratesAdapter.notifyDataSetChanged()
 
                     (activity as MainActivity).supportActionBar?.subtitle =
                         ratesModel.getCurrency(0)?.date
                 }
             })
 
-        // binding.model = ratesModel
-        binding.rates.setHasFixedSize(true)
-        binding.rates.adapter = adapter
-        binding.rates.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                DividerItemDecoration.VERTICAL
+        with(binding.rates) {
+            setHasFixedSize(true)
+            adapter = ratesAdapter
+            addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    DividerItemDecoration.VERTICAL
+                )
             )
-        )
+        }
+
         return binding.root
     }
 }
