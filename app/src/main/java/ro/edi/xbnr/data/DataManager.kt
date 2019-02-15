@@ -8,6 +8,7 @@ import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
 import ro.edi.xbnr.model.Currency
+import ro.edi.xbnr.model.CurrencyRate
 import ro.edi.xbnr.util.Singleton
 import ro.edi.xbnr.util.logd
 import ro.edi.xbnr.util.loge
@@ -108,6 +109,13 @@ class DataManager private constructor(application: Application) {
     }
 
     /**
+     * Get previous available rates.
+     */
+    fun getPreviousRates(): LiveData<List<CurrencyRate>> {
+        return db.rateDao().getPreviousRates()
+    }
+
+    /**
      * Get all rates for the specified interval.
      *
      * **Don't call this on the main UI thread!**
@@ -120,10 +128,10 @@ class DataManager private constructor(application: Application) {
      */
     private fun fetchRates(interval: Int) {
         val call =
-            when (interval) {
-                1 -> BnrService.instance.latestRates
-                10 -> BnrService.instance.last10Rates
-                in 2005..3000 -> BnrService.instance.rates(interval)
+            when {
+                interval == 1 -> BnrService.instance.latestRates
+                interval == 10 -> BnrService.instance.last10Rates
+                interval >= 2005 -> BnrService.instance.rates(interval)
                 else -> BnrService.instance.latestRates
             }
 

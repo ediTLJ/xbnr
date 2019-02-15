@@ -63,6 +63,10 @@ class RatesFragment : Fragment() {
                 }
             })
 
+        ratesModel.previousRates.observe(this, Observer {
+            ratesAdapter.notifyDataSetChanged()
+        })
+
         with(binding.rates) {
             setHasFixedSize(true)
             adapter = ratesAdapter

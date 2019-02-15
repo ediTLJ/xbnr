@@ -82,6 +82,7 @@
             android:fontFamily="@font/eczar_medium"
             android:text="@{String.valueOf(model.getCurrency(position).rate)}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textColor="@{ContextCompat.getColor(context, model.getTrendColorRes(position))}"
             tools:text="4.1235" />
     </LinearLayout>
 </layout>
