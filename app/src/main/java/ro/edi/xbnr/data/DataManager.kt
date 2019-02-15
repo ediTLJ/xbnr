@@ -1,6 +1,7 @@
 package ro.edi.xbnr.data
 
 import android.app.Application
+import android.os.Build
 import androidx.lifecycle.LiveData
 import ro.edi.xbnr.data.db.AppDatabase
 import ro.edi.xbnr.data.db.entity.DbCurrency
@@ -10,6 +11,11 @@ import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.util.Singleton
 import ro.edi.xbnr.util.logd
 import ro.edi.xbnr.util.loge
+import ro.edi.xbnr.util.logi
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -43,19 +49,68 @@ class DataManager private constructor(application: Application) {
      * This also triggers a call to get latest data from the server, if needed.
      */
     fun getRates(): LiveData<List<Currency>> {
-        // FIXME add date conditions, for example:
-        // #1 after 1pm and rateDao().getRates() returns a previous workday => fetchLatestRates()
-        // OR
-        // #2  rateDao().getRates() returns an older workday => fetchRates(int count), where days == days count
+        executor.execute {
+            val latestDateString = db.rateDao().getLatestDate()
 
-        fetchRates(10)
+            // FIXME test if it works for all locales & timezones
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val zoneIdRomania = ZoneId.of("Europe/Bucharest")
+                val today = LocalDate.now(zoneIdRomania)
+                    .also { logi(TAG, "today: ", it) }
 
-        // FIXME is the db query done async?
+                if (latestDateString.isEmpty()) {
+                    logi(TAG, "no date in the db")
+                    fetchRates(today.year)
+                    fetchRates(today.year - 1)
+                    return@execute
+                }
+
+                val latestDate = LocalDate.parse(latestDateString)
+                    .also { logi(TAG, "latest date: ", it) }
+
+                val previousWorkday =
+                    if (today.dayOfWeek == DayOfWeek.MONDAY)
+                        today.minusDays(3)
+                    else today.minusDays(1)
+
+                // another option would be to use Period.between(latestDate, today)
+
+                // if latestDate == today => all good, don't do anything
+                if (latestDate.isBefore(today.minusWeeks(1))) {
+                    // FIXME add service to fetch data daily?
+                    // so we should never reach this
+                    fetchRates(today.year)
+                    fetchRates(today.year - 1)
+                } else if (latestDate.isBefore(previousWorkday)) {
+                    fetchRates(10)
+                } else if (latestDate == previousWorkday) {
+                    val now = LocalTime.now(zoneIdRomania)
+                        .also { logi(TAG, "now: ", it) }
+                    val hour1pm = LocalTime.of(13, 0)
+
+                    if (now.isAfter(hour1pm)) {
+                        fetchRates(1)
+                    } else { // before 1pm
+                        // no rates published yet, no need to do anything
+                        logi(TAG, "before 1pm => nothing to do")
+                    }
+                } else { // today
+                    // all good, don't do anything
+                    logi(TAG, "today => nothing to do")
+                }
+            } else {
+                // FIXME support for Android pre-Oreo
+                // val date = Date();
+            }
+        }
+
         return db.rateDao().getRates()
     }
 
     /**
      * Get all rates for the specified interval.
+     *
+     * **Don't call this on the main UI thread!**
      *
      * @param interval
      *     1 => 1 day (latest rates)
@@ -64,52 +119,51 @@ class DataManager private constructor(application: Application) {
      *     other => 1 day (latest rates)
      */
     private fun fetchRates(interval: Int) {
-        executor.execute {
+        val call =
+            when (interval) {
+                1 -> BnrService.instance.latestRates
+                10 -> BnrService.instance.last10Rates
+                in 2005..3000 -> BnrService.instance.rates(interval)
+                else -> BnrService.instance.latestRates
+            }
 
-            val call =
-                when (interval) {
-                    1 -> BnrService.instance.latestRates
-                    10 -> BnrService.instance.last10Rates
-                    in 2005..Int.MAX_VALUE -> BnrService.instance.rates(interval)
-                    else -> BnrService.instance.latestRates
-                }
+        logi(TAG, "fetching ", interval)
 
-            val response = runCatching { call.execute() }.getOrNull()
-            response ?: return@execute
+        val response = runCatching { call.execute() }.getOrNull()
+        response ?: return
 
-            if (response.isSuccessful) {
-                val days = response.body() ?: return@execute
-                days.ratesList ?: return@execute
+        if (response.isSuccessful) {
+            val days = response.body() ?: return
+            days.ratesList ?: return
 
-                db.runInTransaction {
-                    for (rates in days.ratesList) {
-                        rates.date ?: return@runInTransaction
-                        rates.currencies ?: return@runInTransaction
+            db.runInTransaction {
+                for (rates in days.ratesList) {
+                    rates.date ?: return@runInTransaction
+                    rates.currencies ?: return@runInTransaction
 
-                        logd(TAG, "date: ", rates.date)
+                    logd(TAG, "date: ", rates.date)
 
-                        for (currency in rates.currencies) {
-                            // logd(TAG, "currency: ", currency)
-                            val id: Int = currency.code.hashCode()
+                    for (currency in rates.currencies) {
+                        // logd(TAG, "currency: ", currency)
+                        val id: Int = currency.code.hashCode()
 
-                            // the tikXML library ignores the default value set in the model
-                            val multiplier = if (currency.multiplier > 0) currency.multiplier else 1
+                        // the tikXML library ignores the default value set in the model
+                        val multiplier = if (currency.multiplier > 0) currency.multiplier else 1
 
-                            // some rates are missing (having the "-" value, for example)
-                            currency.rate.toDoubleOrNull()?.let {
-                                val dbCurrency = DbCurrency(id, currency.code, multiplier, false)
-                                db.currencyDao().insert(dbCurrency)
+                        // some rates are missing (having the "-" value, for example)
+                        currency.rate.toDoubleOrNull()?.let {
+                            val dbCurrency = DbCurrency(id, currency.code, multiplier, false)
+                            db.currencyDao().insert(dbCurrency)
 
-                                val dbRate = DbRate(0, id, rates.date, it)
-                                db.rateDao().insert(dbRate)
-                            } // else skip this currency rate
-                        }
+                            val dbRate = DbRate(0, id, rates.date, it)
+                            db.rateDao().insert(dbRate)
+                        } // else skip this currency rate
                     }
                 }
-            } else {
-                loge(TAG, response.errorBody())
-                // FIXME handle errors
             }
+        } else {
+            loge(TAG, response.errorBody())
+            // FIXME handle errors
         }
     }
 }

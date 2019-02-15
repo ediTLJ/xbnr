@@ -14,13 +14,14 @@ abstract class RateDao : BaseDao<DbRate> {
     @Query("SELECT currency_id, code, multiplier, is_favorite, date, rate FROM rates LEFT OUTER JOIN currencies ON rates.currency_id = currencies.id WHERE date = (SELECT MAX(date) FROM rates) ORDER BY code ASC")
     protected abstract fun query(): LiveData<List<Currency>>
 
-    @Transaction
     @Query("SELECT id, date, rate FROM rates WHERE currency_id = :id ORDER BY date DESC LIMIT :count")
     protected abstract fun query(id: Int, count: Int): LiveData<List<RateMinimal>>
 
-    @Transaction
     @Query("SELECT id, date, rate FROM rates WHERE currency_id = :id AND date = (SELECT MAX(date) FROM rates)")
     protected abstract fun query(id: Int): LiveData<RateMinimal>
+
+    @Query("SELECT MAX(date) FROM rates")
+    abstract fun getLatestDate(): String
 
     /**
      * Get latest rates for all currencies.
