@@ -17,7 +17,7 @@
         android:theme="@style/ToolbarTheme"
         app:logo="@drawable/logo"
         app:logoDescription="@string/nbr_reference_rates"
-        app:subtitleTextColor="@color/white_dark"
+        app:subtitleTextColor="?android:attr/textColorSecondary"
         app:titleMarginStart="16dp"
         app:titleMarginTop="28dp" />
 

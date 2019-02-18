@@ -6,5 +6,5 @@ data class CurrencyMinimal(
     val id: Int,
     val code: String,
     val multiplier: Int = 1,
-    @ColumnInfo(name = "is_favorite", index = true) var isFavorite: Boolean = false
+    @ColumnInfo(name = "is_starred", index = true) var isStarred: Boolean = false
 )

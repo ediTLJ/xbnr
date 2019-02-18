@@ -12,7 +12,7 @@ import ro.edi.xbnr.model.DateRate
 @Dao
 abstract class RateDao : BaseDao<DbRate> {
     @Transaction
-    @Query("SELECT currency_id, code, multiplier, is_favorite, date, rate FROM rates LEFT OUTER JOIN currencies ON rates.currency_id = currencies.id WHERE date = (SELECT MAX(date) FROM rates) ORDER BY code ASC")
+    @Query("SELECT currency_id, code, multiplier, is_starred, date, rate FROM rates LEFT OUTER JOIN currencies ON rates.currency_id = currencies.id WHERE date = (SELECT MAX(date) FROM rates) ORDER BY is_starred DESC, code ASC")
     protected abstract fun query(): LiveData<List<Currency>>
 
     @Query("SELECT currency_id, rate FROM rates WHERE date = (SELECT MAX(date) AS date FROM rates WHERE date < (SELECT MAX(date) FROM rates))")
@@ -25,7 +25,7 @@ abstract class RateDao : BaseDao<DbRate> {
     protected abstract fun query(id: Int): LiveData<DateRate>
 
     @Query("SELECT MAX(date) FROM rates")
-    abstract fun getLatestDate(): String
+    abstract fun getLatestDate(): String?
 
     /**
      * Get latest rates for all currencies.

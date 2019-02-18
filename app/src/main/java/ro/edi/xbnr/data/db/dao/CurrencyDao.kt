@@ -8,7 +8,7 @@ import ro.edi.xbnr.model.CurrencyMinimal
 
 @Dao
 abstract class CurrencyDao : BaseDao<DbCurrency> {
-    @Query("SELECT * FROM currencies ORDER BY is_favorite DESC, code ASC")
+    @Query("SELECT * FROM currencies ORDER BY is_starred DESC, code ASC")
     protected abstract fun queryAll(): LiveData<List<CurrencyMinimal>>
 
     /**
