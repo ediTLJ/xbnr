@@ -44,6 +44,14 @@ class DataManager private constructor(application: Application) {
         private const val TAG = "RATES.MANAGER"
     }
 
+    fun update(currency: Currency, isStarred: Boolean) {
+        executor.execute {
+            val dbCurrency =
+                DbCurrency(currency.id, currency.code, currency.multiplier, isStarred)
+            db.currencyDao().update(dbCurrency)
+        }
+    }
+
     /**
      * Get latest available rates.
      *
@@ -59,10 +67,11 @@ class DataManager private constructor(application: Application) {
                 val today = LocalDate.now(zoneIdRomania)
                     .also { logi(TAG, "today: ", it) }
 
-                if (latestDateString.isEmpty()) {
+                if (latestDateString.isNullOrEmpty()) {
                     logi(TAG, "no date in the db")
-                    fetchRates(today.year)
-                    fetchRates(today.year - 1)
+                    fetchRates(10)
+                    // fetchRates(today.year)
+                    // fetchRates(today.year - 1)
                     return@execute
                 }
 
@@ -78,7 +87,7 @@ class DataManager private constructor(application: Application) {
 
                 // if latestDate == today => all good, don't do anything
                 if (latestDate.isBefore(today.minusWeeks(1))) {
-                    // FIXME add service to fetch data daily?
+                    // FIXME add service to fetch data weekly?
                     // so we should never reach this
                     fetchRates(today.year)
                     fetchRates(today.year - 1)

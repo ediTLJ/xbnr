@@ -8,6 +8,8 @@
 
         <import type="androidx.core.content.ContextCompat" />
 
+        <import type="ro.edi.xbnr.util.UtilsKt" />
+
         <variable
             name="position"
             type="int" />
@@ -33,7 +35,15 @@
             android:layout_height="48dp"
             android:contentDescription="@{model.getCurrency(position).code}"
             android:src="@{ContextCompat.getDrawable(context, model.getCurrencyIconRes(position))}"
-            tools:src="@drawable/ic_flag_usd" />
+            tools:src="@drawable/ic_flag_eur" />
+
+        <ImageView
+            android:id="@+id/currency_flag_checked"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bkg_circle"
+            android:src="@drawable/ic_check"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -50,6 +60,7 @@
                 android:includeFontPadding="false"
                 android:text="@{model.getCurrencyDisplayCode(position)}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position))}"
                 tools:text="USD" />
 
             <TextView
@@ -60,6 +71,7 @@
                 android:lines="1"
                 android:text="@{model.getCurrencyNameRes(position)}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position))}"
                 tools:text="US Dollar" />
         </LinearLayout>
 
@@ -73,7 +85,7 @@
             android:paddingEnd="3sp"
             android:text="@string/symbol_ron"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:textColor="@color/white_dark" />
+            android:textColor="?android:attr/textColorSecondary" />
 
         <TextView
             android:id="@+id/currency_value"

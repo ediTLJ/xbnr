@@ -2,7 +2,9 @@
     <string name="app_name">xbnr</string>
 
     <string name="nbr_reference_rates">NBR Reference Rates</string>
+
     <string name="info">Info</string>
+    <string name="star">Star</string>
 
     <string name="no_data_found">No data found.</string>
 

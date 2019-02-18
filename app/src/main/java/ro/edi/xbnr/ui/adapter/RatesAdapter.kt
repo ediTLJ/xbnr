@@ -1,5 +1,7 @@
 package ro.edi.xbnr.ui.adapter
 
+import android.view.View
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import ro.edi.xbnr.R
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
@@ -25,5 +27,21 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
 
     override fun getItemLayoutId(position: Int): Int {
         return R.layout.currency_item
+    }
+
+    override fun onClick(position: Int) {
+
+    }
+
+    override fun onLongClick(position: Int): Boolean {
+        return false
+    }
+
+    override fun bind(position: Int, binding: ViewDataBinding) {
+        binding.root.findViewById<View>(R.id.currency_flag).setOnClickListener {
+            ratesModel.getCurrency(position)?.let {
+                ratesModel.setIsStarred(position, !it.isStarred)
+            }
+        }
     }
 }

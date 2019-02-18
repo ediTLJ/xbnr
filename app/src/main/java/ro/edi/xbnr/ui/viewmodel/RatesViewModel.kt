@@ -1,6 +1,7 @@
 package ro.edi.xbnr.ui.viewmodel
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import ro.edi.xbnr.R
@@ -8,6 +9,7 @@ import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyRate
 import ro.edi.xbnr.util.Helper
+import ro.edi.xbnr.util.getColorRes
 
 class RatesViewModel(application: Application) : AndroidViewModel(application) {
     val currencies: LiveData<List<Currency>> by lazy(LazyThreadSafetyMode.NONE) {
@@ -71,6 +73,23 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
             trend > 0 -> R.color.orange_300
             trend < 0 -> R.color.green_300
             else -> R.color.white
+        }
+    }
+
+    fun getIsStarredColorRes(context: Context, position: Int): Int {
+        getCurrency(position)?.let {
+            return if (it.isStarred) R.color.yellow_300 else getColorRes(
+                context,
+                android.R.attr.textColorPrimary
+            )
+        }
+
+        return getColorRes(context, android.R.attr.textColorPrimary)
+    }
+
+    fun setIsStarred(position: Int, isStarred: Boolean) {
+        getCurrency(position)?.let {
+            DataManager.getInstance(getApplication()).update(it, isStarred)
         }
     }
 }

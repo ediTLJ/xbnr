@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -13,6 +15,8 @@ import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.RatesFragmentBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
+import ro.edi.xbnr.util.getColorRes
+
 
 class RatesFragment : Fragment() {
     private val ratesModel: RatesViewModel by lazy(LazyThreadSafetyMode.NONE) {
@@ -58,8 +62,30 @@ class RatesFragment : Fragment() {
 
                     ratesAdapter.notifyDataSetChanged()
 
-                    (activity as MainActivity).supportActionBar?.subtitle =
-                        ratesModel.getCurrency(0)?.date
+                    val latestDate = ratesModel.getCurrency(0)?.date
+
+                    val toolbar = (activity as MainActivity).supportActionBar
+
+                    // FIXME different color when new date
+//                    if (toolbar?.subtitle == latestDate) {
+//                        toolbar?.setSubtitleTextColor(
+//                            ContextCompat.getColor(
+//                                activity as MainActivity,
+//                                getColorRes(
+//                                    activity as MainActivity,
+//                                    android.R.attr.textColorSecondary
+//                                )
+//                            )
+//                        )
+//                    } else {
+                        toolbar?.subtitle = latestDate
+//                        toolbar?.setSubtitleTextColor(
+//                            ContextCompat.getColor(
+//                                activity as MainActivity,
+//                                getColorRes(activity as MainActivity, android.R.attr.colorPrimary)
+//                            )
+//                        )
+//                    }
                 }
             })
 
