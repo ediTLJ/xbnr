@@ -15,8 +15,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.title = ""
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

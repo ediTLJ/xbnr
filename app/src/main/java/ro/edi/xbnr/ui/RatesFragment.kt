@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.RatesFragmentBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
+import ro.edi.xbnr.util.getColorRes
 
 
 class RatesFragment : Fragment() {
@@ -49,30 +51,28 @@ class RatesFragment : Fragment() {
 
                 ratesAdapter.notifyDataSetChanged()
 
+                // FIXME show date using current locale
+
+                val toolbarDate = (activity as MainActivity).findViewById<TextView>(R.id.toolbar_date)
                 val latestDate = ratesModel.getCurrency(0)?.date
 
-                val toolbar = (activity as MainActivity).supportActionBar
+                if (toolbarDate.text.isNullOrEmpty() || toolbarDate.text == latestDate) {
+                    toolbarDate.setTextColor(
+                        ContextCompat.getColor(
+                            activity as MainActivity,
+                            getColorRes(activity as MainActivity, android.R.attr.textColorSecondary)
+                        )
+                    )
+                } else {
+                    toolbarDate.setTextColor(
+                        ContextCompat.getColor(
+                            activity as MainActivity,
+                            getColorRes(activity as MainActivity, android.R.attr.colorPrimary)
+                        )
+                    )
+                }
 
-                // FIXME different color when new date
-//                    if (toolbar?.subtitle == latestDate) {
-//                        toolbar?.setSubtitleTextColor(
-//                            ContextCompat.getColor(
-//                                activity as MainActivity,
-//                                getColorRes(
-//                                    activity as MainActivity,
-//                                    android.R.attr.textColorSecondary
-//                                )
-//                            )
-//                        )
-//                    } else {
-                toolbar?.subtitle = latestDate
-//                        toolbar?.setSubtitleTextColor(
-//                            ContextCompat.getColor(
-//                                activity as MainActivity,
-//                                getColorRes(activity as MainActivity, android.R.attr.colorPrimary)
-//                            )
-//                        )
-//                    }
+                toolbarDate.text = latestDate
             }
         })
 

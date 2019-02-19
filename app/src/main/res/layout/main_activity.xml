@@ -1,30 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/grey_light"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:layout_height="wrap_content"
         android:theme="@style/ToolbarTheme"
-        app:logo="@drawable/logo"
-        app:logoDescription="@string/nbr_reference_rates"
-        app:subtitleTextColor="?android:attr/textColorSecondary"
-        app:titleMarginStart="16dp"
-        app:titleMarginTop="28dp" />
+        app:elevation="4dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:logo="@drawable/logo"
+            app:logoDescription="@string/nbr_reference_rates">
+
+            <TextView
+                android:id="@+id/toolbar_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto_condensed_medium"
+                android:gravity="end|bottom"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:paddingBottom="2dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:textColor="?android:attr/textColorSecondary"
+                tools:text="2018-10-10" />
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".ui.MainActivity" />
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
