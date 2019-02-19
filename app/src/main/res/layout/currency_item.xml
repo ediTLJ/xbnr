@@ -42,6 +42,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/bkg_circle"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_check"
             android:visibility="gone" />
 
@@ -92,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/eczar_medium"
-            android:text="@{String.valueOf(model.getCurrency(position).rate)}"
+            android:text="@{String.format(`%.4f`, model.getCurrency(position).rate)}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:textColor="@{ContextCompat.getColor(context, model.getTrendColorRes(position))}"
             tools:text="4.1235" />

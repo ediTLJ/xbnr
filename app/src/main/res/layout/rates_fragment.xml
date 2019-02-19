@@ -25,7 +25,6 @@
             android:layout_height="48dp"
             android:layout_gravity="center"
             android:indeterminate="true"
-            android:indeterminateTint="?android:attr/colorPrimary"
             android:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView

@@ -3,22 +3,18 @@ package ro.edi.xbnr.data
 import android.app.Application
 import android.os.Build
 import androidx.lifecycle.LiveData
+import ro.edi.xbnr.AppExecutors
 import ro.edi.xbnr.data.db.AppDatabase
 import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyRate
-import ro.edi.xbnr.util.Singleton
-import ro.edi.xbnr.util.logd
-import ro.edi.xbnr.util.loge
-import ro.edi.xbnr.util.logi
+import ro.edi.xbnr.util.*
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 
 /**
@@ -34,7 +30,6 @@ import java.util.concurrent.Executors
  */
 class DataManager private constructor(application: Application) {
     private val db: AppDatabase by lazy { AppDatabase.getInstance(application) }
-    private val executor: ExecutorService by lazy { Executors.newSingleThreadExecutor() }
 
     init {
         // ...
@@ -45,7 +40,7 @@ class DataManager private constructor(application: Application) {
     }
 
     fun update(currency: Currency, isStarred: Boolean) {
-        executor.execute {
+        AppExecutors.diskIO().execute {
             val dbCurrency =
                 DbCurrency(currency.id, currency.code, currency.multiplier, isStarred)
             db.currencyDao().update(dbCurrency)
@@ -58,7 +53,7 @@ class DataManager private constructor(application: Application) {
      * This also triggers a call to get latest data from the server, if needed.
      */
     fun getRates(): LiveData<List<Currency>> {
-        executor.execute {
+        AppExecutors.networkIO().execute {
             val latestDateString = db.rateDao().getLatestDate()
 
             // FIXME test if it works for all locales & timezones
