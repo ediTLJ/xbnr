@@ -4,9 +4,9 @@
 
     <color name="black">#000000</color>
 
-    <color name="grey">#0C0C17</color>
-    <color name="grey_light">#33333D</color>
-    <color name="grey_lighter">#373740</color>
+    <color name="grey_dark">#0C0C17</color>
+    <color name="grey">#33333D</color>
+    <color name="grey_light">#363640</color>
 
     <color name="white_dark">#5F5F66</color>
     <color name="white_ish">#E6E6E8</color>

@@ -10,7 +10,7 @@
         <item name="colorAccent">@color/green_500</item>
         <item name="android:colorBackground">@color/grey_light</item>
         <item name="android:statusBarColor">@color/grey</item>
-        <!--<item name="colorControlHighlight">@color/grey_lighter</item>-->
+        <!--<item name="colorControlHighlight">@color/grey</item>-->
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents">

@@ -83,7 +83,7 @@ class RatesFragment : Fragment() {
         with(binding.rates) {
             setHasFixedSize(true)
             adapter = ratesAdapter
-            
+
             val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
             ContextCompat.getDrawable(context, R.drawable.divider)?.let { divider.setDrawable(it) }
             addItemDecoration(divider)
