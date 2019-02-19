@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,7 +14,6 @@ import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.RatesFragmentBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
-import ro.edi.xbnr.util.getColorRes
 
 
 class RatesFragment : Fragment() {
@@ -31,42 +29,31 @@ class RatesFragment : Fragment() {
         }
     }
 
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val binding = DataBindingUtil.inflate<RatesFragmentBinding>(
-            inflater,
-            R.layout.rates_fragment, container, false
-        )
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val binding =
+            DataBindingUtil.inflate<RatesFragmentBinding>(inflater, R.layout.rates_fragment, container, false)
 
         val ratesAdapter = RatesAdapter(ratesModel)
         ratesAdapter.setHasStableIds(true)
 
-        ratesModel.currencies
-            .observe(this, Observer {
-                binding.loading.hide()
+        ratesModel.currencies.observe(this, Observer {
+            binding.loading.hide()
 
-                // FIXME replace with databinding
-                if (it.isNullOrEmpty()) {
-                    binding.empty.visibility = View.VISIBLE
-                    binding.rates.visibility = View.GONE
-                } else {
-                    binding.empty.visibility = View.GONE
-                    binding.rates.visibility = View.VISIBLE
+            // FIXME replace with databinding
+            if (it.isNullOrEmpty()) {
+                binding.empty.visibility = View.VISIBLE
+                binding.rates.visibility = View.GONE
+            } else {
+                binding.empty.visibility = View.GONE
+                binding.rates.visibility = View.VISIBLE
 
-                    ratesAdapter.notifyDataSetChanged()
+                ratesAdapter.notifyDataSetChanged()
 
-                    val latestDate = ratesModel.getCurrency(0)?.date
+                val latestDate = ratesModel.getCurrency(0)?.date
 
-                    val toolbar = (activity as MainActivity).supportActionBar
+                val toolbar = (activity as MainActivity).supportActionBar
 
-                    // FIXME different color when new date
+                // FIXME different color when new date
 //                    if (toolbar?.subtitle == latestDate) {
 //                        toolbar?.setSubtitleTextColor(
 //                            ContextCompat.getColor(
@@ -78,7 +65,7 @@ class RatesFragment : Fragment() {
 //                            )
 //                        )
 //                    } else {
-                        toolbar?.subtitle = latestDate
+                toolbar?.subtitle = latestDate
 //                        toolbar?.setSubtitleTextColor(
 //                            ContextCompat.getColor(
 //                                activity as MainActivity,
@@ -86,8 +73,8 @@ class RatesFragment : Fragment() {
 //                            )
 //                        )
 //                    }
-                }
-            })
+            }
+        })
 
         ratesModel.previousRates.observe(this, Observer {
             ratesAdapter.notifyDataSetChanged()
@@ -96,12 +83,10 @@ class RatesFragment : Fragment() {
         with(binding.rates) {
             setHasFixedSize(true)
             adapter = ratesAdapter
-            addItemDecoration(
-                DividerItemDecoration(
-                    context,
-                    DividerItemDecoration.VERTICAL
-                )
-            )
+            
+            val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+            ContextCompat.getDrawable(context, R.drawable.divider)?.let { divider.setDrawable(it) }
+            addItemDecoration(divider)
         }
 
         return binding.root
