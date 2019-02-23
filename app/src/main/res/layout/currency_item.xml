@@ -57,18 +57,19 @@
                 android:id="@+id/currency_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_condensed_medium"
+                android:fontFamily="@font/fira_sans_condensed_medium"
                 android:includeFontPadding="false"
                 android:text="@{model.getCurrencyDisplayCode(position)}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position, true))}"
+                android:textSize="18sp"
                 tools:text="USD" />
 
             <TextView
                 android:id="@+id/currency_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_condensed_regular"
+                android:fontFamily="@font/fira_sans_condensed_regular"
                 android:lines="1"
                 android:text="@{model.getCurrencyNameRes(position)}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
@@ -80,10 +81,10 @@
             android:id="@+id/currency_ron"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/eczar_regular"
-            android:paddingStart="4sp"
-            android:paddingTop="2sp"
-            android:paddingEnd="4sp"
+            android:fontFamily="@font/titilliumweb_regular"
+            android:paddingStart="4dp"
+            android:paddingTop="1sp"
+            android:paddingEnd="4dp"
             android:text="@string/symbol_ron"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="?android:attr/textColorSecondary" />
@@ -92,10 +93,11 @@
             android:id="@+id/currency_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/eczar_medium"
+            android:fontFamily="@font/titilliumweb_semibold"
             android:text="@{String.format(`%.4f`, model.getCurrency(position).rate)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="@{ContextCompat.getColor(context, model.getTrendColorRes(position))}"
+            android:textSize="18sp"
             tools:text="4.1235" />
     </LinearLayout>
 </layout>
