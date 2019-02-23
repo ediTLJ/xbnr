@@ -28,10 +28,10 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         return getCurrency(position)?.let {
             if (it.multiplier > 1) {
                 (getApplication() as Application).resources.getQuantityString(
-                    R.plurals.currency_multiplier,
-                    it.multiplier,
-                    it.multiplier,
-                    it.code
+                        R.plurals.currency_multiplier,
+                        it.multiplier,
+                        it.multiplier,
+                        it.code
                 )
             } else it.code
         }
@@ -49,7 +49,7 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         return Helper.getCurrencyNameRes(currency?.code)
     }
 
-    fun getTrend(position: Int): Int {
+    private fun getTrend(position: Int): Int {
         val currency: Currency = getCurrency(position) ?: return 0
 
         previousRates.value?.let {
@@ -76,15 +76,22 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getIsStarredColorRes(context: Context, position: Int): Int {
+    fun getIsStarredColorRes(context: Context, position: Int, isPrimary: Boolean): Int {
         getCurrency(position)?.let {
-            return if (it.isStarred) R.color.yellow_300 else getColorRes(
-                context,
-                android.R.attr.textColorPrimary
-            )
+            return if (isPrimary)
+                if (it.isStarred) R.color.yellow_300 else getColorRes(
+                        context,
+                        android.R.attr.textColorPrimary
+                )
+            else
+                if (it.isStarred) R.color.yellow_500 else getColorRes(
+                        context,
+                        android.R.attr.textColorSecondary
+                )
         }
 
-        return getColorRes(context, android.R.attr.textColorPrimary)
+        return getColorRes(context,
+                if (isPrimary) android.R.attr.textColorPrimary else android.R.attr.textColorSecondary)
     }
 
     fun setIsStarred(position: Int, isStarred: Boolean) {

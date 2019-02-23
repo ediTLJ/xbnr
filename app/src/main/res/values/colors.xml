@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">@color/grey_light</color>
+    <color name="ic_launcher_background">@color/grey</color>
 
     <color name="black">#000000</color>
+    <color name="grey">#212321</color>
+    <color name="grey_light">#484B48</color>
 
-    <color name="grey_dark">#0C0C17</color>
-    <color name="grey">#33333D</color>
-    <color name="grey_light">#363640</color>
-
-    <color name="white_dark">#5F5F66</color>
-    <color name="white_ish">#E6E6E8</color>
-    <color name="white">#FFFFFF</color>
+    <color name="white_dark">#A1A3A1</color>
+    <color name="white">#F1F3F1</color>
 
     <color name="green_700">#007D51</color>
     <color name="green_500">#1EB980</color>

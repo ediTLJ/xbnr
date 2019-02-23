@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.RatesFragment">
@@ -23,25 +22,26 @@
     <LinearLayout
         android:id="@+id/currency"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="72dp"
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
         <!--android:onClick="@{() -> viewModel.onItemClick(position)}"-->
 
         <ImageView
             android:id="@+id/currency_flag"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:contentDescription="@{model.getCurrency(position).code}"
             app:src="@{model.getCurrencyIconRes(position)}"
             tools:src="@drawable/ic_flag_eur" />
 
         <ImageView
             android:id="@+id/currency_flag_checked"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_check"
             android:visibility="gone" />
@@ -61,7 +61,7 @@
                 android:includeFontPadding="false"
                 android:text="@{model.getCurrencyDisplayCode(position)}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position))}"
+                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position, true))}"
                 tools:text="USD" />
 
             <TextView
@@ -72,7 +72,7 @@
                 android:lines="1"
                 android:text="@{model.getCurrencyNameRes(position)}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position))}"
+                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position, false))}"
                 tools:text="US Dollar" />
         </LinearLayout>
 
@@ -81,9 +81,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/eczar_regular"
-            android:paddingStart="3sp"
-            android:paddingTop="3sp"
-            android:paddingEnd="3sp"
+            android:paddingStart="4sp"
+            android:paddingTop="2sp"
+            android:paddingEnd="4sp"
             android:text="@string/symbol_ron"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="?android:attr/textColorSecondary" />

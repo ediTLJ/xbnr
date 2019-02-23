@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DividerItemDecoration
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.RatesFragmentBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
@@ -84,9 +83,9 @@ class RatesFragment : Fragment() {
             setHasFixedSize(true)
             adapter = ratesAdapter
 
-            val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-            ContextCompat.getDrawable(context, R.drawable.divider)?.let { divider.setDrawable(it) }
-            addItemDecoration(divider)
+            // val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+            // ContextCompat.getDrawable(context, R.drawable.divider)?.let { divider.setDrawable(it) }
+            // addItemDecoration(divider)
         }
 
         return binding.root
