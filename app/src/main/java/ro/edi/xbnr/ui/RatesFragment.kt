@@ -10,11 +10,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
+import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.RatesFragmentBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
-import ro.edi.util.getColorRes
 
 
 class RatesFragment : Fragment() {
@@ -40,7 +43,7 @@ class RatesFragment : Fragment() {
         ratesModel.currencies.observe(this, Observer {
             binding.loading.hide()
 
-            // FIXME replace with databinding
+            // TODO replace with databinding
             if (it.isNullOrEmpty()) {
                 binding.empty.visibility = View.VISIBLE
                 binding.rates.visibility = View.GONE
@@ -50,20 +53,21 @@ class RatesFragment : Fragment() {
 
                 ratesAdapter.notifyDataSetChanged()
 
-                // FIXME show date using current locale
+                val tvDate = (activity as MainActivity).findViewById<TextView>(R.id.toolbar_date)
+                val latestDateString = ratesModel.getCurrency(0)?.date
 
-                val toolbarDate = (activity as MainActivity).findViewById<TextView>(R.id.toolbar_date)
-                val latestDate = ratesModel.getCurrency(0)?.date
+                val latestDate = LocalDate.parse(latestDateString)
+                val txtDate = latestDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
 
-                if (toolbarDate.text.isNullOrEmpty() || toolbarDate.text == latestDate) {
-                    toolbarDate.setTextColor(
+                if (tvDate.text.isNullOrEmpty() || tvDate.text == txtDate) {
+                    tvDate.setTextColor(
                         ContextCompat.getColor(
                             activity as MainActivity,
                             getColorRes(activity as MainActivity, android.R.attr.textColorSecondary)
                         )
                     )
                 } else {
-                    toolbarDate.setTextColor(
+                    tvDate.setTextColor(
                         ContextCompat.getColor(
                             activity as MainActivity,
                             getColorRes(activity as MainActivity, android.R.attr.colorPrimary)
@@ -71,7 +75,7 @@ class RatesFragment : Fragment() {
                     )
                 }
 
-                toolbarDate.text = latestDate
+                tvDate.text = txtDate
             }
         })
 

@@ -1,23 +1,18 @@
 package ro.edi.xbnr.data
 
 import android.app.Application
-import android.os.Build
 import androidx.lifecycle.LiveData
-import ro.edi.util.Singleton
-import ro.edi.util.logd
-import ro.edi.util.loge
-import ro.edi.util.logi
-import ro.edi.util.AppExecutors
+import org.threeten.bp.DayOfWeek
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
+import org.threeten.bp.ZoneId
+import ro.edi.util.*
 import ro.edi.xbnr.data.db.AppDatabase
 import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyRate
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.ZoneId
 
 
 /**
@@ -60,56 +55,49 @@ class DataManager private constructor(application: Application) {
             val latestDateString = db.rateDao().getLatestDate()
 
             // FIXME test if it works for all locales & timezones
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val zoneIdRomania = ZoneId.of("Europe/Bucharest")
-                val today = LocalDate.now(zoneIdRomania)
-                    .also { logi(TAG, "today: ", it) }
+            val zoneIdRomania = ZoneId.of("Europe/Bucharest")
+            val today = LocalDate.now(zoneIdRomania)
+                .also { logi(TAG, "today: ", it) }
 
-                if (latestDateString.isNullOrEmpty()) {
-                    logi(TAG, "no date in the db")
-                    fetchRates(10)
-                    // fetchRates(today.year)
-                    // fetchRates(today.year - 1)
-                    return@execute
-                }
-
-                val latestDate = LocalDate.parse(latestDateString)
-                    .also { logi(TAG, "latest date: ", it) }
-
-                val previousWorkday =
-                    if (today.dayOfWeek == DayOfWeek.MONDAY)
-                        today.minusDays(3)
-                    else today.minusDays(1)
-
-                // another option would be to use Period.between(latestDate, today)
-
-                // if latestDate == today => all good, don't do anything
-                if (latestDate.isBefore(today.minusWeeks(1))) {
-                    // FIXME add service to fetch data weekly?
-                    // so we should never reach this
-                    fetchRates(today.year)
-                    fetchRates(today.year - 1)
-                } else if (latestDate.isBefore(previousWorkday)) {
-                    fetchRates(10)
-                } else if (latestDate == previousWorkday) {
-                    val now = LocalTime.now(zoneIdRomania)
-                        .also { logi(TAG, "now: ", it) }
-                    val hour1pm = LocalTime.of(13, 0)
-
-                    if (now.isAfter(hour1pm)) {
-                        fetchRates(1)
-                    } else { // before 1pm
-                        // no rates published yet, no need to do anything
-                        logi(TAG, "before 1pm => nothing to do")
-                    }
-                } else { // today
-                    // all good, don't do anything
-                    logi(TAG, "today => nothing to do")
-                }
-            } else {
-                // FIXME support for Android pre-Oreo
-                // val date = Date();
+            if (latestDateString.isNullOrEmpty()) {
+                logi(TAG, "no date in the db")
                 fetchRates(10)
+                // fetchRates(today.year)
+                // fetchRates(today.year - 1)
+                return@execute
+            }
+
+            val latestDate = LocalDate.parse(latestDateString)
+                .also { logi(TAG, "latest date: ", it) }
+
+            val previousWorkday =
+                if (today.dayOfWeek == DayOfWeek.MONDAY)
+                    today.minusDays(3)
+                else today.minusDays(1)
+
+            // another option would be to use Period.between(latestDate, today)
+
+            // if latestDate == today => all good, don't do anything
+            if (latestDate.isBefore(today.minusWeeks(1))) {
+                // TODO add service to fetch data weekly? so we should never reach this
+                fetchRates(today.year)
+                fetchRates(today.year - 1)
+            } else if (latestDate.isBefore(previousWorkday)) {
+                fetchRates(10)
+            } else if (latestDate == previousWorkday) {
+                val now = LocalTime.now(zoneIdRomania)
+                    .also { logi(TAG, "now: ", it) }
+                val hour1pm = LocalTime.of(13, 0)
+
+                if (now.isAfter(hour1pm)) {
+                    fetchRates(1)
+                } else { // before 1pm
+                    // no rates published yet, no need to do anything
+                    logi(TAG, "before 1pm => nothing to do")
+                }
+            } else { // today
+                // all good, don't do anything
+                logi(TAG, "today => nothing to do")
             }
         }
 
@@ -178,8 +166,8 @@ class DataManager private constructor(application: Application) {
                 }
             }
         } else {
+            // ignore errors, for now
             loge(TAG, response.errorBody())
-            // FIXME handle errors
         }
     }
 }
