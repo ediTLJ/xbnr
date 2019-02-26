@@ -1,4 +1,4 @@
-package ro.edi.xbnr.util
+package ro.edi.util
 
 import ro.edi.xbnr.BuildConfig
 

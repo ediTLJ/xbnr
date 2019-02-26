@@ -8,7 +8,7 @@
 
         <import type="androidx.core.content.ContextCompat" />
 
-        <import type="ro.edi.xbnr.util.UtilsKt" />
+        <import type="ro.edi.util.UtilsKt" />
 
         <variable
             name="position"

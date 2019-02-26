@@ -3,14 +3,17 @@ package ro.edi.xbnr.data
 import android.app.Application
 import android.os.Build
 import androidx.lifecycle.LiveData
-import ro.edi.xbnr.AppExecutors
+import ro.edi.util.Singleton
+import ro.edi.util.logd
+import ro.edi.util.loge
+import ro.edi.util.logi
+import ro.edi.util.AppExecutors
 import ro.edi.xbnr.data.db.AppDatabase
 import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyRate
-import ro.edi.xbnr.util.*
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -106,6 +109,7 @@ class DataManager private constructor(application: Application) {
             } else {
                 // FIXME support for Android pre-Oreo
                 // val date = Date();
+                fetchRates(10)
             }
         }
 

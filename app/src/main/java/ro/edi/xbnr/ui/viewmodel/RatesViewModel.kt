@@ -8,8 +8,8 @@ import ro.edi.xbnr.R
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyRate
-import ro.edi.xbnr.util.Helper
-import ro.edi.xbnr.util.getColorRes
+import ro.edi.xbnr.ui.util.Helper
+import ro.edi.util.getColorRes
 
 class RatesViewModel(application: Application) : AndroidViewModel(application) {
     val currencies: LiveData<List<Currency>> by lazy(LazyThreadSafetyMode.NONE) {
@@ -80,18 +80,20 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         getCurrency(position)?.let {
             return if (isPrimary)
                 if (it.isStarred) R.color.yellow_300 else getColorRes(
-                        context,
-                        android.R.attr.textColorPrimary
+                    context,
+                    android.R.attr.textColorPrimary
                 )
             else
                 if (it.isStarred) R.color.yellow_500 else getColorRes(
-                        context,
-                        android.R.attr.textColorSecondary
+                    context,
+                    android.R.attr.textColorSecondary
                 )
         }
 
-        return getColorRes(context,
-                if (isPrimary) android.R.attr.textColorPrimary else android.R.attr.textColorSecondary)
+        return getColorRes(
+            context,
+            if (isPrimary) android.R.attr.textColorPrimary else android.R.attr.textColorSecondary
+        )
     }
 
     fun setIsStarred(position: Int, isStarred: Boolean) {

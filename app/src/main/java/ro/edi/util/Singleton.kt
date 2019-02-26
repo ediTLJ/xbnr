@@ -1,4 +1,4 @@
-package ro.edi.xbnr.util
+package ro.edi.util
 
 /**
  * Singleton with 1 parameter, using double-checked locking.

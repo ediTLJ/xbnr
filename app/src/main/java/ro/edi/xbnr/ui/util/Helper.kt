@@ -1,10 +1,9 @@
-package ro.edi.xbnr.util
+package ro.edi.xbnr.ui.util
 
 import ro.edi.xbnr.R
 
 object Helper {
 
-    // FIXME icons license
     fun getCurrencyIconRes(code: String?): Int {
         return when (code) {
             "AED" -> R.drawable.ic_flag_aed

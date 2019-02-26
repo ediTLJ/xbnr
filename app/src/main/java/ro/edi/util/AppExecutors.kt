@@ -1,4 +1,4 @@
-package ro.edi.xbnr
+package ro.edi.util
 
 import android.os.Handler
 import android.os.Looper

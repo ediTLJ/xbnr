@@ -8,7 +8,7 @@ import ro.edi.xbnr.data.db.dao.CurrencyDao
 import ro.edi.xbnr.data.db.dao.RateDao
 import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
-import ro.edi.xbnr.util.Singleton
+import ro.edi.util.Singleton
 
 @Database(entities = [DbCurrency::class, DbRate::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {

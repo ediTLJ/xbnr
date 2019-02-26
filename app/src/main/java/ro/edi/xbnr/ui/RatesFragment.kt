@@ -14,7 +14,7 @@ import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.RatesFragmentBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
-import ro.edi.xbnr.util.getColorRes
+import ro.edi.util.getColorRes
 
 
 class RatesFragment : Fragment() {
