@@ -42,21 +42,21 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
         val vFlagChecked = binding.root.findViewById<View>(R.id.currency_flag_checked)
 
         vFlag.setOnClickListener {
-            binding.root.isActivated = true
-            it.visibility = View.GONE
-            vFlagChecked.visibility = View.VISIBLE
-//            ratesModel.getCurrency(position)?.let {
-//                ratesModel.setIsStarred(position, !it.isStarred)
-//            }
+            // binding.root.isActivated = true
+            // it.visibility = View.GONE
+            // vFlagChecked.visibility = View.VISIBLE
+            ratesModel.getCurrency(position)?.let {
+                ratesModel.setIsStarred(position, !it.isStarred)
+            }
         }
 
         vFlagChecked.setOnClickListener {
-            binding.root.isActivated = false
-            it.visibility = View.GONE
-            vFlag.visibility = View.VISIBLE
-//            ratesModel.getCurrency(position)?.let {
-//                ratesModel.setIsStarred(position, !it.isStarred)
-//            }
+            // binding.root.isActivated = false
+            // it.visibility = View.GONE
+            // vFlag.visibility = View.VISIBLE
+            ratesModel.getCurrency(position)?.let {
+                ratesModel.setIsStarred(position, !it.isStarred)
+            }
         }
     }
 }
