@@ -39,7 +39,7 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
 
     override fun bind(position: Int, binding: ViewDataBinding) {
         val vFlag = binding.root.findViewById<View>(R.id.currency_flag)
-        val vFlagChecked = binding.root.findViewById<View>(R.id.currency_flag_checked)
+        // val vFlagChecked = binding.root.findViewById<View>(R.id.currency_flag_checked)
 
         vFlag.setOnClickListener {
             // binding.root.isActivated = true
@@ -50,13 +50,13 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
             }
         }
 
-        vFlagChecked.setOnClickListener {
-            // binding.root.isActivated = false
-            // it.visibility = View.GONE
-            // vFlag.visibility = View.VISIBLE
-            ratesModel.getCurrency(position)?.let {
-                ratesModel.setIsStarred(position, !it.isStarred)
-            }
-        }
+//        vFlagChecked.setOnClickListener {
+//            // binding.root.isActivated = false
+//            // it.visibility = View.GONE
+//            // vFlag.visibility = View.VISIBLE
+//            ratesModel.getCurrency(position)?.let {
+//                ratesModel.setIsStarred(position, !it.isStarred)
+//            }
+//        }
     }
 }
