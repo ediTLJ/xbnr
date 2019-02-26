@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import ro.edi.xbnr.InfoDialogFragment
 import ro.edi.xbnr.R
 
 class MainActivity : AppCompatActivity() {
@@ -32,8 +33,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_info -> TODO("add info popup")
-            else -> return super.onOptionsItemSelected(item)
+            R.id.action_info -> InfoDialogFragment().show(supportFragmentManager, "dialog_info")
         }
+        return super.onOptionsItemSelected(item)
     }
 }

@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ToolbarTheme"
+        app:elevation="4dp"
         app:liftOnScroll="true">
 
         <androidx.appcompat.widget.Toolbar
@@ -17,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:logo="@drawable/logo"
-            app:logoDescription="@string/nbr_reference_rates">
+            app:logoDescription="@string/description_nbr_reference_rates">
 
             <TextView
                 android:id="@+id/toolbar_date"
