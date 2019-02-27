@@ -1,3 +1,18 @@
+/*
+* Copyright 2019 Eduard Scarlat
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 package ro.edi.xbnr.ui
 
 import android.os.Bundle
@@ -18,7 +33,6 @@ import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.RatesFragmentBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
-
 
 class RatesFragment : Fragment() {
     private val ratesModel: RatesViewModel by lazy(LazyThreadSafetyMode.NONE) {
@@ -41,13 +55,17 @@ class RatesFragment : Fragment() {
         ratesAdapter.setHasStableIds(true)
 
         ratesModel.currencies.observe(this, Observer {
-            binding.loading.hide()
-
             // TODO replace with databinding
-            if (it.isNullOrEmpty()) {
+            if (it == null) {
+                binding.loading.show()
+                binding.empty.visibility = View.GONE
+                binding.rates.visibility = View.GONE
+            } else if (it.isEmpty()) {
+                binding.loading.hide()
                 binding.empty.visibility = View.VISIBLE
                 binding.rates.visibility = View.GONE
             } else {
+                binding.loading.hide()
                 binding.empty.visibility = View.GONE
                 binding.rates.visibility = View.VISIBLE
 
@@ -86,10 +104,6 @@ class RatesFragment : Fragment() {
         with(binding.rates) {
             setHasFixedSize(true)
             adapter = ratesAdapter
-
-            // val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-            // ContextCompat.getDrawable(context, R.drawable.divider)?.let { divider.setDrawable(it) }
-            // addItemDecoration(divider)
         }
 
         return binding.root

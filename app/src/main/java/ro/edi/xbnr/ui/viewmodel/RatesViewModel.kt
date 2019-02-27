@@ -1,15 +1,30 @@
+/*
+* Copyright 2019 Eduard Scarlat
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 package ro.edi.xbnr.ui.viewmodel
 
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyRate
 import ro.edi.xbnr.ui.util.Helper
-import ro.edi.util.getColorRes
 
 class RatesViewModel(application: Application) : AndroidViewModel(application) {
     val currencies: LiveData<List<Currency>> by lazy(LazyThreadSafetyMode.NONE) {
@@ -28,10 +43,10 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         return getCurrency(position)?.let {
             if (it.multiplier > 1) {
                 (getApplication() as Application).resources.getQuantityString(
-                        R.plurals.currency_multiplier,
-                        it.multiplier,
-                        it.multiplier,
-                        it.code
+                    R.plurals.currency_multiplier,
+                    it.multiplier,
+                    it.multiplier,
+                    it.code
                 )
             } else it.code
         }
