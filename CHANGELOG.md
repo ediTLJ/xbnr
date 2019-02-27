@@ -4,7 +4,7 @@
 * add rates history
 * add currency converter
 
-#Change Log
+# Change Log
 
 ## v1.0 [MMM dd, 2019]
 * MVP release
