@@ -1,6 +1,6 @@
 # xbnr
 A simple exchange rates app with a nice & clean UI.<br />
-The app uses data published by NBR (National Bank of Romania).
+The app uses data published by NBR (National Bank of Romania): https://www.bnr.ro/
 
 Short source code description: Kotlin, MVVM (no DI!), Jetpack.
 
@@ -11,4 +11,4 @@ https://www.flaticon.com/packs/countrys-flags
 
 ## License
 Apache License 2.0<br />
-See LICENSE for details
+See LICENSE for details.
