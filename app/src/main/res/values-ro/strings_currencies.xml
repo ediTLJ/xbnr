@@ -1,0 +1,35 @@
+<resources>
+    <string name="name_aed">Dirhamul Emiratelor Arabe</string>
+    <string name="name_aud">Dolarul australian</string>
+    <string name="name_bgn">Leva bulgară</string>
+    <string name="name_brl">Realul brazilian</string>
+    <string name="name_cad">Dolarul canadian</string>
+    <string name="name_chf">Francul elvețian</string>
+    <string name="name_cny">Yuan-ul chinezesc</string>
+    <string name="name_czk">Coroana cehă</string>
+    <string name="name_dkk">Coroana daneză</string>
+    <string name="name_egp">Lira egipteană</string>
+    <string name="name_eur">Euro</string>
+    <string name="name_gbp">Lira sterlină</string>
+    <string name="name_hrk">Kuna croată</string>
+    <string name="name_huf">Forintul maghiar</string>
+    <string name="name_inr">Rupia indiană</string>
+    <string name="name_jpy">Yen-ul japonez</string>
+    <string name="name_krw">Won-ul sud-coreean</string>
+    <string name="name_mdl">Leul moldovenesc</string>
+    <string name="name_mxn">Peso-ul mexican</string>
+    <string name="name_nok">Coroana norvegiană</string>
+    <string name="name_nzd">Dolarul neo-zeelandez</string>
+    <string name="name_pln">Zlotul polonez</string>
+    <string name="name_rsd">Dinarul sârbesc</string>
+    <string name="name_rub">Rubla rusească</string>
+    <string name="name_sek">Coroana suedeză</string>
+    <string name="name_thb">Bahtul thailandez</string>
+    <string name="name_try">Lira turcească</string>
+    <string name="name_uah">Hryvna ucraineană</string>
+    <string name="name_usd">Dolarul american</string>
+    <string name="name_xau">Aur (1 gram)</string>
+    <string name="name_xdr">DST</string>
+    <string name="name_zar">Randul sud-african</string>
+    <string name="name_ron">Leul românesc</string>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TOOLBAR ACTIONS -->
+    <string name="action_info">Info</string>
+    <string name="action_star">Favorit</string>
+
+    <!-- BUTTONS -->
+    <string name="btn_ok">OK</string>
+    <string name="btn_rate">EVALUEAZĂ</string>
+    <string name="btn_other_apps">APLICAȚII</string>
+
+    <!-- INFO -->
+    <string name="info">xbnr este o aplicație de curs valutar, cu o interfață simplă și prietenoasă.
+        \n\nAplicația folosește datele publicate de BNR (Banca Națională a României) în fiecare zi lucrătoare, după ora 1pm EET.
+        \nAceasta NU este o aplicație BNR oficială.
+        \n\nIcon-urile de țări au fost create de Freepik și preluate de pe Flaticon.
+        \n\nv%1$s
+    </string>
+
+    <!-- EMPTY VIEWS -->
+    <string name="no_data_found">Lipsă date.</string>
+
+    <!-- ACCESSIBILITY -->
+    <string name="description_nbr_reference_rates">Cursuri de referință BNR</string>
+
+</resources>

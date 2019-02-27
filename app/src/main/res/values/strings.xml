@@ -11,9 +11,9 @@
     <string name="btn_other_apps">OTHER APPS</string>
 
     <!-- INFO -->
-    <string name="info">xbnr is a free currency rates app with a nice &amp; clean UI.
+    <string name="info">xbnr is a simple exchange rates app with a nice &amp; clean UI.
         \n\nThe app uses data published by NBR (National Bank of Romania) every workday after 1pm EET.
-        \nThis is <b>not</b> an official NBR app.
+        \nThis is NOT an official NBR app.
         \n\nThe currency icons are based on country flags designed by Freepik from Flaticon.
         \n\nv%1$s
     </string>

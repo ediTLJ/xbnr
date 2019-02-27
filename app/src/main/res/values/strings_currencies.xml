@@ -32,7 +32,7 @@
     <string name="name_xdr">SDR</string>
     <string name="name_zar">South African rand</string>
     <string name="name_ron">Romanian leu</string>
-    <string name="name_default" />
+    <string name="name_default" translatable="false" />
 
     <string name="symbol_aed" translatable="false">د.إ</string>
     <string name="symbol_aud" translatable="false">$</string>
