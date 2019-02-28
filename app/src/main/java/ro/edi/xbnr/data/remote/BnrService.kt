@@ -47,11 +47,11 @@ interface BnrService {
             // add other interceptors here
 
             // add logging as last interceptor
-            val logging = HttpLoggingInterceptor()
-            logging.level =
-                if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC
-
-            okBuilder.addInterceptor(logging)
+            if (BuildConfig.DEBUG) {
+                val logging = HttpLoggingInterceptor()
+                logging.level = HttpLoggingInterceptor.Level.BODY
+                okBuilder.addInterceptor(logging)
+            }
 
             okBuilder.hostnameVerifier(object : HostnameVerifier {
                 override fun verify(hostname: String, session: SSLSession): Boolean {

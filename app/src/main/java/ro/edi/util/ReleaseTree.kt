@@ -18,10 +18,8 @@ package ro.edi.util
 import android.util.Log
 import timber.log.Timber
 
-class ReleaseTree : Timber.Tree() {
-    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        if (priority == Log.WARN || priority == Log.ERROR) {
-            super.log(priority, message, t)
-        }
+class ReleaseTree : Timber.DebugTree() {
+    override fun isLoggable(tag: String?, priority: Int): Boolean {
+        return priority >= Log.WARN
     }
 }

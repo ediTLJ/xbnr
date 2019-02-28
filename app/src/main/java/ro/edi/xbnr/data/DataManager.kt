@@ -149,9 +149,8 @@ class DataManager private constructor(application: Application) {
 
         logi("fetching %d", interval)
 
-        val response = runCatching { call.execute() }.getOrNull()
-        if (response == null) {
-            loge("error fetching rates")
+        val response = runCatching { call.execute() }.getOrElse {
+            loge(it, "error fetching or parsing rates")
             return
         }
 
@@ -186,7 +185,7 @@ class DataManager private constructor(application: Application) {
             }
         } else {
             // ignore errors, for now
-            loge("failed fetching rates: %s", response.errorBody())
+            loge("error fetching rates [%d]: %s", response.code(), response.errorBody())
         }
     }
 }
