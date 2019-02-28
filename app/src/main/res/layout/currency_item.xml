@@ -25,7 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:background="?attr/selectableItemBackground"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
@@ -33,9 +32,11 @@
 
         <ImageView
             android:id="@+id/currency_flag"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
             android:contentDescription="@{model.getCurrency(position).code}"
+            android:padding="3dp"
             app:src="@{model.getCurrencyIconRes(position)}"
             tools:src="@drawable/ic_flag_eur" />
 
@@ -51,6 +52,7 @@
             android:id="@+id/currency_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
             android:layout_toStartOf="@id/currency_ron"
             android:layout_toEndOf="@id/currency_flag"
@@ -100,7 +102,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:fontFamily="@font/titilliumweb_semibold"
+            android:includeFontPadding="false"
             android:lines="1"
             android:text="@{String.format(`%.4f`, model.getCurrency(position).rate)}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"

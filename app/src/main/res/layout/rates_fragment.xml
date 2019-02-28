@@ -42,7 +42,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/fira_sans_condensed_medium"
             android:text="@string/no_data_found"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textColor="?android:attr/textColorSecondary"
             android:visibility="gone" />
     </FrameLayout>
