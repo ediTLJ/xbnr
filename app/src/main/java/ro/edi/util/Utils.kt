@@ -19,7 +19,6 @@ import android.content.Context
 import android.util.TypedValue
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
 /**
@@ -32,7 +31,7 @@ fun getAppVersionName(context: Context): String {
 
 @BindingAdapter(value = ["src", "errorSrc", "placeholderSrc"], requireAll = false)
 fun ImageView.setImageUrl(src: Int? = null, errorSrc: Int? = null, placeholderSrc: Int? = null) {
-    val builder = Glide.with(context).load(src)
+    val builder = GlideApp.with(context).load(src)
 
     with(builder) {
         errorSrc?.let {

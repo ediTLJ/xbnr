@@ -23,6 +23,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
+import ro.edi.xbnr.BuildConfig
 import ro.edi.xbnr.data.remote.model.BnrDays
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLSession
@@ -47,7 +48,8 @@ interface BnrService {
 
             // add logging as last interceptor
             val logging = HttpLoggingInterceptor()
-            logging.level = HttpLoggingInterceptor.Level.BODY
+            logging.level =
+                if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC
 
             okBuilder.addInterceptor(logging)
 
