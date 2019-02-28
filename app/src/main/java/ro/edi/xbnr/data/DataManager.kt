@@ -21,14 +21,17 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.ZoneId
-import ro.edi.util.*
+import ro.edi.util.AppExecutors
+import ro.edi.util.Singleton
 import ro.edi.xbnr.data.db.AppDatabase
 import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyRate
-
+import timber.log.Timber.d as logd
+import timber.log.Timber.e as loge
+import timber.log.Timber.i as logi
 
 /**
  * This class manages the underlying data.
@@ -48,9 +51,7 @@ class DataManager private constructor(application: Application) {
         // ...
     }
 
-    companion object : Singleton<DataManager, Application>(::DataManager) {
-        private const val TAG = "RATES.MANAGER"
-    }
+    companion object : Singleton<DataManager, Application>(::DataManager)
 
     fun update(currency: Currency, isStarred: Boolean) {
         AppExecutors.diskIO().execute {
@@ -72,10 +73,10 @@ class DataManager private constructor(application: Application) {
             // FIXME test if it works for all locales & timezones
             val zoneIdRomania = ZoneId.of("Europe/Bucharest")
             val today = LocalDate.now(zoneIdRomania)
-                .also { logi(TAG, "today: ", it) }
+                .also { logi("today: %s", it) }
 
             if (latestDateString.isNullOrEmpty()) {
-                logi(TAG, "no date in the db")
+                logi("no date in the db")
                 fetchRates(10)
                 // fetchRates(today.year)
                 // fetchRates(today.year - 1)
@@ -83,7 +84,7 @@ class DataManager private constructor(application: Application) {
             }
 
             val latestDate = LocalDate.parse(latestDateString)
-                .also { logi(TAG, "latest date: ", it) }
+                .also { logi("latest date: %s", it) }
 
             val previousWorkday =
                 if (today.dayOfWeek == DayOfWeek.MONDAY)
@@ -101,18 +102,18 @@ class DataManager private constructor(application: Application) {
                 fetchRates(10)
             } else if (latestDate == previousWorkday) {
                 val now = LocalTime.now(zoneIdRomania)
-                    .also { logi(TAG, "now: ", it) }
+                    .also { logi("now: %s", it) }
                 val hour1pm = LocalTime.of(13, 0)
 
                 if (now.isAfter(hour1pm)) {
                     fetchRates(1)
                 } else { // before 1pm
                     // no rates published yet, no need to do anything
-                    logi(TAG, "before 1pm => nothing to do")
+                    logi("before 1pm => nothing to do")
                 }
             } else { // today
                 // all good, don't do anything
-                logi(TAG, "today => nothing to do")
+                logi("today => nothing to do")
             }
         }
 
@@ -146,10 +147,13 @@ class DataManager private constructor(application: Application) {
                 else -> BnrService.instance.latestRates
             }
 
-        logi(TAG, "fetching ", interval)
+        logi("fetching %d", interval)
 
         val response = runCatching { call.execute() }.getOrNull()
-        response ?: return
+        if (response == null) {
+            loge("error fetching rates")
+            return
+        }
 
         if (response.isSuccessful) {
             val days = response.body() ?: return
@@ -160,7 +164,7 @@ class DataManager private constructor(application: Application) {
                     rates.date ?: return@runInTransaction
                     rates.currencies ?: return@runInTransaction
 
-                    logd(TAG, "date: ", rates.date)
+                    logd("date: %s", rates.date)
 
                     for (currency in rates.currencies) {
                         // logd(TAG, "currency: ", currency)
@@ -182,7 +186,7 @@ class DataManager private constructor(application: Application) {
             }
         } else {
             // ignore errors, for now
-            loge(TAG, response.errorBody())
+            loge("failed fetching rates: %s", response.errorBody())
         }
     }
 }

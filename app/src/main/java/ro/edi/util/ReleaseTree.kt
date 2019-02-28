@@ -13,22 +13,15 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package ro.edi.xbnr
+package ro.edi.util
 
-import android.app.Application
-import com.jakewharton.threetenabp.AndroidThreeTen
-import ro.edi.util.ReleaseTree
+import android.util.Log
 import timber.log.Timber
 
-class MyApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        } else {
-            Timber.plant(ReleaseTree())
+class ReleaseTree : Timber.Tree() {
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+        if (priority == Log.WARN || priority == Log.ERROR) {
+            super.log(priority, message, t)
         }
-        AndroidThreeTen.init(this)
     }
 }

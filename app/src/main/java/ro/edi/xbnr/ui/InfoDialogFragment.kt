@@ -24,7 +24,6 @@ import androidx.fragment.app.DialogFragment
 import ro.edi.util.getAppVersionName
 import ro.edi.xbnr.R
 
-
 class InfoDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         if (!isAdded) return super.onCreateDialog(savedInstanceState)
