@@ -66,15 +66,15 @@
                     tools:text="USD" />
 
                 <TextView
-                    android:id="@+id/currency_name"
+                    android:id="@+id/currency_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fira_sans_condensed_regular"
                     android:lines="1"
-                    android:text="@{model.getCurrencyNameRes()}"
+                    android:text="@{model.getRateDisplayDate()}"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                     android:textColor="?android:textColorSecondary"
-                    tools:text="US Dollar" />
+                    tools:text="February 27, 2019" />
             </LinearLayout>
 
             <TextView
@@ -88,7 +88,7 @@
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
                 android:text="@string/symbol_ron"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:textColor="?android:attr/textColorSecondary" />
 
             <TextView
@@ -100,7 +100,7 @@
                 android:fontFamily="@font/titilliumweb_semibold"
                 android:includeFontPadding="false"
                 android:lines="1"
-                android:text="@{String.format(`%.4f`, model.getCurrencyRate())}"
+                android:text="@{String.format(`%.4f`, model.getRate())}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="18sp"

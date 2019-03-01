@@ -92,7 +92,7 @@
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
             android:text="@string/symbol_ron"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:textColor="?android:attr/textColorSecondary" />
 
         <TextView
