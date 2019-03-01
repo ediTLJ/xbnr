@@ -30,9 +30,11 @@ import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
-import ro.edi.xbnr.databinding.RatesFragmentBinding
+import ro.edi.xbnr.databinding.FragmentRatesBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
+import timber.log.Timber.d as logd
+import timber.log.Timber.i as logi
 
 class RatesFragment : Fragment() {
     private val ratesModel: RatesViewModel by lazy(LazyThreadSafetyMode.NONE) {
@@ -40,8 +42,6 @@ class RatesFragment : Fragment() {
     }
 
     companion object {
-        // private const val TAG = "RATES.FRAGMENT"
-
         fun newInstance(): RatesFragment {
             return RatesFragment()
         }
@@ -49,18 +49,20 @@ class RatesFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding =
-            DataBindingUtil.inflate<RatesFragmentBinding>(inflater, R.layout.rates_fragment, container, false)
+            DataBindingUtil.inflate<FragmentRatesBinding>(inflater, R.layout.fragment_rates, container, false)
 
         val ratesAdapter = RatesAdapter(ratesModel)
         ratesAdapter.setHasStableIds(true)
 
-        ratesModel.currencies.observe(this, Observer {
+        ratesModel.currencies.observe(this, Observer { list ->
+            logi("ratesModel currencies changed")
+
             // TODO replace with databinding
-            if (it == null) {
+            if (list == null) {
                 binding.loading.show()
                 binding.empty.visibility = View.GONE
                 binding.rates.visibility = View.GONE
-            } else if (it.isEmpty()) {
+            } else if (list.isEmpty()) {
                 binding.loading.hide()
                 binding.empty.visibility = View.VISIBLE
                 binding.rates.visibility = View.GONE
@@ -73,9 +75,12 @@ class RatesFragment : Fragment() {
 
                 val tvDate = (activity as MainActivity).findViewById<TextView>(R.id.toolbar_date)
                 val latestDateString = ratesModel.getCurrency(0)?.date
+                    .also { logd("latest date string: %s", it) }
 
                 val latestDate = LocalDate.parse(latestDateString)
+                    .also { logd("latest date: %s", it) }
                 val txtDate = latestDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                    .also { logd("txtDate: %s", it) }
 
                 if (tvDate.text.isNullOrEmpty() || tvDate.text == txtDate) {
                     tvDate.setTextColor(
@@ -88,7 +93,7 @@ class RatesFragment : Fragment() {
                     tvDate.setTextColor(
                         ContextCompat.getColor(
                             activity as MainActivity,
-                            getColorRes(activity as MainActivity, android.R.attr.colorPrimary)
+                            getColorRes(activity as MainActivity, android.R.attr.colorAccent)
                         )
                     )
                 }
@@ -98,7 +103,8 @@ class RatesFragment : Fragment() {
         })
 
         ratesModel.previousRates.observe(this, Observer {
-            ratesAdapter.notifyDataSetChanged()
+            logi("ratesModel previous rates changed")
+            // ratesAdapter.notifyDataSetChanged()
         })
 
         with(binding.rates) {

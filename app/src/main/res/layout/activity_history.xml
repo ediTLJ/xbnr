@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.HistoryActivity">
+
+    <data>
+
+        <variable
+            name="model"
+            type="ro.edi.xbnr.ui.viewmodel.CurrencyViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:theme="@style/ToolbarTheme"
+            app:elevation="4dp"
+            app:title="@string/title_history" />
+
+        <RelativeLayout
+            android:id="@+id/currency"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:id="@+id/currency_flag"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:contentDescription="@{model.getCurrencyDisplayCode()}"
+                android:padding="3dp"
+                app:src="@{model.getCurrencyIconRes()}"
+                tools:src="@drawable/ic_flag_usd" />
+
+            <LinearLayout
+                android:id="@+id/currency_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_toStartOf="@id/currency_ron"
+                android:layout_toEndOf="@id/currency_flag"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/currency_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fira_sans_condensed_medium"
+                    android:includeFontPadding="false"
+                    android:lines="1"
+                    android:text="@{model.getCurrencyDisplayCode()}"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="18sp"
+                    tools:text="USD" />
+
+                <TextView
+                    android:id="@+id/currency_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fira_sans_condensed_regular"
+                    android:lines="1"
+                    android:text="@{model.getCurrencyNameRes()}"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                    android:textColor="?android:textColorSecondary"
+                    tools:text="US Dollar" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/currency_ron"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/currency_value"
+                android:layout_toStartOf="@id/currency_value"
+                android:fontFamily="@font/titilliumweb_regular"
+                android:lines="1"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:text="@string/symbol_ron"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:textColor="?android:attr/textColorSecondary" />
+
+            <TextView
+                android:id="@+id/currency_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/titilliumweb_semibold"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:text="@{String.format(`%.4f`, model.getCurrencyRate())}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="18sp"
+                tools:text="4.1235" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</layout>

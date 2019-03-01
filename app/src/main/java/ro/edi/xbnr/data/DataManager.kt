@@ -29,6 +29,7 @@ import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyRate
+import ro.edi.xbnr.model.DateRate
 import timber.log.Timber.d as logd
 import timber.log.Timber.e as loge
 import timber.log.Timber.i as logi
@@ -53,14 +54,6 @@ class DataManager private constructor(application: Application) {
 
     companion object : Singleton<DataManager, Application>(::DataManager)
 
-    fun update(currency: Currency, isStarred: Boolean) {
-        AppExecutors.diskIO().execute {
-            val dbCurrency =
-                DbCurrency(currency.id, currency.code, currency.multiplier, isStarred)
-            db.currencyDao().update(dbCurrency)
-        }
-    }
-
     /**
      * Get latest available rates.
      *
@@ -70,7 +63,6 @@ class DataManager private constructor(application: Application) {
         AppExecutors.networkIO().execute {
             val latestDateString = db.rateDao().getLatestDate()
 
-            // FIXME test if it works for all locales & timezones
             val zoneIdRomania = ZoneId.of("Europe/Bucharest")
             val today = LocalDate.now(zoneIdRomania)
                 .also { logi("today: %s", it) }
@@ -125,6 +117,23 @@ class DataManager private constructor(application: Application) {
      */
     fun getPreviousRates(): LiveData<List<CurrencyRate>> {
         return db.rateDao().getPreviousRates()
+    }
+
+    fun update(currency: Currency, isStarred: Boolean) {
+        AppExecutors.diskIO().execute {
+            val dbCurrency =
+                DbCurrency(currency.id, currency.code, currency.multiplier, isStarred)
+            db.currencyDao().update(dbCurrency)
+        }
+    }
+
+    fun getCurrency(currencyId: Int): LiveData<Currency> {
+        return db.rateDao().getCurrency(currencyId)
+    }
+
+    fun getRates(currencyId: Int, count: Int): LiveData<List<DateRate>> {
+        // FIXME fetch data, if needed
+        return db.rateDao().getRates(currencyId, count)
     }
 
     /**

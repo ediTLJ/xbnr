@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- TOOLBAR ACTIONS -->
+    <!-- TOOLBAR TITLES & ACTIONS -->
+    <string name="title_history">History</string>
     <string name="action_info">Info</string>
     <string name="action_star">Favorit</string>
 

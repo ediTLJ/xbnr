@@ -15,21 +15,20 @@
 */
 package ro.edi.xbnr.ui.adapter
 
+import android.content.Context
+import android.content.Intent
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import ro.edi.xbnr.R
+import ro.edi.xbnr.ui.HistoryActivity
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
 
 class RatesAdapter(private val ratesModel: RatesViewModel) :
     BaseAdapter() {
 
     override fun getItemId(position: Int): Long {
-        ratesModel.getCurrency(position)?.let {
-            return it.id.toLong()
-        }
-
-        return 0
+        return ratesModel.getCurrencyId(position).toLong()
     }
 
     override fun getItemCount(): Int {
@@ -44,11 +43,13 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
         return R.layout.currency_item
     }
 
-    override fun onClick(position: Int) {
-
+    override fun onClick(context: Context, position: Int) {
+        val i = Intent(context, HistoryActivity::class.java)
+        i.putExtra(HistoryActivity.EXTRA_CURRENCY_ID, ratesModel.getCurrencyId(position))
+        context.startActivity(i)
     }
 
-    override fun onLongClick(position: Int): Boolean {
+    override fun onLongClick(context: Context, position: Int): Boolean {
         return false
     }
 

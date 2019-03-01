@@ -15,6 +15,7 @@
 */
 package ro.edi.xbnr.ui.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -48,16 +49,16 @@ abstract class BaseAdapter :
 
     protected abstract fun bind(position: Int, binding: ViewDataBinding)
 
-    protected abstract fun onClick(position: Int)
+    protected abstract fun onClick(context: Context, position: Int)
 
-    protected abstract fun onLongClick(position: Int): Boolean
+    protected abstract fun onLongClick(context: Context, position: Int): Boolean
 
     inner class BaseViewHolder(private val binding: ViewDataBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: ViewModel, position: Int) {
-            binding.root.setOnClickListener { onClick(position) }
-            binding.root.setOnLongClickListener { onLongClick(position) }
+            binding.root.setOnClickListener { onClick(binding.root.context, position) }
+            binding.root.setOnLongClickListener { onLongClick(binding.root.context, position) }
             binding.setVariable(BR.model, model)
             binding.setVariable(BR.position, position)
             bind(position, binding)

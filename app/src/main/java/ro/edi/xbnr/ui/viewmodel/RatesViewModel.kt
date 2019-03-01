@@ -39,6 +39,14 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         return currencies.value?.getOrNull(position)
     }
 
+    fun getCurrencyId(position: Int): Int {
+        getCurrency(position)?.let {
+            return it.id
+        }
+
+        return -1
+    }
+
     fun getCurrencyDisplayCode(position: Int): String? {
         return getCurrency(position)?.let {
             if (it.multiplier > 1) {
