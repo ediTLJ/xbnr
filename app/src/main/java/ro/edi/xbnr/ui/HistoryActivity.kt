@@ -32,7 +32,7 @@ import timber.log.Timber.i as logi
 
 class HistoryActivity : AppCompatActivity() {
     companion object {
-        const val EXTRA_CURRENCY_ID = "ro.edi.xbnr.ui.history.extra_curency_id"
+        const val EXTRA_CURRENCY_ID = "ro.edi.xbnr.ui.history.extra_currency_id"
     }
 
     private val currencyModel: CurrencyViewModel by lazy(LazyThreadSafetyMode.NONE) {
@@ -84,7 +84,7 @@ class HistoryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    var factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+    private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
             return CurrencyViewModel(

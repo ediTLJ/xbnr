@@ -33,7 +33,7 @@ import timber.log.Timber.i as logi
 
 class HistoryFragment : Fragment() {
     companion object {
-        const val ARG_CURRENCY_ID = "ro.edi.xbnr.ui.history.arg_curency_id"
+        const val ARG_CURRENCY_ID = "ro.edi.xbnr.ui.history.arg_currency_id"
 
         fun newInstance(currencyId: Int) = HistoryFragment().apply {
             arguments = Bundle().apply {
@@ -65,11 +65,11 @@ class HistoryFragment : Fragment() {
         return binding.root
     }
 
-    var factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+    private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
             return HistoryViewModel(
-                (activity as AppCompatActivity).application,
+                (activity as AppCompatActivity).application, // FIXME this will probably crash if the fragment is not attached to the activity
                 arguments?.getInt(ARG_CURRENCY_ID, -1) ?: -1
             ) as T
         }

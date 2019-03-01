@@ -71,32 +71,34 @@ class RatesFragment : Fragment() {
 
                 ratesAdapter.notifyDataSetChanged()
 
-                val tvDate = (activity as MainActivity).findViewById<TextView>(R.id.toolbar_date)
-                val latestDateString = ratesModel.getCurrency(0)?.date
-                    .also { logd("latest date string: %s", it) }
+                activity?.apply {
+                    val tvDate = this.findViewById<TextView>(R.id.toolbar_date)
+                    val latestDateString = ratesModel.getCurrency(0)?.date
+                        .also { logd("latest date string: %s", it) }
 
-                val latestDate = LocalDate.parse(latestDateString)
-                    .also { logd("latest date: %s", it) }
-                val txtDate = latestDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
-                    .also { logd("txtDate: %s", it) }
+                    val latestDate = LocalDate.parse(latestDateString)
+                        .also { logd("latest date: %s", it) }
+                    val txtDate = latestDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                        .also { logd("txtDate: %s", it) }
 
-                if (tvDate.text.isNullOrEmpty() || tvDate.text == txtDate) {
-                    tvDate.setTextColor(
-                        ContextCompat.getColor(
-                            activity as MainActivity,
-                            getColorRes(activity as MainActivity, android.R.attr.textColorSecondary)
+                    if (tvDate.text.isNullOrEmpty() || tvDate.text == txtDate) {
+                        tvDate.setTextColor(
+                            ContextCompat.getColor(
+                                this,
+                                getColorRes(this, android.R.attr.textColorSecondary)
+                            )
                         )
-                    )
-                } else {
-                    tvDate.setTextColor(
-                        ContextCompat.getColor(
-                            activity as MainActivity,
-                            getColorRes(activity as MainActivity, android.R.attr.colorAccent)
+                    } else {
+                        tvDate.setTextColor(
+                            ContextCompat.getColor(
+                                this,
+                                getColorRes(this, android.R.attr.colorAccent)
+                            )
                         )
-                    )
+                    }
+
+                    tvDate.text = txtDate
                 }
-
-                tvDate.text = txtDate
             }
         })
 
