@@ -69,7 +69,7 @@ class HistoryFragment : Fragment() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
             return HistoryViewModel(
-                (activity as AppCompatActivity).application, // FIXME this will probably crash if the fragment is not attached to the activity
+                (activity as AppCompatActivity).application,
                 arguments?.getInt(ARG_CURRENCY_ID, -1) ?: -1
             ) as T
         }
