@@ -32,16 +32,18 @@ import ro.edi.xbnr.ui.viewmodel.HistoryViewModel
 import timber.log.Timber.i as logi
 
 class HistoryFragment : Fragment() {
-    private val historyModel: HistoryViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProviders.of(this, factory).get(HistoryViewModel::class.java)
-    }
-
     companion object {
         const val ARG_CURRENCY_ID = "ro.edi.xbnr.ui.history.arg_curency_id"
 
-        fun newInstance(): HistoryFragment {
-            return HistoryFragment()
+        fun newInstance(currencyId: Int) = HistoryFragment().apply {
+            arguments = Bundle().apply {
+                putInt(ARG_CURRENCY_ID, currencyId)
+            }
         }
+    }
+
+    private val historyModel: HistoryViewModel by lazy(LazyThreadSafetyMode.NONE) {
+        ViewModelProviders.of(this, factory).get(HistoryViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

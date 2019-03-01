@@ -31,12 +31,12 @@ import ro.edi.xbnr.ui.viewmodel.CurrencyViewModel
 import timber.log.Timber.i as logi
 
 class HistoryActivity : AppCompatActivity() {
-    private val currencyModel: CurrencyViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProviders.of(this, factory).get(CurrencyViewModel::class.java)
-    }
-
     companion object {
         const val EXTRA_CURRENCY_ID = "ro.edi.xbnr.ui.history.extra_curency_id"
+    }
+
+    private val currencyModel: CurrencyViewModel by lazy(LazyThreadSafetyMode.NONE) {
+        ViewModelProviders.of(this, factory).get(CurrencyViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +57,10 @@ class HistoryActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, HistoryFragment.newInstance())
+                .replace(
+                    R.id.container,
+                    HistoryFragment.newInstance(intent.getIntExtra(EXTRA_CURRENCY_ID, -1))
+                )
                 .commitNow()
         }
     }

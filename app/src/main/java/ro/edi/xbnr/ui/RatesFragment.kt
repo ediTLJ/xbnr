@@ -37,14 +37,12 @@ import timber.log.Timber.d as logd
 import timber.log.Timber.i as logi
 
 class RatesFragment : Fragment() {
-    private val ratesModel: RatesViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProviders.of(this).get(RatesViewModel::class.java)
+    companion object {
+        fun newInstance() = RatesFragment()
     }
 
-    companion object {
-        fun newInstance(): RatesFragment {
-            return RatesFragment()
-        }
+    private val ratesModel: RatesViewModel by lazy(LazyThreadSafetyMode.NONE) {
+        ViewModelProviders.of(this).get(RatesViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
