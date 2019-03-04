@@ -36,7 +36,7 @@ abstract class RateDao : BaseDao<DbRate> {
     @Query("SELECT currency_id, code, multiplier, is_starred, date, rate FROM rates LEFT OUTER JOIN currencies ON rates.currency_id = currencies.id WHERE currency_id = :id AND date = (SELECT MAX(date) FROM rates)")
     protected abstract fun query(id: Int): LiveData<Currency>
 
-    @Query("SELECT id, date, rate FROM rates WHERE currency_id = :id ORDER BY date DESC LIMIT :count")
+    @Query("SELECT id, date, rate FROM (SELECT id, date, rate FROM rates WHERE currency_id = :id ORDER BY date DESC LIMIT :count) ORDER BY date ASC")
     protected abstract fun query(id: Int, count: Int): LiveData<List<DateRate>>
 
     @Query("SELECT MAX(date) FROM rates")

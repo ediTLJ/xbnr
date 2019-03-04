@@ -34,3 +34,6 @@
 -keepclasseswithmembernames class * {
     @com.tickaroo.tikxml.* <methods>;
 }
+
+# MPAndroidChart
+-keep class com.github.mikephil.charting.** { *; }

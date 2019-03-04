@@ -107,9 +107,12 @@
                 tools:text="4.1235" />
         </RelativeLayout>
 
+        <!-- FIXME ScrollView -->
+
         <FrameLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="400dp"
+            android:layout_marginBottom="16dp" />
     </LinearLayout>
 </layout>

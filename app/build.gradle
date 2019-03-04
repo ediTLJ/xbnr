@@ -93,6 +93,9 @@ dependencies {
     // ThreeTen Android Backport - remove this when reaching minSdkVersion 27 (Android 8)
     implementation "com.jakewharton.threetenabp:threetenabp:1.1.2"
 
+    // MPAndroidChart
+    implementation "com.github.PhilJay:MPAndroidChart:v3.1.0-alpha"
+
     // testing dependencies
     testImplementation "androidx.arch.core:core-testing:2.0.0"
     testImplementation "androidx.room:room-testing:2.0.0"
