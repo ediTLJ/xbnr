@@ -43,6 +43,7 @@ class HistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val binding: ActivityHistoryBinding = DataBindingUtil.setContentView(this, R.layout.activity_history)
+        binding.lifecycleOwner = this
         binding.model = currencyModel
 
         currencyModel.currency.observe(this, Observer {

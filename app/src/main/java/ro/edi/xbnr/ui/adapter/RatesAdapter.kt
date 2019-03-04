@@ -24,8 +24,7 @@ import ro.edi.xbnr.R
 import ro.edi.xbnr.ui.HistoryActivity
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
 
-class RatesAdapter(private val ratesModel: RatesViewModel) :
-    BaseAdapter() {
+class RatesAdapter(private val ratesModel: RatesViewModel) : BaseAdapter() {
 
     override fun getItemId(position: Int): Long {
         return ratesModel.getCurrencyId(position).toLong()

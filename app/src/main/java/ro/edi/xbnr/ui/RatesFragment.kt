@@ -48,11 +48,21 @@ class RatesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding =
             DataBindingUtil.inflate<FragmentRatesBinding>(inflater, R.layout.fragment_rates, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         val ratesAdapter = RatesAdapter(ratesModel)
         ratesAdapter.setHasStableIds(true)
 
-        ratesModel.currencies.observe(this, Observer { list ->
+        val colorAccent = ContextCompat.getColor(
+            binding.root.context,
+            getColorRes(binding.root.context, R.attr.colorAccent)
+        )
+        val textColorSecondary = ContextCompat.getColor(
+            binding.root.context,
+            getColorRes(binding.root.context, android.R.attr.textColorSecondary)
+        )
+
+        ratesModel.currencies.observe(viewLifecycleOwner, Observer { list ->
             logi("ratesModel currencies changed")
 
             // TODO replace with databinding
@@ -72,7 +82,7 @@ class RatesFragment : Fragment() {
                 ratesAdapter.notifyDataSetChanged()
 
                 activity?.apply {
-                    val tvDate = this.findViewById<TextView>(R.id.toolbar_date)
+                    val tvDate = findViewById<TextView>(R.id.toolbar_date)
                     val latestDateString = ratesModel.getCurrency(0)?.date
                         .also { logd("latest date string: %s", it) }
 
@@ -82,19 +92,9 @@ class RatesFragment : Fragment() {
                         .also { logd("txtDate: %s", it) }
 
                     if (tvDate.text.isNullOrEmpty() || tvDate.text == txtDate) {
-                        tvDate.setTextColor(
-                            ContextCompat.getColor(
-                                this,
-                                getColorRes(this, android.R.attr.textColorSecondary)
-                            )
-                        )
+                        tvDate.setTextColor(textColorSecondary)
                     } else {
-                        tvDate.setTextColor(
-                            ContextCompat.getColor(
-                                this,
-                                getColorRes(this, android.R.attr.colorAccent)
-                            )
-                        )
+                        tvDate.setTextColor(colorAccent)
                     }
 
                     tvDate.text = txtDate
@@ -102,9 +102,9 @@ class RatesFragment : Fragment() {
             }
         })
 
-        ratesModel.previousRates.observe(this, Observer {
+        ratesModel.previousRates.observe(viewLifecycleOwner, Observer {
             logi("ratesModel previous rates changed")
-            // ratesAdapter.notifyDataSetChanged()
+            ratesAdapter.notifyDataSetChanged()
         })
 
         with(binding.rates) {

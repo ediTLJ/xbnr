@@ -18,6 +18,8 @@ package ro.edi.util
 import android.content.Context
 import android.util.TypedValue
 import android.widget.ImageView
+import androidx.annotation.AttrRes
+import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
@@ -30,7 +32,7 @@ fun getAppVersionName(context: Context): String {
 }
 
 @BindingAdapter(value = ["src", "errorSrc", "placeholderSrc"], requireAll = false)
-fun ImageView.setImageUrl(src: Int? = null, errorSrc: Int? = null, placeholderSrc: Int? = null) {
+fun ImageView.setImageUrl(@DrawableRes src: Int? = null, @DrawableRes errorSrc: Int? = null, @DrawableRes placeholderSrc: Int? = null) {
     val builder = GlideApp.with(context).load(src)
 
     with(builder) {
@@ -47,7 +49,7 @@ fun ImageView.setImageUrl(src: Int? = null, errorSrc: Int? = null, placeholderSr
     builder.into(this)
 }
 
-fun getColorRes(context: Context, attrRes: Int): Int {
+fun getColorRes(context: Context, @AttrRes attrRes: Int): Int {
     val outValue = TypedValue()
     context.theme.resolveAttribute(attrRes, outValue, true)
     return outValue.resourceId
