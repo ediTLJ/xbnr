@@ -25,7 +25,7 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
     private var currencyId = -1
 
     val rates: LiveData<List<DateRate>> by lazy(LazyThreadSafetyMode.NONE) {
-        DataManager.getInstance(getApplication()).getRates(currencyId, 10)
+        DataManager.getInstance(getApplication()).getRates(currencyId, 20)
     }
 
     constructor(application: Application, currencyId: Int) : this(application) {

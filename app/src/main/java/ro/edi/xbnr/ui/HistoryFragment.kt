@@ -25,10 +25,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
@@ -97,14 +94,7 @@ class HistoryFragment : Fragment() {
                 setNoDataTextTypeface(it)
             }
 
-            val dayAxisFormatter = object : IAxisValueFormatter {
-                override fun getFormattedValue(value: Float, axis: AxisBase): String {
-                    return historyModel.rates.value?.getOrNull(value.toInt())?.let {
-                        it.date.takeLast(2)
-                    } ?: ""
-                }
-            }
-            xAxis.valueFormatter = dayAxisFormatter
+            xAxis.valueFormatter = DayAxisFormatter(historyModel.rates)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.setDrawGridLines(false)
             xAxis.setLabelCount(20, true)
@@ -119,9 +109,7 @@ class HistoryFragment : Fragment() {
 
             val clickListener = object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry, h: Highlight) {
-                    historyModel.rates.value?.getOrNull(e.x.toInt())?.let {
-                        show(it)
-                    }
+                    show(e.data as DateRate)
                 }
 
                 override fun onNothingSelected() {
@@ -158,8 +146,8 @@ class HistoryFragment : Fragment() {
 
                 val entries = mutableListOf<Entry>()
 
-                rates.forEach { rate ->
-                    entries.add(Entry(entries.size.toFloat(), rate.rate.toFloat()))
+                rates.forEachIndexed { index, rate ->
+                    entries.add(Entry(index.toFloat(), rate.rate.toFloat(), rate))
                 }
 
                 val dataSet = LineDataSet(entries, "rates").apply {
@@ -167,9 +155,10 @@ class HistoryFragment : Fragment() {
                     mode = LineDataSet.Mode.STEPPED
 
                     lineWidth = 2.0f
-                    setCircleColor(colorAccent)
-                    circleHoleColor = colorAccent
-                    circleRadius = 5.0f
+                    setDrawCircles(false)
+                    // setCircleColor(colorAccent)
+                    // circleHoleColor = colorAccent
+                    // circleRadius = 5.0f
 
                     setDrawFilled(true)
                     fillColor = colorAccent
@@ -177,7 +166,7 @@ class HistoryFragment : Fragment() {
 
                     setDrawHorizontalHighlightIndicator(false)
                     setDrawVerticalHighlightIndicator(true)
-                    highLightColor = colorAccent
+                    highLightColor = textColorPrimary
                     highlightLineWidth = 2.0f
 
                     setDrawValues(false)
@@ -195,6 +184,12 @@ class HistoryFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    class DayAxisFormatter(private val rates: LiveData<List<DateRate>>) : IAxisValueFormatter {
+        override fun getFormattedValue(value: Float, axis: AxisBase): String {
+            return rates.value?.getOrNull(value.toInt())?.date?.takeLast(2) ?: ""
+        }
     }
 
     private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

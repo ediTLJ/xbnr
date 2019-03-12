@@ -107,7 +107,7 @@
                 tools:text="4.1235" />
         </RelativeLayout>
 
-        <!-- FIXME ScrollView -->
+        <!-- FIXME ScrollView & landscape layout -->
 
         <FrameLayout
             android:id="@+id/container"
