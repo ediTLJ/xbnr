@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.HistoryFragment">
 
@@ -11,9 +12,10 @@
             type="ro.edi.xbnr.ui.viewmodel.HistoryViewModel" />
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/loading"
@@ -22,14 +24,79 @@
             android:layout_height="48dp"
             android:layout_gravity="center"
             android:indeterminate="true"
-            android:visibility="visible" />
+            android:visibility="visible"
+            tools:visibility="gone" />
 
         <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chart"
+            android:id="@+id/line_chart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="350dp"
+            android:layout_gravity="top"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="40dp" />
-    </FrameLayout>
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <com.github.mikephil.charting.charts.CandleStickChart
+            android:id="@+id/candle_chart"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_gravity="top"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chart_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:checkedChip="@+id/mode_bezier"
+            app:chipSpacing="0dp"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/mode_bezier"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:checkedIcon="@drawable/ic_chart_bezier_checked"
+                app:checkedIconEnabled="true"
+                app:chipBackgroundColor="@android:color/transparent"
+                app:chipCornerRadius="24dp"
+                app:chipIcon="@drawable/ic_chart_bezier"
+                app:chipIconEnabled="true"
+                app:chipStartPadding="12dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/mode_stepped"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:checkedIcon="@drawable/ic_chart_stepped_checked"
+                app:checkedIconEnabled="true"
+                app:chipBackgroundColor="@android:color/transparent"
+                app:chipCornerRadius="24dp"
+                app:chipIcon="@drawable/ic_chart_stepped"
+                app:chipIconEnabled="true"
+                app:chipStartPadding="12dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/mode_linear"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:checkedIcon="@drawable/ic_chart_linear_checked"
+                app:checkedIconEnabled="true"
+                app:chipBackgroundColor="@android:color/transparent"
+                app:chipCornerRadius="24dp"
+                app:chipIcon="@drawable/ic_chart_linear"
+                app:chipIconEnabled="true"
+                app:chipStartPadding="12dp" />
+        </com.google.android.material.chip.ChipGroup>
+    </LinearLayout>
 </layout>

@@ -79,7 +79,7 @@ class HistoryFragment : Fragment() {
             getColorRes(binding.root.context, android.R.attr.textColorSecondary)
         )
 
-        binding.chart.apply {
+        binding.lineChart.apply {
             isAutoScaleMinMaxEnabled = true
             isKeepPositionOnRotation = true
             legend.isEnabled = false
@@ -135,12 +135,30 @@ class HistoryFragment : Fragment() {
             setExtraOffsets(0f, 0f, 0f, 4f)
         }
 
+        binding.chartMode.setOnCheckedChangeListener { _, id ->
+            binding.lineChart.apply {
+                if (visibility != View.VISIBLE || data.dataSetCount == 0)
+                    return@setOnCheckedChangeListener
+
+                val dataSet = data.getDataSetByIndex(0) as LineDataSet
+                dataSet.apply {
+                    when (id) {
+                        R.id.mode_bezier -> mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+                        R.id.mode_stepped -> mode = LineDataSet.Mode.STEPPED
+                        R.id.mode_linear -> mode = LineDataSet.Mode.LINEAR
+                    }
+                }
+
+                animateX(500, Easing.EaseInOutSine)
+            }
+        }
+
         historyModel.rates.observe(viewLifecycleOwner, Observer { rates ->
             logi("ratesModel currencies changed")
 
             if (rates.isNullOrEmpty()) {
                 binding.loading.show()
-                binding.chart.visibility = View.GONE
+                binding.lineChart.visibility = View.GONE
             } else {
                 binding.loading.hide()
 
@@ -152,13 +170,10 @@ class HistoryFragment : Fragment() {
 
                 val dataSet = LineDataSet(entries, "rates").apply {
                     axisDependency = YAxis.AxisDependency.LEFT
-                    mode = LineDataSet.Mode.STEPPED
+                    mode = LineDataSet.Mode.HORIZONTAL_BEZIER
 
                     lineWidth = 2.0f
                     setDrawCircles(false)
-                    // setCircleColor(colorAccent)
-                    // circleHoleColor = colorAccent
-                    // circleRadius = 5.0f
 
                     setDrawFilled(true)
                     fillColor = colorAccent
@@ -173,13 +188,15 @@ class HistoryFragment : Fragment() {
                     color = colorAccent
                 }
 
-                binding.chart.apply {
+                binding.lineChart.apply {
                     data = LineData(dataSet)
                     notifyDataSetChanged()
 
                     visibility = View.VISIBLE
-                    animateX(500, Easing.EaseOutBack)
+                    animateX(500, Easing.EaseInOutSine)
                 }
+
+                binding.chartMode.visibility = View.VISIBLE
             }
         })
 
