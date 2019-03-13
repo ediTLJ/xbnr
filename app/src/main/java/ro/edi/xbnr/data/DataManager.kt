@@ -69,9 +69,9 @@ class DataManager private constructor(application: Application) {
 
             if (latestDateString.isNullOrEmpty()) {
                 logi("no date in the db")
-                fetchRates(10)
-                // fetchRates(today.year)
-                // fetchRates(today.year - 1)
+                // fetchRates(10)
+                fetchRates(today.year)
+                fetchRates(today.year - 1)
                 return@execute
             }
 
@@ -132,7 +132,11 @@ class DataManager private constructor(application: Application) {
     }
 
     fun getRates(currencyId: Int, count: Int): LiveData<List<DateRate>> {
-        // FIXME fetch data, if needed
+        // TODO fetch data if needed, based on count and existing db entries
+        // not needed yet, as we only show latest 20 rates in current version
+        // AppExecutors.networkIO().execute {
+        // }
+
         return db.rateDao().getRates(currencyId, count)
     }
 

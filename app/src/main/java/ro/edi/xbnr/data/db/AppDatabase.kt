@@ -25,7 +25,7 @@ import ro.edi.xbnr.data.db.dao.RateDao
 import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 
-@Database(entities = [DbCurrency::class, DbRate::class], version = 1, exportSchema = false)
+@Database(entities = [DbCurrency::class, DbRate::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun currencyDao(): CurrencyDao
     abstract fun rateDao(): RateDao
