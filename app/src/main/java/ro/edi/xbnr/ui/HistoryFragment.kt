@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.MarkerImage
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
@@ -87,7 +88,6 @@ class HistoryFragment : Fragment() {
             description.isEnabled = false
             setDrawGridBackground(false)
             setScaleEnabled(false)
-            isHighlightPerTapEnabled = true
 
             setNoDataText(getString(R.string.no_data_found))
             setNoDataTextColor(textColorSecondary)
@@ -122,9 +122,7 @@ class HistoryFragment : Fragment() {
                 private fun show(rate: DateRate) {
                     activity?.run {
                         findViewById<TextView>(R.id.currency_date).text =
-                            LocalDate.parse(rate.date).format(
-                                DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
-                            )
+                            LocalDate.parse(rate.date).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
 
                         findViewById<TextView>(R.id.currency_value).text = String.format("%.4f", rate.rate)
                     }
@@ -134,6 +132,10 @@ class HistoryFragment : Fragment() {
 
             setVisibleXRangeMaximum(20f)
             setExtraOffsets(0f, 0f, 0f, 4f)
+
+            val marker = MarkerImage(context, R.drawable.ic_dot)
+            marker.setOffset(-10f, -10f)
+            setMarker(marker)
         }
 
         binding.chartMode.setOnCheckedChangeListener { chipGroup, id ->
@@ -189,10 +191,11 @@ class HistoryFragment : Fragment() {
                     fillColor = colorAccent
                     fillAlpha = 25
 
-                    setDrawHorizontalHighlightIndicator(false)
-                    setDrawVerticalHighlightIndicator(true)
-                    highLightColor = textColorPrimary
-                    highlightLineWidth = 2.0f
+                    setDrawHighlightIndicators(false)
+                    // setDrawHorizontalHighlightIndicator(false)
+                    // setDrawVerticalHighlightIndicator(true)
+                    // highLightColor = textColorPrimary
+                    // highlightLineWidth = 2.0f
 
                     setDrawValues(false)
                     color = colorAccent
@@ -201,6 +204,8 @@ class HistoryFragment : Fragment() {
                 binding.lineChart.apply {
                     data = LineData(dataSet)
                     notifyDataSetChanged()
+
+                    highlightValue(data.xMax, 0)
 
                     visibility = View.VISIBLE
                     animateX(500, Easing.Linear)
