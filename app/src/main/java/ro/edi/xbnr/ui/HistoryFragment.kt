@@ -72,10 +72,6 @@ class HistoryFragment : Fragment() {
             binding.root.context,
             getColorRes(binding.root.context, R.attr.colorAccent)
         )
-        val textColorPrimary = ContextCompat.getColor(
-            binding.root.context,
-            getColorRes(binding.root.context, android.R.attr.textColorPrimary)
-        )
         val textColorSecondary = ContextCompat.getColor(
             binding.root.context,
             getColorRes(binding.root.context, android.R.attr.textColorSecondary)
@@ -99,7 +95,7 @@ class HistoryFragment : Fragment() {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.setDrawGridLines(false)
             xAxis.setLabelCount(20, true)
-            xAxis.textColor = textColorPrimary
+            xAxis.textColor = textColorSecondary
             xAxis.textSize = 12f
             ResourcesCompat.getFont(context, R.font.fira_sans_condensed_regular)?.let {
                 xAxis.typeface = it
@@ -137,6 +133,8 @@ class HistoryFragment : Fragment() {
             marker.setOffset(-10f, -10f)
             setMarker(marker)
         }
+
+        // FIXME save/restore chart mode & highlight at screen orientation change
 
         binding.chartMode.setOnCheckedChangeListener { chipGroup, id ->
             for (i in 0 until chipGroup.childCount) {
@@ -182,7 +180,7 @@ class HistoryFragment : Fragment() {
 
                 val dataSet = LineDataSet(entries, "rates").apply {
                     axisDependency = YAxis.AxisDependency.LEFT
-                    mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+                    mode = historyModel.chartMode
 
                     lineWidth = 2.0f
                     setDrawCircles(false)
@@ -205,7 +203,10 @@ class HistoryFragment : Fragment() {
                     data = LineData(dataSet)
                     notifyDataSetChanged()
 
-                    highlightValue(data.xMax, 0)
+                    highlightValue(
+                        if (historyModel.chartHighlightX < 0f) data.xMax else historyModel.chartHighlightX,
+                        0
+                    )
 
                     visibility = View.VISIBLE
                     animateX(500, Easing.Linear)
@@ -217,6 +218,24 @@ class HistoryFragment : Fragment() {
 
         return binding.root
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//
+//        view?.findViewById<LineChart>(R.id.line_chart)?.apply {
+//            if (data != null && data.dataSetCount > 0) {
+//                val dataSet = data.getDataSetByIndex(0) as LineDataSet
+//                dataSet.mode = historyModel.chartMode
+//
+//                highlightValue(
+//                    if (historyModel.chartHighlightX < 0f) data.xMax else historyModel.chartHighlightX,
+//                    0
+//                )
+//
+//                invalidate()
+//            }
+//        }
+//    }
 
     class DayAxisFormatter(private val rates: LiveData<List<DateRate>>) : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase): String {

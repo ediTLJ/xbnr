@@ -18,6 +18,7 @@ package ro.edi.xbnr.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import com.github.mikephil.charting.data.LineDataSet
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.DateRate
 
@@ -27,6 +28,9 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
     val rates: LiveData<List<DateRate>> by lazy(LazyThreadSafetyMode.NONE) {
         DataManager.getInstance(getApplication()).getRates(currencyId, 20)
     }
+
+    var chartHighlightX = -1f
+    var chartMode = LineDataSet.Mode.HORIZONTAL_BEZIER
 
     constructor(application: Application, currencyId: Int) : this(application) {
         this.currencyId = currencyId

@@ -15,7 +15,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/loading"
@@ -29,30 +29,32 @@
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/line_chart"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/chart_height"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_gravity="start|top"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
             android:visibility="gone"
             tools:visibility="visible" />
 
         <com.github.mikephil.charting.charts.CandleStickChart
             android:id="@+id/candle_chart"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/chart_height"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_gravity="start|top"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
             android:visibility="gone" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chart_mode"
-            android:layout_width="wrap_content"
+            android:layout_width="48dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="16dp"
+            android:layout_gravity="top"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="16dp"
             android:visibility="gone"
             app:chipSpacing="0dp"
             app:singleSelection="true"
