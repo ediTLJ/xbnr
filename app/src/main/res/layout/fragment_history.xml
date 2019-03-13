@@ -55,21 +55,23 @@
             android:layout_marginEnd="16dp"
             android:orientation="horizontal"
             android:visibility="gone"
-            app:checkedChip="@+id/mode_bezier"
             app:chipSpacing="0dp"
-            app:singleSelection="true">
+            app:singleSelection="true"
+            tools:visibility="visible">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/mode_bezier"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:checked="true"
+                android:clickable="false"
                 app:checkedIcon="@drawable/ic_chart_bezier_checked"
-                app:checkedIconEnabled="true"
+                app:checkedIconVisible="true"
                 app:chipBackgroundColor="@android:color/transparent"
                 app:chipCornerRadius="24dp"
                 app:chipIcon="@drawable/ic_chart_bezier"
-                app:chipIconEnabled="true"
+                app:chipIconVisible="false"
                 app:chipStartPadding="12dp" />
 
             <com.google.android.material.chip.Chip
@@ -78,11 +80,11 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 app:checkedIcon="@drawable/ic_chart_stepped_checked"
-                app:checkedIconEnabled="true"
+                app:checkedIconVisible="true"
                 app:chipBackgroundColor="@android:color/transparent"
                 app:chipCornerRadius="24dp"
                 app:chipIcon="@drawable/ic_chart_stepped"
-                app:chipIconEnabled="true"
+                app:chipIconVisible="true"
                 app:chipStartPadding="12dp" />
 
             <com.google.android.material.chip.Chip
@@ -91,11 +93,11 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 app:checkedIcon="@drawable/ic_chart_linear_checked"
-                app:checkedIconEnabled="true"
+                app:checkedIconVisible="true"
                 app:chipBackgroundColor="@android:color/transparent"
                 app:chipCornerRadius="24dp"
                 app:chipIcon="@drawable/ic_chart_linear"
-                app:chipIconEnabled="true"
+                app:chipIconVisible="true"
                 app:chipStartPadding="12dp" />
         </com.google.android.material.chip.ChipGroup>
     </LinearLayout>

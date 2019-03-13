@@ -36,6 +36,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.google.android.material.chip.Chip
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -135,10 +136,19 @@ class HistoryFragment : Fragment() {
             setExtraOffsets(0f, 0f, 0f, 4f)
         }
 
-        binding.chartMode.setOnCheckedChangeListener { _, id ->
+        binding.chartMode.setOnCheckedChangeListener { chipGroup, id ->
+            for (i in 0 until chipGroup.childCount) {
+                val chip = chipGroup.getChildAt(i) as Chip
+                chip.isClickable = chip.id != chipGroup.checkedChipId
+                chip.isChecked = chip.id == chipGroup.checkedChipId
+                chip.isChipIconVisible = chip.id != chipGroup.checkedChipId
+                chip.isCheckedIconVisible = chip.id == chipGroup.checkedChipId
+            }
+
             binding.lineChart.apply {
-                if (visibility != View.VISIBLE || data.dataSetCount == 0)
+                if (visibility != View.VISIBLE || data.dataSetCount == 0) {
                     return@setOnCheckedChangeListener
+                }
 
                 val dataSet = data.getDataSetByIndex(0) as LineDataSet
                 dataSet.apply {
@@ -149,7 +159,7 @@ class HistoryFragment : Fragment() {
                     }
                 }
 
-                animateX(500, Easing.EaseInOutSine)
+                animateX(500, Easing.Linear)
             }
         }
 
@@ -193,7 +203,7 @@ class HistoryFragment : Fragment() {
                     notifyDataSetChanged()
 
                     visibility = View.VISIBLE
-                    animateX(500, Easing.EaseInOutSine)
+                    animateX(500, Easing.Linear)
                 }
 
                 binding.chartMode.visibility = View.VISIBLE
