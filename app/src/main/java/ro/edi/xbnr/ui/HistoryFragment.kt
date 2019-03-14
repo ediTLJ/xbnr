@@ -149,7 +149,7 @@ class HistoryFragment : Fragment() {
             }
 
             binding.lineChart.apply {
-                if (visibility != View.VISIBLE || data.dataSetCount == 0) {
+                if (data.dataSetCount == 0) {
                     return@setOnCheckedChangeListener
                 }
 
@@ -209,7 +209,7 @@ class HistoryFragment : Fragment() {
 
                     highlightValue(
                         if (historyModel.chartHighlightX < 0f) data.xMax else historyModel.chartHighlightX,
-                        0
+                        0, true
                     )
 
                     visibility = View.VISIBLE

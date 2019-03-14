@@ -89,12 +89,10 @@
                         android:id="@+id/currency_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:layout_toEndOf="@id/currency_ron"
                         android:fontFamily="@font/titilliumweb_semibold"
                         android:includeFontPadding="false"
                         android:lines="1"
-                        android:text="@{String.format(`%.4f`, model.getRate())}"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp"
@@ -108,7 +106,6 @@
                     android:fontFamily="@font/fira_sans_condensed_regular"
                     android:gravity="center_horizontal"
                     android:lines="1"
-                    android:text="@{model.getRateDisplayDate()}"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                     android:textColor="?android:textColorSecondary"
                     tools:text="September 28, 2019" />
