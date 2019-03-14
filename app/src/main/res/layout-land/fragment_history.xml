@@ -65,8 +65,6 @@
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:checked="true"
-                android:clickable="false"
                 app:checkedIcon="@drawable/ic_chart_bezier_checked"
                 app:checkedIconVisible="true"
                 app:chipBackgroundColor="@android:color/transparent"

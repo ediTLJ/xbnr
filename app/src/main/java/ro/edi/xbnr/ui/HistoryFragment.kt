@@ -26,6 +26,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
+import androidx.preference.PreferenceManager
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.MarkerImage
@@ -69,6 +70,7 @@ class HistoryFragment : Fragment() {
             DataBindingUtil.inflate<FragmentHistoryBinding>(inflater, R.layout.fragment_history, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
         val colorAccent = ContextCompat.getColor(
             binding.root.context,
             getColorRes(binding.root.context, R.attr.colorAccent)
@@ -138,6 +140,24 @@ class HistoryFragment : Fragment() {
             setMarker(marker)
         }
 
+        binding.chartMode.apply {
+            val checkedId = when (sharedPrefs.getString("chart_line_mode", LineDataSet.Mode.HORIZONTAL_BEZIER.name)) {
+                LineDataSet.Mode.HORIZONTAL_BEZIER.name -> R.id.mode_bezier
+                LineDataSet.Mode.STEPPED.name -> R.id.mode_stepped
+                LineDataSet.Mode.LINEAR.name -> R.id.mode_linear
+                else -> R.id.mode_bezier
+            }
+
+            for (i in 0 until childCount) {
+                val chip = getChildAt(i) as Chip
+                chip.isClickable = chip.id != checkedId
+                chip.isChecked = chip.id == checkedId
+                // let's keep them both visible for now... it's an interesting effect
+                // chip.isChipIconVisible = chip.id != chipGroup.checkedChipId
+                // chip.isCheckedIconVisible = chip.id == chipGroup.checkedChipId
+            }
+        }
+
         binding.chartMode.setOnCheckedChangeListener { chipGroup, id ->
             for (i in 0 until chipGroup.childCount) {
                 val chip = chipGroup.getChildAt(i) as Chip
@@ -149,7 +169,7 @@ class HistoryFragment : Fragment() {
             }
 
             binding.lineChart.apply {
-                if (data.dataSetCount == 0) {
+                if (data == null || data.dataSetCount == 0) {
                     return@setOnCheckedChangeListener
                 }
 
@@ -160,7 +180,10 @@ class HistoryFragment : Fragment() {
                         R.id.mode_stepped -> mode = LineDataSet.Mode.STEPPED
                         R.id.mode_linear -> mode = LineDataSet.Mode.LINEAR
                     }
-                    historyModel.chartMode = mode
+
+                    sharedPrefs.edit()
+                        .putString("chart_line_mode", mode.name)
+                        .apply()
                 }
 
                 animateX(500, Easing.Linear)
@@ -184,7 +207,11 @@ class HistoryFragment : Fragment() {
 
                 val dataSet = LineDataSet(entries, "rates").apply {
                     axisDependency = YAxis.AxisDependency.LEFT
-                    mode = historyModel.chartMode
+
+                    mode = LineDataSet.Mode.valueOf(
+                        sharedPrefs.getString("chart_line_mode", LineDataSet.Mode.HORIZONTAL_BEZIER.name)
+                            ?: LineDataSet.Mode.HORIZONTAL_BEZIER.name
+                    )
 
                     lineWidth = 2.0f
                     setDrawCircles(false)
