@@ -14,6 +14,7 @@
     <color name="green_300">#37EFBA</color>
 
     <color name="dark_green_700">#045D56</color>
+    <color name="dark_green_700_transparent">#00045D56</color>
 
     <color name="orange_300">#FF6859</color>
     <color name="orange_200">#FF857C</color>

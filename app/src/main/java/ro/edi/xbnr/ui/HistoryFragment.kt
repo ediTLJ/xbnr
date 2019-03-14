@@ -79,6 +79,7 @@ class HistoryFragment : Fragment() {
             binding.root.context,
             getColorRes(binding.root.context, android.R.attr.textColorSecondary)
         )
+        val bkgChart = ContextCompat.getDrawable(binding.root.context, R.drawable.bkg_chart)
 
         binding.lineChart.apply {
             isAutoScaleMinMaxEnabled = true
@@ -186,7 +187,7 @@ class HistoryFragment : Fragment() {
                         .apply()
                 }
 
-                animateX(500, Easing.Linear)
+                animateX(300, Easing.Linear)
             }
         }
 
@@ -217,20 +218,18 @@ class HistoryFragment : Fragment() {
                     setDrawCircles(false)
 
                     setDrawFilled(true)
-                    fillColor = colorAccent
-                    fillAlpha = 25
+                    fillDrawable = bkgChart
 
                     setDrawHighlightIndicators(false)
-                    // setDrawHorizontalHighlightIndicator(false)
-                    // setDrawVerticalHighlightIndicator(true)
-                    // highLightColor = textColorPrimary
-                    // highlightLineWidth = 2.0f
 
                     setDrawValues(false)
                     color = colorAccent
                 }
 
                 binding.lineChart.apply {
+                    val wasEmpty = data == null || data.dataSetCount == 0
+                        || data.getDataSetByIndex(0).entryCount == 0
+
                     data = LineData(dataSet)
                     notifyDataSetChanged()
 
@@ -240,7 +239,12 @@ class HistoryFragment : Fragment() {
                     )
 
                     visibility = View.VISIBLE
-                    animateX(500, Easing.Linear)
+
+                    if (wasEmpty) {
+                        animateX(300, Easing.Linear)
+                    } else {
+                        invalidate()
+                    }
                 }
 
                 binding.chartMode.visibility = View.VISIBLE
