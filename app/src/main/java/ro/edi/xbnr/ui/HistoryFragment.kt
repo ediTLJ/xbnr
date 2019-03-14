@@ -25,17 +25,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.MarkerImage
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.chip.Chip
@@ -92,6 +92,13 @@ class HistoryFragment : Fragment() {
             axisLeft.isEnabled = false
             axisRight.isEnabled = false
 
+            // setVisibleXRangeMaximum(20f)
+            minOffset = 8f
+
+            val marker = MarkerImage(context, R.drawable.ic_dot)
+            marker.setOffset(-12f, -12f) // drawable size + line width
+            setMarker(marker)
+
             setNoDataText(getString(R.string.no_data_found))
             setNoDataTextColor(textColorSecondary)
             ResourcesCompat.getFont(context, R.font.fira_sans_condensed_medium)?.let {
@@ -121,13 +128,6 @@ class HistoryFragment : Fragment() {
                 }
             }
             setOnChartValueSelectedListener(clickListener)
-
-            // setVisibleXRangeMaximum(20f)
-            minOffset = 8f
-
-            val marker = MarkerImage(context, R.drawable.ic_dot)
-            marker.setOffset(-12f, -12f) // drawable size + line width
-            setMarker(marker)
         }
 
         binding.chartMode.apply {
@@ -142,41 +142,35 @@ class HistoryFragment : Fragment() {
                 val chip = getChildAt(i) as Chip
                 chip.isClickable = chip.id != checkedId
                 chip.isChecked = chip.id == checkedId
-                // let's keep them both visible for now... it's an interesting effect
-                // chip.isChipIconVisible = chip.id != chipGroup.checkedChipId
-                // chip.isCheckedIconVisible = chip.id == chipGroup.checkedChipId
-            }
-        }
-
-        binding.chartMode.setOnCheckedChangeListener { chipGroup, id ->
-            for (i in 0 until chipGroup.childCount) {
-                val chip = chipGroup.getChildAt(i) as Chip
-                chip.isClickable = chip.id != chipGroup.checkedChipId
-                chip.isChecked = chip.id == chipGroup.checkedChipId
-                // let's keep them both visible for now... it's an interesting effect
-                // chip.isChipIconVisible = chip.id != chipGroup.checkedChipId
-                // chip.isCheckedIconVisible = chip.id == chipGroup.checkedChipId
             }
 
-            binding.lineChart.apply {
-                if (data == null || data.dataSetCount == 0) {
-                    return@setOnCheckedChangeListener
+            setOnCheckedChangeListener { chipGroup, id ->
+                for (i in 0 until chipGroup.childCount) {
+                    val chip = chipGroup.getChildAt(i) as Chip
+                    chip.isClickable = chip.id != chipGroup.checkedChipId
+                    chip.isChecked = chip.id == chipGroup.checkedChipId
                 }
 
-                val dataSet = data.getDataSetByIndex(0) as LineDataSet
-                dataSet.apply {
-                    when (id) {
-                        R.id.mode_bezier -> mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-                        R.id.mode_stepped -> mode = LineDataSet.Mode.STEPPED
-                        R.id.mode_linear -> mode = LineDataSet.Mode.LINEAR
+                binding.lineChart.apply {
+                    if (data == null || data.dataSetCount == 0) {
+                        return@setOnCheckedChangeListener
                     }
 
-                    sharedPrefs.edit()
-                        .putString("chart_line_mode", mode.name)
-                        .apply()
-                }
+                    val dataSet = data.getDataSetByIndex(0) as LineDataSet
+                    dataSet.apply {
+                        when (id) {
+                            R.id.mode_bezier -> mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+                            R.id.mode_stepped -> mode = LineDataSet.Mode.STEPPED
+                            R.id.mode_linear -> mode = LineDataSet.Mode.LINEAR
+                        }
 
-                animateX(300, Easing.Linear)
+                        sharedPrefs.edit()
+                            .putString("chart_line_mode", mode.name)
+                            .apply()
+                    }
+
+                    animateX(300, Easing.Linear)
+                }
             }
         }
 
@@ -190,29 +184,25 @@ class HistoryFragment : Fragment() {
                 binding.loading.hide()
 
                 val entries = mutableListOf<Entry>()
-
                 rates.forEachIndexed { index, rate ->
                     entries.add(Entry(index.toFloat(), rate.rate.toFloat(), rate))
                 }
 
                 val dataSet = LineDataSet(entries, "rates").apply {
-                    axisDependency = YAxis.AxisDependency.LEFT
+                    setDrawCircles(false)
+                    setDrawValues(false)
+                    setDrawHighlightIndicators(false)
 
+                    axisDependency = YAxis.AxisDependency.LEFT
                     mode = LineDataSet.Mode.valueOf(
                         sharedPrefs.getString("chart_line_mode", LineDataSet.Mode.HORIZONTAL_BEZIER.name)
                             ?: LineDataSet.Mode.HORIZONTAL_BEZIER.name
                     )
 
                     lineWidth = 2.0f
-                    setDrawCircles(false)
-
+                    color = colorAccent
                     setDrawFilled(true)
                     fillDrawable = bkgChart
-
-                    setDrawHighlightIndicators(false)
-
-                    setDrawValues(false)
-                    color = colorAccent
                 }
 
                 binding.lineChart.apply {
