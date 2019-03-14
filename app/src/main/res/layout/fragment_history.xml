@@ -70,8 +70,10 @@
                 app:chipBackgroundColor="@android:color/transparent"
                 app:chipCornerRadius="24dp"
                 app:chipIcon="@drawable/ic_chart_bezier"
-                app:chipIconVisible="false"
-                app:chipStartPadding="12dp" />
+                app:chipIconVisible="true"
+                app:chipMinHeight="48dp"
+                app:chipStartPadding="12dp"
+                app:chipSurfaceColor="@android:color/transparent" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/mode_stepped"
@@ -84,7 +86,9 @@
                 app:chipCornerRadius="24dp"
                 app:chipIcon="@drawable/ic_chart_stepped"
                 app:chipIconVisible="true"
-                app:chipStartPadding="12dp" />
+                app:chipMinHeight="48dp"
+                app:chipStartPadding="12dp"
+                app:chipSurfaceColor="@android:color/transparent" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/mode_linear"
@@ -97,7 +101,9 @@
                 app:chipCornerRadius="24dp"
                 app:chipIcon="@drawable/ic_chart_linear"
                 app:chipIconVisible="true"
-                app:chipStartPadding="12dp" />
+                app:chipMinHeight="48dp"
+                app:chipStartPadding="12dp"
+                app:chipSurfaceColor="@android:color/transparent" />
         </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 </layout>

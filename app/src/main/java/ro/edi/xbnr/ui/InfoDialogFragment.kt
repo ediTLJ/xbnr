@@ -19,8 +19,8 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ro.edi.util.getAppVersionName
 import ro.edi.xbnr.R
 
@@ -28,7 +28,7 @@ class InfoDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         if (!isAdded) return super.onCreateDialog(savedInstanceState)
 
-        val dialog = AlertDialog.Builder(requireActivity())
+        val dialog = MaterialAlertDialogBuilder(requireActivity())
 
         dialog.setTitle(R.string.app_name)
         dialog.setMessage(getString(R.string.info, getAppVersionName(requireActivity())))

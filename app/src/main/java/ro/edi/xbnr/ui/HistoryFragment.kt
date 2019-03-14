@@ -46,6 +46,7 @@ import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentHistoryBinding
 import ro.edi.xbnr.model.DateRate
 import ro.edi.xbnr.ui.viewmodel.HistoryViewModel
+import timber.log.Timber.d as logd
 import timber.log.Timber.i as logi
 
 class HistoryFragment : Fragment() {
@@ -142,8 +143,9 @@ class HistoryFragment : Fragment() {
                 val chip = chipGroup.getChildAt(i) as Chip
                 chip.isClickable = chip.id != chipGroup.checkedChipId
                 chip.isChecked = chip.id == chipGroup.checkedChipId
-                chip.isChipIconVisible = chip.id != chipGroup.checkedChipId
-                chip.isCheckedIconVisible = chip.id == chipGroup.checkedChipId
+                // let's keep them both visible for now... it's an interesting effect
+                // chip.isChipIconVisible = chip.id != chipGroup.checkedChipId
+                // chip.isCheckedIconVisible = chip.id == chipGroup.checkedChipId
             }
 
             binding.lineChart.apply {
