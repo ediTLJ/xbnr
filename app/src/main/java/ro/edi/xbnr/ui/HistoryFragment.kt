@@ -88,25 +88,15 @@ class HistoryFragment : Fragment() {
             description.isEnabled = false
             setDrawGridBackground(false)
             setScaleEnabled(false)
+            xAxis.isEnabled = false
+            axisLeft.isEnabled = false
+            axisRight.isEnabled = false
 
             setNoDataText(getString(R.string.no_data_found))
             setNoDataTextColor(textColorSecondary)
             ResourcesCompat.getFont(context, R.font.fira_sans_condensed_medium)?.let {
                 setNoDataTextTypeface(it)
             }
-
-            xAxis.valueFormatter = DayAxisFormatter(historyModel.rates)
-            xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.setDrawGridLines(false)
-            xAxis.setLabelCount(20, true)
-            xAxis.textColor = textColorSecondary
-            xAxis.textSize = 12f
-            ResourcesCompat.getFont(context, R.font.fira_sans_condensed_regular)?.let {
-                xAxis.typeface = it
-            }
-
-            axisLeft.isEnabled = false
-            axisRight.isEnabled = false
 
             val clickListener = object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry, h: Highlight) {
@@ -132,9 +122,8 @@ class HistoryFragment : Fragment() {
             }
             setOnChartValueSelectedListener(clickListener)
 
-            setVisibleXRangeMaximum(20f)
+            // setVisibleXRangeMaximum(20f)
             minOffset = 8f
-            setExtraOffsets(0f, 0f, 0f, 2f)
 
             val marker = MarkerImage(context, R.drawable.ic_dot)
             marker.setOffset(-12f, -12f) // drawable size + line width
@@ -252,12 +241,6 @@ class HistoryFragment : Fragment() {
         })
 
         return binding.root
-    }
-
-    class DayAxisFormatter(private val rates: LiveData<List<DateRate>>) : IAxisValueFormatter {
-        override fun getFormattedValue(value: Float, axis: AxisBase): String {
-            return rates.value?.getOrNull(value.toInt())?.date?.takeLast(2) ?: ""
-        }
     }
 
     private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
