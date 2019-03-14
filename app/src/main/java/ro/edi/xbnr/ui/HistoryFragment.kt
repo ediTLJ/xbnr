@@ -106,10 +106,12 @@ class HistoryFragment : Fragment() {
 
             val clickListener = object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry, h: Highlight) {
+                    historyModel.chartHighlightX = h.x
                     show(e.data as DateRate)
                 }
 
                 override fun onNothingSelected() {
+                    historyModel.chartHighlightX = -1f
                     historyModel.rates.value?.lastOrNull()?.let {
                         show(it)
                     }
@@ -127,14 +129,13 @@ class HistoryFragment : Fragment() {
             setOnChartValueSelectedListener(clickListener)
 
             setVisibleXRangeMaximum(20f)
-            setExtraOffsets(0f, 0f, 0f, 4f)
+            minOffset = 8f
+            setExtraOffsets(0f, 0f, 0f, 2f)
 
             val marker = MarkerImage(context, R.drawable.ic_dot)
-            marker.setOffset(-10f, -10f)
+            marker.setOffset(-12f, -12f) // drawable size + line width
             setMarker(marker)
         }
-
-        // FIXME save/restore chart mode & highlight at screen orientation change
 
         binding.chartMode.setOnCheckedChangeListener { chipGroup, id ->
             for (i in 0 until chipGroup.childCount) {
@@ -157,6 +158,7 @@ class HistoryFragment : Fragment() {
                         R.id.mode_stepped -> mode = LineDataSet.Mode.STEPPED
                         R.id.mode_linear -> mode = LineDataSet.Mode.LINEAR
                     }
+                    historyModel.chartMode = mode
                 }
 
                 animateX(500, Easing.Linear)
@@ -218,24 +220,6 @@ class HistoryFragment : Fragment() {
 
         return binding.root
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//
-//        view?.findViewById<LineChart>(R.id.line_chart)?.apply {
-//            if (data != null && data.dataSetCount > 0) {
-//                val dataSet = data.getDataSetByIndex(0) as LineDataSet
-//                dataSet.mode = historyModel.chartMode
-//
-//                highlightValue(
-//                    if (historyModel.chartHighlightX < 0f) data.xMax else historyModel.chartHighlightX,
-//                    0
-//                )
-//
-//                invalidate()
-//            }
-//        }
-//    }
 
     class DayAxisFormatter(private val rates: LiveData<List<DateRate>>) : IAxisValueFormatter {
         override fun getFormattedValue(value: Float, axis: AxisBase): String {
