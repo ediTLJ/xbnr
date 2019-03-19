@@ -16,21 +16,53 @@
 package ro.edi.xbnr.ui.viewmodel
 
 import android.app.Application
+import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.preference.PreferenceManager
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.DateRate
 
+const val PREFS_KEY_CHART_INTERVAL = "chart_interval"
+
 class HistoryViewModel(application: Application) : AndroidViewModel(application) {
     private var currencyId = -1
+    // var chartHighlightX = -1f
+    var chartHighlight: DateRate? = null
 
-    val rates: LiveData<List<DateRate>> by lazy(LazyThreadSafetyMode.NONE) {
-        DataManager.getInstance(getApplication()).getRates(currencyId, 20)
+    private val countLiveData = MutableLiveData<Int>()
+    private lateinit var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener
+
+    val rates: LiveData<List<DateRate>> = Transformations.switchMap(
+        countLiveData
+    ) { count ->
+        DataManager.getInstance(getApplication()).getRates(currencyId, count)
     }
-
-    var chartHighlightX = -1f
 
     constructor(application: Application, currencyId: Int) : this(application) {
         this.currencyId = currencyId
+
+        prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPrefs, key ->
+            if (PREFS_KEY_CHART_INTERVAL == key) {
+                countLiveData.value = when (sharedPrefs.getInt(key, 1)) {
+                    1 -> 20
+                    3 -> 64
+                    12 -> 260
+                    else -> 20
+                }
+            }
+        }
+
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application)
+        countLiveData.value = when (sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)) {
+            1 -> 20
+            3 -> 64
+            12 -> 260
+            else -> 20
+        }
+
+        sharedPrefs.registerOnSharedPreferenceChangeListener(prefsListener)
     }
 }

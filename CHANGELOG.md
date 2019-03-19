@@ -1,8 +1,7 @@
 ## next release(s)
 * write tests
-* add proper support for starring/unstarring currencies
-* add rates history
 * add currency converter
+* tablet UI
 
 # Change Log
 

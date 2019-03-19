@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="chart_height">266dp</dimen> <!-- used for portrait only -->
+    <!--<dimen name="chart_height">266dp</dimen>-->
 </resources>

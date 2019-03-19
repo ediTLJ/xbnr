@@ -47,8 +47,10 @@ import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentHistoryBinding
 import ro.edi.xbnr.model.DateRate
 import ro.edi.xbnr.ui.viewmodel.HistoryViewModel
+import ro.edi.xbnr.ui.viewmodel.PREFS_KEY_CHART_INTERVAL
 import timber.log.Timber.d as logd
 import timber.log.Timber.i as logi
+import timber.log.Timber.w as logw
 
 class HistoryFragment : Fragment() {
     companion object {
@@ -61,8 +63,12 @@ class HistoryFragment : Fragment() {
         }
     }
 
-    private val historyModel: HistoryViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProviders.of(this, factory).get(HistoryViewModel::class.java)
+    private lateinit var historyModel: HistoryViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        historyModel = ViewModelProviders.of(this, factory).get(HistoryViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -107,12 +113,15 @@ class HistoryFragment : Fragment() {
 
             val clickListener = object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry, h: Highlight) {
-                    historyModel.chartHighlightX = h.x
-                    show(e.data as DateRate)
+                    val rate = e.data as DateRate
+                    // historyModel.chartHighlightX = h.x
+                    historyModel.chartHighlight = rate
+                    show(rate)
                 }
 
                 override fun onNothingSelected() {
-                    historyModel.chartHighlightX = -1f
+                    // historyModel.chartHighlightX = -1f
+                    historyModel.chartHighlight = null
                     historyModel.rates.value?.lastOrNull()?.let {
                         show(it)
                     }
@@ -130,12 +139,12 @@ class HistoryFragment : Fragment() {
             setOnChartValueSelectedListener(clickListener)
         }
 
-        binding.chartMode.apply {
-            val checkedId = when (sharedPrefs.getString("chart_line_mode", LineDataSet.Mode.HORIZONTAL_BEZIER.name)) {
-                LineDataSet.Mode.HORIZONTAL_BEZIER.name -> R.id.mode_bezier
-                LineDataSet.Mode.STEPPED.name -> R.id.mode_stepped
-                LineDataSet.Mode.LINEAR.name -> R.id.mode_linear
-                else -> R.id.mode_bezier
+        binding.chartInterval.apply {
+            val checkedId = when (sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)) {
+                1 -> R.id.interval_1m
+                3 -> R.id.interval_3m
+                12 -> R.id.interval_1y
+                else -> R.id.interval_1m
             }
 
             for (i in 0 until childCount) {
@@ -152,24 +161,16 @@ class HistoryFragment : Fragment() {
                 }
 
                 binding.lineChart.apply {
-                    if (data == null || data.dataSetCount == 0) {
-                        return@setOnCheckedChangeListener
+                    val interval: Int = when (id) {
+                        R.id.interval_1m -> 1
+                        R.id.interval_3m -> 3
+                        R.id.interval_1y -> 12
+                        else -> 1
                     }
 
-                    val dataSet = data.getDataSetByIndex(0) as LineDataSet
-                    dataSet.apply {
-                        when (id) {
-                            R.id.mode_bezier -> mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-                            R.id.mode_stepped -> mode = LineDataSet.Mode.STEPPED
-                            R.id.mode_linear -> mode = LineDataSet.Mode.LINEAR
-                        }
-
-                        sharedPrefs.edit()
-                            .putString("chart_line_mode", mode.name)
-                            .apply()
-                    }
-
-                    animateX(300, Easing.Linear)
+                    sharedPrefs.edit()
+                        .putInt(PREFS_KEY_CHART_INTERVAL, interval)
+                        .apply()
                 }
             }
         }
@@ -177,56 +178,70 @@ class HistoryFragment : Fragment() {
         historyModel.rates.observe(viewLifecycleOwner, Observer { rates ->
             logi("ratesModel currencies changed")
 
+            binding.lineChart.visibility = View.GONE
+            binding.loadingContainer.visibility = View.VISIBLE
+            binding.loading.visibility = View.VISIBLE
+
             if (rates.isNullOrEmpty()) {
-                binding.loading.show()
-                binding.lineChart.visibility = View.GONE
-            } else {
-                binding.loading.hide()
+                return@Observer
+            }
 
-                val entries = mutableListOf<Entry>()
-                rates.forEachIndexed { index, rate ->
-                    entries.add(Entry(index.toFloat(), rate.rate.toFloat(), rate))
-                }
+            val entries = mutableListOf<Entry>()
+            rates.forEachIndexed { index, rate ->
+                entries.add(Entry(index.toFloat(), rate.rate.toFloat(), rate))
+            }
 
-                val dataSet = LineDataSet(entries, "rates").apply {
-                    setDrawCircles(false)
-                    setDrawValues(false)
-                    setDrawHighlightIndicators(false)
+            val dataSet = LineDataSet(entries, "rates").apply {
+                setDrawCircles(false)
+                setDrawValues(false)
+                setDrawHighlightIndicators(false)
 
-                    axisDependency = YAxis.AxisDependency.LEFT
-                    mode = LineDataSet.Mode.valueOf(
-                        sharedPrefs.getString("chart_line_mode", LineDataSet.Mode.HORIZONTAL_BEZIER.name)
-                            ?: LineDataSet.Mode.HORIZONTAL_BEZIER.name
-                    )
+                axisDependency = YAxis.AxisDependency.LEFT
+                mode = LineDataSet.Mode.HORIZONTAL_BEZIER
 
-                    lineWidth = 2.0f
-                    color = colorAccent
-                    setDrawFilled(true)
-                    fillDrawable = bkgChart
-                }
+                lineWidth = 2.0f
+                color = colorAccent
+                setDrawFilled(true)
+                fillDrawable = bkgChart
+            }
 
-                binding.lineChart.apply {
-                    val wasEmpty = data == null || data.dataSetCount == 0
-                        || data.getDataSetByIndex(0).entryCount == 0
+            binding.lineChart.apply {
+                data = LineData(dataSet)
+                notifyDataSetChanged()
 
-                    data = LineData(dataSet)
-                    notifyDataSetChanged()
-
-                    highlightValue(
-                        if (historyModel.chartHighlightX < 0f) data.xMax else historyModel.chartHighlightX,
-                        0, true
-                    )
-
-                    visibility = View.VISIBLE
-
-                    if (wasEmpty) {
-                        animateX(300, Easing.Linear)
-                    } else {
-                        invalidate()
+                val dataX = historyModel.chartHighlight?.let {
+                    var x = -1f
+                    entries.forEachIndexed { _, entry ->
+                        val rate = entry.data as DateRate
+                        if (rate.id == it.id) {
+                            x = entry.x
+                            return@forEachIndexed
+                        }
                     }
-                }
 
-                binding.chartMode.visibility = View.VISIBLE
+                    if (x < 0) data.xMin else x
+                } ?: data.xMax
+
+                // if (historyModel.chartHighlightX < 0f) data.xMax else historyModel.chartHighlightX,
+                highlightValue(dataX, 0, true)
+
+                if (isResumed) {
+                    handler.postDelayed({
+                        binding.loading.hide()
+                        binding.loadingContainer.visibility = View.GONE
+                        visibility = View.VISIBLE
+                        binding.chartInterval.visibility = View.VISIBLE
+
+                        animateX(300, Easing.Linear)
+                    }, 300)
+                } else {
+                    binding.loading.hide()
+                    binding.loadingContainer.visibility = View.GONE
+                    visibility = View.VISIBLE
+                    binding.chartInterval.visibility = View.VISIBLE
+
+                    invalidate()
+                }
             }
         })
 

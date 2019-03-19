@@ -17,15 +17,22 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/loading"
-            style="?android:progressBarStyle"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:visibility="visible"
-            tools:visibility="gone" />
+        <FrameLayout
+            android:id="@+id/loading_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:visibility="gone">
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/loading"
+                style="?android:progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                tools:visibility="gone" />
+        </FrameLayout>
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/line_chart"
@@ -49,63 +56,56 @@
             android:visibility="gone" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chart_mode"
+            android:id="@+id/chart_interval"
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:visibility="gone"
-            app:chipSpacing="0dp"
+            android:visibility="invisible"
+            app:chipSpacingHorizontal="0dp"
             app:singleSelection="true"
             tools:visibility="visible">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/mode_bezier"
+                android:id="@+id/interval_1m"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:checkedIcon="@drawable/ic_chart_bezier_checked"
-                app:checkedIconVisible="true"
+                android:fontFamily="@font/fira_sans_condensed_medium"
+                android:text="@string/interval_1m"
+                android:textAlignment="center"
+                android:textColor="@color/check_green"
+                app:checkedIconVisible="false"
                 app:chipBackgroundColor="@android:color/transparent"
-                app:chipCornerRadius="24dp"
-                app:chipIcon="@drawable/ic_chart_bezier"
-                app:chipIconTint="@color/green_700"
-                app:chipIconVisible="true"
-                app:chipMinHeight="48dp"
-                app:chipStartPadding="12dp"
+                app:chipIconVisible="false"
                 app:chipSurfaceColor="@android:color/transparent" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/mode_stepped"
+                android:id="@+id/interval_3m"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:checkedIcon="@drawable/ic_chart_stepped_checked"
-                app:checkedIconVisible="true"
+                android:fontFamily="@font/fira_sans_condensed_medium"
+                android:text="@string/interval_3m"
+                android:textAlignment="center"
+                android:textColor="@color/check_green"
+                app:checkedIconVisible="false"
                 app:chipBackgroundColor="@android:color/transparent"
-                app:chipCornerRadius="24dp"
-                app:chipIcon="@drawable/ic_chart_stepped"
-                app:chipIconTint="@color/green_700"
-                app:chipIconVisible="true"
-                app:chipMinHeight="48dp"
-                app:chipStartPadding="12dp"
+                app:chipIconVisible="false"
                 app:chipSurfaceColor="@android:color/transparent" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/mode_linear"
+                android:id="@+id/interval_1y"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:checkedIcon="@drawable/ic_chart_linear_checked"
-                app:checkedIconVisible="true"
+                android:fontFamily="@font/fira_sans_condensed_medium"
+                android:text="@string/interval_1y"
+                android:textAlignment="center"
+                android:textColor="@color/check_green"
+                app:checkedIconVisible="false"
                 app:chipBackgroundColor="@android:color/transparent"
-                app:chipCornerRadius="24dp"
-                app:chipIcon="@drawable/ic_chart_linear"
-                app:chipIconTint="@color/green_700"
-                app:chipIconVisible="true"
-                app:chipMinHeight="48dp"
-                app:chipStartPadding="12dp"
+                app:chipIconVisible="false"
                 app:chipSurfaceColor="@android:color/transparent" />
         </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
