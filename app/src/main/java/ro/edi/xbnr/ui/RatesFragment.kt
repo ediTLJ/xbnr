@@ -41,8 +41,12 @@ class RatesFragment : Fragment() {
         fun newInstance() = RatesFragment()
     }
 
-    private val ratesModel: RatesViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProviders.of(this).get(RatesViewModel::class.java)
+    private lateinit var ratesModel: RatesViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        ratesModel = ViewModelProviders.of(this).get(RatesViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
