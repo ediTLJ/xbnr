@@ -39,11 +39,11 @@ class InfoDialogFragment : DialogFragment() {
             intent.data = Uri.parse("market://details?id=ro.edi.xbnr")
             startActivity(intent)
         }
-        dialog.setNeutralButton(R.string.btn_other_apps) { _, _ ->
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("market://search?q=pub:Eduard%20Scarlat")
-            startActivity(intent)
-        }
+//        dialog.setNeutralButton(R.string.btn_other_apps) { _, _ ->
+//            val intent = Intent(Intent.ACTION_VIEW)
+//            intent.data = Uri.parse("market://search?q=pub:Eduard%20Scarlat")
+//            startActivity(intent)
+//        }
 
         return dialog.create()
     }

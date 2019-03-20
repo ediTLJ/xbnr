@@ -10,7 +10,7 @@
     <!-- BUTTONS -->
     <string name="btn_ok">OK</string>
     <string name="btn_rate">RATE APP</string>
-    <string name="btn_other_apps">OTHER APPS</string>
+    <!--<string name="btn_other_apps">OTHER APPS</string>-->
     <string name="interval_1m">1m</string>
     <string name="interval_3m">3m</string>
     <string name="interval_1y">1y</string>
