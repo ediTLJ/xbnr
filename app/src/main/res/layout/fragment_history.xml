@@ -126,54 +126,6 @@
                 app:chipSurfaceColor="@android:color/transparent"
                 app:textEndPadding="8dp"
                 app:textStartPadding="8dp" />
-
-            <!--<com.google.android.material.chip.Chip-->
-            <!--android:id="@+id/mode_bezier"-->
-            <!--style="@style/Widget.MaterialComponents.Chip.Choice"-->
-            <!--android:layout_width="48dp"-->
-            <!--android:layout_height="48dp"-->
-            <!--app:checkedIcon="@drawable/ic_chart_bezier_checked"-->
-            <!--app:checkedIconVisible="true"-->
-            <!--app:chipBackgroundColor="@android:color/transparent"-->
-            <!--app:chipCornerRadius="24dp"-->
-            <!--app:chipIcon="@drawable/ic_chart_bezier"-->
-            <!--app:chipIconTint="@color/green_700"-->
-            <!--app:chipIconVisible="true"-->
-            <!--app:chipMinHeight="48dp"-->
-            <!--app:chipStartPadding="12dp"-->
-            <!--app:chipSurfaceColor="@android:color/transparent" />-->
-
-            <!--<com.google.android.material.chip.Chip-->
-            <!--android:id="@+id/mode_stepped"-->
-            <!--style="@style/Widget.MaterialComponents.Chip.Choice"-->
-            <!--android:layout_width="48dp"-->
-            <!--android:layout_height="48dp"-->
-            <!--app:checkedIcon="@drawable/ic_chart_stepped_checked"-->
-            <!--app:checkedIconVisible="true"-->
-            <!--app:chipBackgroundColor="@android:color/transparent"-->
-            <!--app:chipCornerRadius="24dp"-->
-            <!--app:chipIcon="@drawable/ic_chart_stepped"-->
-            <!--app:chipIconTint="@color/green_700"-->
-            <!--app:chipIconVisible="true"-->
-            <!--app:chipMinHeight="48dp"-->
-            <!--app:chipStartPadding="12dp"-->
-            <!--app:chipSurfaceColor="@android:color/transparent" />-->
-
-            <!--<com.google.android.material.chip.Chip-->
-            <!--android:id="@+id/mode_linear"-->
-            <!--style="@style/Widget.MaterialComponents.Chip.Choice"-->
-            <!--android:layout_width="48dp"-->
-            <!--android:layout_height="48dp"-->
-            <!--app:checkedIcon="@drawable/ic_chart_linear_checked"-->
-            <!--app:checkedIconVisible="true"-->
-            <!--app:chipBackgroundColor="@android:color/transparent"-->
-            <!--app:chipCornerRadius="24dp"-->
-            <!--app:chipIcon="@drawable/ic_chart_linear"-->
-            <!--app:chipIconTint="@color/green_700"-->
-            <!--app:chipIconVisible="true"-->
-            <!--app:chipMinHeight="48dp"-->
-            <!--app:chipStartPadding="12dp"-->
-            <!--app:chipSurfaceColor="@android:color/transparent" />-->
         </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 </layout>

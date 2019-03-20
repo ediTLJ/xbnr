@@ -77,9 +77,9 @@ class HistoryFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val colorAccent = ContextCompat.getColor(
+        val colorPrimary = ContextCompat.getColor(
             binding.root.context,
-            getColorRes(binding.root.context, R.attr.colorAccent)
+            getColorRes(binding.root.context, R.attr.colorPrimary)
         )
         val textColorSecondary = ContextCompat.getColor(
             binding.root.context,
@@ -200,7 +200,7 @@ class HistoryFragment : Fragment() {
                 mode = LineDataSet.Mode.HORIZONTAL_BEZIER
 
                 lineWidth = 2.0f
-                color = colorAccent
+                color = colorPrimary
                 setDrawFilled(true)
                 fillDrawable = bkgChart
             }

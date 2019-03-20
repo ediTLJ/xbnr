@@ -57,9 +57,9 @@ class RatesFragment : Fragment() {
         val ratesAdapter = RatesAdapter(ratesModel)
         ratesAdapter.setHasStableIds(true)
 
-        val colorAccent = ContextCompat.getColor(
+        val colorPrimary = ContextCompat.getColor(
             binding.root.context,
-            getColorRes(binding.root.context, R.attr.colorAccent)
+            getColorRes(binding.root.context, R.attr.colorPrimary)
         )
         val textColorSecondary = ContextCompat.getColor(
             binding.root.context,
@@ -98,7 +98,7 @@ class RatesFragment : Fragment() {
                     if (tvDate.text.isNullOrEmpty() || tvDate.text == txtDate) {
                         tvDate.setTextColor(textColorSecondary)
                     } else {
-                        tvDate.setTextColor(colorAccent)
+                        tvDate.setTextColor(colorPrimary)
                     }
 
                     tvDate.text = txtDate
