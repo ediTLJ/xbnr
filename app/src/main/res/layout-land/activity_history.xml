@@ -134,17 +134,14 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_converter"
-            style="@style/Widget.MaterialComponents.FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:layout_marginStart="0dp"
             android:visibility="invisible"
-            app:backgroundTint="?colorAccent"
             app:fabSize="auto"
             app:srcCompat="@drawable/ic_action_info"
-            app:tint="@android:color/white"
             tools:visibility="visible" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

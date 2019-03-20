@@ -13,9 +13,15 @@
         <item name="android:textColorSecondary">@color/white_dark</item>
         <item name="android:colorBackground">@color/grey</item>
         <item name="android:statusBarColor">@color/grey</item>
+
+        <item name="materialAlertDialogTheme">@style/DialogTheme</item>
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
         <item name="android:background">@color/grey</item>
+    </style>
+
+    <style name="DialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <!--<item name="android:fontFamily">@font/fira_sans_condensed</item>-->
     </style>
 </resources>

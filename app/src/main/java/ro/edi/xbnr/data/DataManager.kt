@@ -85,9 +85,11 @@ class DataManager private constructor(application: Application) {
 
             // another option would be to use Period.between(latestDate, today)
 
+            // TODO what if latest date is older than 1-2 years ago? :)
+
             // if latestDate == today => all good, don't do anything
             if (latestDate.isBefore(today.minusWeeks(1))) {
-                // TODO add service to fetch data weekly? so we should never reach this
+                // add service to fetch data weekly? so we should never reach this
                 fetchRates(today.year)
                 fetchRates(today.year - 1)
             } else if (latestDate.isBefore(previousWorkday)) {
@@ -132,10 +134,12 @@ class DataManager private constructor(application: Application) {
     }
 
     fun getRates(currencyId: Int, count: Int): LiveData<List<DateRate>> {
-        // TODO fetch data if needed, based on count and existing db entries
+        // fetch data if needed, based on count and existing db entries
         // not needed yet, as we only show latest 20 rates in current version
         // AppExecutors.networkIO().execute {
         // }
+
+        // FIXME I should use "since", instead of "count"
 
         return db.rateDao().getRates(currencyId, count)
     }
