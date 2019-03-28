@@ -22,6 +22,14 @@
 
 #-dontobfuscate
 
+# Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+
 # TikXML
 -keep class com.tickaroo.tikxml.** { *; }
 -keep @com.tickaroo.tikxml.annotation.Xml public class *
