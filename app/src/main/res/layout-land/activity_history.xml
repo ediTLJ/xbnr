@@ -27,9 +27,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:title="@string/title_history"
-                app:titleTextAppearance="@style/App.TextAppearance.Toolbar.Title" />
-
+                app:title="@string/title_history" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
@@ -67,12 +65,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:fontFamily="@font/fira_sans_condensed_medium"
                         android:gravity="center_horizontal"
                         android:includeFontPadding="false"
                         android:lines="1"
                         android:text="@{model.getCurrencyDisplayCode()}"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                        android:textAppearance="@style/App.TextAppearance.Headline6"
                         android:textColor="?android:textColorPrimary"
                         android:textSize="18sp"
                         tools:text="USD" />
@@ -90,11 +87,10 @@
                             android:layout_height="wrap_content"
                             android:layout_alignBaseline="@id/currency_value"
                             android:layout_alignParentStart="true"
-                            android:fontFamily="@font/titillium_web"
                             android:lines="1"
                             android:paddingEnd="4dp"
                             android:text="@string/symbol_ron"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                            android:textAppearance="@style/App.TextAppearance.Subtitle2"
                             android:textColor="?android:attr/textColorSecondary"
                             tools:ignore="RtlSymmetry" />
 
@@ -103,10 +99,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/currency_ron"
-                            android:fontFamily="@font/titillium_web_semibold"
                             android:includeFontPadding="false"
                             android:lines="1"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                            android:textAppearance="@style/App.TextAppearance.Subtitle1"
                             android:textColor="?android:textColorPrimary"
                             android:textSize="18sp"
                             tools:text="4.1235" />
@@ -116,10 +111,9 @@
                         android:id="@+id/currency_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/fira_sans_condensed"
                         android:gravity="center_horizontal"
                         android:lines="1"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                        android:textAppearance="@style/App.TextAppearance.Body2"
                         android:textColor="?android:textColorSecondary"
                         tools:text="September 28, 2019" />
                 </LinearLayout>

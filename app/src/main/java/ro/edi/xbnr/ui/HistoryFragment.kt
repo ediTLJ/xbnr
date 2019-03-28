@@ -107,7 +107,7 @@ class HistoryFragment : Fragment() {
 
             setNoDataText(getString(R.string.no_data_found))
             setNoDataTextColor(textColorSecondary)
-            ResourcesCompat.getFont(context, R.font.fira_sans_condensed_medium)?.let {
+            ResourcesCompat.getFont(context, R.font.fira_sans_condensed)?.let {
                 setNoDataTextTypeface(it)
             }
 

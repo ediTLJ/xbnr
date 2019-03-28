@@ -14,18 +14,52 @@
         <item name="android:colorBackground">@color/grey</item>
         <item name="android:statusBarColor">@color/grey</item>
 
-        <item name="materialAlertDialogTheme">@style/App.Theme.Dialog</item>
+        <item name="textAppearanceHeadline6">@style/App.TextAppearance.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/App.TextAppearance.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/App.TextAppearance.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/App.TextAppearance.Body1</item>
+        <item name="textAppearanceBody2">@style/App.TextAppearance.Body2</item>
+        <item name="textAppearanceButton">@style/App.TextAppearance.Button</item>
+        <item name="textAppearanceCaption">@style/App.TextAppearance.Caption</item>
     </style>
 
     <style name="App.Theme.Toolbar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
         <item name="android:background">@color/grey</item>
     </style>
 
-    <style name="App.Theme.Dialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <!--<item name="android:fontFamily">@font/fira_sans_condensed</item>-->
+    <style name="App.TextAppearance.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed</item>
     </style>
 
-    <style name="App.TextAppearance.Toolbar.Title" parent="TextAppearance.MaterialComponents.Headline6">
+    <style name="App.TextAppearance.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/titillium_web</item>
+        <item name="android:fontFamily">@font/titillium_web</item>
+    </style>
+
+    <style name="App.TextAppearance.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="fontFamily">@font/titillium_web</item>
+        <item name="android:fontFamily">@font/titillium_web</item>
+    </style>
+
+    <style name="App.TextAppearance.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:letterSpacing">0.009375</item>
+    </style>
+
+    <style name="App.TextAppearance.Body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:letterSpacing">0.00714285714</item>
+    </style>
+
+    <style name="App.TextAppearance.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/fira_sans_condensed_medium</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed_medium</item>
+    </style>
+
+    <style name="App.TextAppearance.Caption" parent="TextAppearance.MaterialComponents.Caption">
         <item name="fontFamily">@font/fira_sans_condensed</item>
         <item name="android:fontFamily">@font/fira_sans_condensed</item>
     </style>

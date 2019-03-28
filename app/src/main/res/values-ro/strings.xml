@@ -10,9 +10,9 @@
     <string name="btn_ok">OK</string>
     <string name="btn_rate">EVALUEAZĂ</string>
     <!--<string name="btn_other_apps">APLICAȚII</string>-->
-    <string name="interval_1m">1l</string>
-    <string name="interval_3m">3l</string>
-    <string name="interval_1y">1a</string>
+    <string name="interval_1m">1L</string>
+    <string name="interval_3m">3L</string>
+    <string name="interval_1y">1A</string>
 
     <!-- INFO -->
     <string name="info">xbnr este o aplicație de curs valutar, cu o interfață simplă și prietenoasă.

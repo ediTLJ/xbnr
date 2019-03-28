@@ -60,11 +60,10 @@
                 android:id="@+id/currency_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/fira_sans_condensed_medium"
                 android:includeFontPadding="false"
                 android:lines="1"
                 android:text="@{model.getCurrencyDisplayCode(position)}"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textAppearance="@style/App.TextAppearance.Headline6"
                 android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(position, true))}"
                 android:textSize="18sp"
                 tools:text="USD" />
@@ -73,10 +72,9 @@
                 android:id="@+id/currency_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/fira_sans_condensed"
                 android:lines="1"
                 android:text="@{model.getCurrencyNameRes(position)}"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:textAppearance="@style/App.TextAppearance.Body2"
                 android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(position, false))}"
                 tools:text="US Dollar" />
         </LinearLayout>
@@ -87,12 +85,11 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/currency_value"
             android:layout_toStartOf="@id/currency_value"
-            android:fontFamily="@font/titillium_web"
             android:lines="1"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
             android:text="@string/symbol_ron"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textAppearance="@style/App.TextAppearance.Subtitle2"
             android:textColor="?android:attr/textColorSecondary" />
 
         <TextView
@@ -101,11 +98,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:fontFamily="@font/titillium_web_semibold"
             android:includeFontPadding="false"
             android:lines="1"
             android:text="@{String.format(`%.4f`, model.getCurrency(position).rate)}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:textAppearance="@style/App.TextAppearance.Subtitle1"
             android:textColor="@{ContextCompat.getColor(context, model.getTrendColorRes(position))}"
             android:textSize="18sp"
             tools:text="4.1235" />

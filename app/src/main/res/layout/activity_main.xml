@@ -19,18 +19,16 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             app:logo="@drawable/logo"
-            app:logoDescription="@string/description_nbr_reference_rates"
-            app:titleTextAppearance="@style/App.TextAppearance.Toolbar.Title">
+            app:logoDescription="@string/description_nbr_reference_rates">
 
             <TextView
                 android:id="@+id/toolbar_date"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/fira_sans_condensed"
                 android:gravity="end|center_vertical"
                 android:paddingStart="2dp"
                 android:paddingEnd="2dp"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:textAppearance="@style/App.TextAppearance.Body2"
                 android:textColor="?android:attr/textColorSecondary"
                 tools:text="Oct 10, 2018" />
         </androidx.appcompat.widget.Toolbar>
