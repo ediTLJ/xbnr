@@ -20,14 +20,15 @@
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ToolbarTheme"
+            android:theme="@style/App.Theme.Toolbar"
             app:liftOnScroll="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:title="@string/title_history" />
+                app:title="@string/title_history"
+                app:titleTextAppearance="@style/App.TextAppearance.Toolbar.Title" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

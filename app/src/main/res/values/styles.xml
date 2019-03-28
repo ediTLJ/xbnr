@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- application theme -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="App.Theme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/green_500</item>
         <item name="colorPrimaryDark">@color/dark_green_700</item>
         <item name="colorAccent">@color/green_500</item>
@@ -14,14 +14,19 @@
         <item name="android:colorBackground">@color/grey</item>
         <item name="android:statusBarColor">@color/grey</item>
 
-        <item name="materialAlertDialogTheme">@style/DialogTheme</item>
+        <item name="materialAlertDialogTheme">@style/App.Theme.Dialog</item>
     </style>
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+    <style name="App.Theme.Toolbar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
         <item name="android:background">@color/grey</item>
     </style>
 
-    <style name="DialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <style name="App.Theme.Dialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <!--<item name="android:fontFamily">@font/fira_sans_condensed</item>-->
+    </style>
+
+    <style name="App.TextAppearance.Toolbar.Title" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed</item>
     </style>
 </resources>

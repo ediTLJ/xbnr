@@ -5,13 +5,13 @@
     <item
         android:id="@+id/action_star"
         android:icon="@drawable/ic_action_star_border"
-        android:title="@string/action_info"
+        android:title="@string/action_star"
         android:visible="false"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_unstar"
         android:icon="@drawable/ic_action_star"
-        android:title="@string/action_info"
+        android:title="@string/action_unstar"
         android:visible="false"
         app:showAsAction="ifRoom" />
 </menu>

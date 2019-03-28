@@ -11,7 +11,7 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ToolbarTheme"
+        android:theme="@style/App.Theme.Toolbar"
         app:liftOnScroll="true">
 
         <androidx.appcompat.widget.Toolbar
@@ -19,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             app:logo="@drawable/logo"
-            app:logoDescription="@string/description_nbr_reference_rates">
+            app:logoDescription="@string/description_nbr_reference_rates"
+            app:titleTextAppearance="@style/App.TextAppearance.Toolbar.Title">
 
             <TextView
                 android:id="@+id/toolbar_date"

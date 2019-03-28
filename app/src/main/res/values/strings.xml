@@ -5,7 +5,8 @@
     <!-- TOOLBAR TITLES & ACTIONS -->
     <string name="title_history">History</string>
     <string name="action_info">Info</string>
-    <string name="action_star">Star</string>
+    <string name="action_star">Add star</string>
+    <string name="action_unstar">Remove star</string>
 
     <!-- BUTTONS -->
     <string name="btn_ok">OK</string>

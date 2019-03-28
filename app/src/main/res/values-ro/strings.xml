@@ -3,7 +3,8 @@
     <!-- TOOLBAR TITLES & ACTIONS -->
     <string name="title_history">Istoric</string>
     <string name="action_info">Info</string>
-    <string name="action_star">Favorit</string>
+    <string name="action_star">Marchează cu stea</string>
+    <string name="action_unstar">Elimină steaua</string>
 
     <!-- BUTTONS -->
     <string name="btn_ok">OK</string>
