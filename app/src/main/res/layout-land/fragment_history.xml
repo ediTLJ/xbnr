@@ -74,11 +74,17 @@
                 android:fontFamily="@font/fira_sans_condensed_medium"
                 android:text="@string/interval_1m"
                 android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 android:textColor="@color/check_green"
                 app:checkedIconVisible="false"
                 app:chipBackgroundColor="@android:color/transparent"
+                app:chipCornerRadius="1dp"
+                app:chipEndPadding="0dp"
                 app:chipIconVisible="false"
-                app:chipSurfaceColor="@android:color/transparent" />
+                app:chipStartPadding="0dp"
+                app:chipSurfaceColor="@android:color/transparent"
+                app:textEndPadding="6dp"
+                app:textStartPadding="6dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/interval_3m"
@@ -88,11 +94,17 @@
                 android:fontFamily="@font/fira_sans_condensed_medium"
                 android:text="@string/interval_3m"
                 android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 android:textColor="@color/check_green"
                 app:checkedIconVisible="false"
                 app:chipBackgroundColor="@android:color/transparent"
+                app:chipCornerRadius="1dp"
+                app:chipEndPadding="0dp"
                 app:chipIconVisible="false"
-                app:chipSurfaceColor="@android:color/transparent" />
+                app:chipStartPadding="0dp"
+                app:chipSurfaceColor="@android:color/transparent"
+                app:textEndPadding="6dp"
+                app:textStartPadding="6dp" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/interval_1y"
@@ -102,11 +114,17 @@
                 android:fontFamily="@font/fira_sans_condensed_medium"
                 android:text="@string/interval_1y"
                 android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 android:textColor="@color/check_green"
                 app:checkedIconVisible="false"
                 app:chipBackgroundColor="@android:color/transparent"
+                app:chipCornerRadius="1dp"
+                app:chipEndPadding="0dp"
                 app:chipIconVisible="false"
-                app:chipSurfaceColor="@android:color/transparent" />
+                app:chipStartPadding="0dp"
+                app:chipSurfaceColor="@android:color/transparent"
+                app:textEndPadding="8dp"
+                app:textStartPadding="8dp" />
         </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 </layout>
