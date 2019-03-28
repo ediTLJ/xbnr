@@ -52,11 +52,10 @@
 
                     <ImageView
                         android:id="@+id/currency_flag"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_marginTop="16dp"
                         android:contentDescription="@{model.getCurrencyDisplayCode()}"
-                        android:padding="3dp"
                         app:src="@{model.getCurrencyIconRes()}"
                         tools:src="@drawable/ic_flag_usd" />
 

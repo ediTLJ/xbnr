@@ -30,18 +30,17 @@
 
         <ImageView
             android:id="@+id/currency_flag"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:contentDescription="@{model.getCurrency(position).code}"
-            android:padding="3dp"
             app:src="@{model.getCurrencyIconRes(position)}"
             tools:src="@drawable/ic_flag_usd" />
 
         <!--<ImageView-->
         <!--android:id="@+id/currency_flag_checked"-->
-        <!--android:layout_width="42dp"-->
-        <!--android:layout_height="42dp"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
         <!--android:scaleType="centerInside"-->
         <!--android:src="@drawable/ic_check"-->
         <!--android:visibility="gone" />-->

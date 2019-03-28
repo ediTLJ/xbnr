@@ -39,7 +39,7 @@
             <LinearLayout
                 android:id="@+id/currency"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
+                android:layout_height="72dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingStart="16dp"
@@ -47,10 +47,9 @@
 
                 <ImageView
                     android:id="@+id/currency_flag"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:contentDescription="@{model.getCurrencyDisplayCode()}"
-                    android:padding="3dp"
                     app:src="@{model.getCurrencyIconRes()}"
                     tools:src="@drawable/ic_flag_usd" />
 
