@@ -63,7 +63,7 @@
                 android:lines="1"
                 android:text="@{model.getCurrencyDisplayCode(position)}"
                 android:textAppearance="@style/App.TextAppearance.Headline6"
-                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(position, true))}"
+                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position, true))}"
                 android:textSize="18sp"
                 tools:text="USD" />
 
@@ -74,7 +74,7 @@
                 android:lines="1"
                 android:text="@{model.getCurrencyNameRes(position)}"
                 android:textAppearance="@style/App.TextAppearance.Body2"
-                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(position, false))}"
+                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position, false))}"
                 tools:text="US Dollar" />
         </LinearLayout>
 

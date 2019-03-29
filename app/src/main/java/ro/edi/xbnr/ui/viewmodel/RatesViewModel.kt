@@ -16,6 +16,7 @@
 package ro.edi.xbnr.ui.viewmodel
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import org.threeten.bp.LocalDate
@@ -107,22 +108,22 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getIsStarredColorRes(position: Int, isPrimary: Boolean): Int {
+    fun getIsStarredColorRes(context: Context, position: Int, isPrimary: Boolean): Int {
         getCurrency(position)?.let {
             return if (isPrimary)
                 if (it.isStarred) R.color.yellow_300 else getColorRes(
-                    getApplication(),
+                    context,
                     android.R.attr.textColorPrimary
                 )
             else
                 if (it.isStarred) R.color.yellow_500 else getColorRes(
-                    getApplication(),
+                    context,
                     android.R.attr.textColorSecondary
                 )
         }
 
         return getColorRes(
-            getApplication(),
+            context,
             if (isPrimary) android.R.attr.textColorPrimary else android.R.attr.textColorSecondary
         )
     }
