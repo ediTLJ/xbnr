@@ -33,97 +33,91 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_marginStart="@dimen/activity_margin"
+            android:layout_marginEnd="@dimen/activity_margin"
+            android:layout_marginBottom="@dimen/activity_margin"
+            android:orientation="horizontal"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/currency"
+                android:layout_width="128dp"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingBottom="16dp">
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/list_item_padding_start"
+                android:paddingBottom="@dimen/list_item_padding_end">
 
-                <LinearLayout
-                    android:id="@+id/currency"
-                    android:layout_width="120dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
+                <ImageView
+                    android:id="@+id/currency_flag"
+                    android:layout_width="@dimen/list_item_icon_size"
+                    android:layout_height="@dimen/list_item_icon_size"
+                    android:layout_marginTop="@dimen/activity_margin"
+                    android:contentDescription="@{model.getCurrencyDisplayCode()}"
+                    android:padding="@dimen/list_item_icon_padding"
+                    app:src="@{model.getCurrencyIconRes()}"
+                    tools:src="@drawable/ic_flag_usd" />
+
+                <TextView
+                    android:id="@+id/currency_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/list_item_padding_start"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:includeFontPadding="false"
+                    android:lines="1"
+                    android:text="@{model.getCurrencyDisplayCode()}"
+                    android:textAppearance="@style/App.TextAppearance.Title"
+                    android:textColor="?android:textColorPrimary"
+                    tools:text="USD" />
 
-                    <ImageView
-                        android:id="@+id/currency_flag"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="16dp"
-                        android:contentDescription="@{model.getCurrencyDisplayCode()}"
-                        app:src="@{model.getCurrencyIconRes()}"
-                        tools:src="@drawable/ic_flag_usd" />
+                <RelativeLayout
+                    android:id="@+id/currency_rate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/list_item_gutter"
+                    android:gravity="center_horizontal">
 
                     <TextView
-                        android:id="@+id/currency_code"
-                        android:layout_width="match_parent"
+                        android:id="@+id/currency_ron"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center_horizontal"
+                        android:layout_alignBaseline="@id/currency_value"
+                        android:layout_alignParentStart="true"
+                        android:lines="1"
+                        android:paddingEnd="4dp"
+                        android:text="@string/symbol_ron"
+                        android:textAppearance="@style/App.TextAppearance.Subtitle2"
+                        android:textColor="?android:attr/textColorSecondary"
+                        tools:ignore="RtlSymmetry" />
+
+                    <TextView
+                        android:id="@+id/currency_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/currency_ron"
                         android:includeFontPadding="false"
                         android:lines="1"
-                        android:text="@{model.getCurrencyDisplayCode()}"
-                        android:textAppearance="@style/App.TextAppearance.Headline6"
+                        android:textAppearance="@style/App.TextAppearance.Subtitle1"
                         android:textColor="?android:textColorPrimary"
-                        android:textSize="18sp"
-                        tools:text="USD" />
+                        tools:text="4.1235" />
+                </RelativeLayout>
 
-                    <RelativeLayout
-                        android:id="@+id/currency_rate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center_horizontal">
-
-                        <TextView
-                            android:id="@+id/currency_ron"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignBaseline="@id/currency_value"
-                            android:layout_alignParentStart="true"
-                            android:lines="1"
-                            android:paddingEnd="4dp"
-                            android:text="@string/symbol_ron"
-                            android:textAppearance="@style/App.TextAppearance.Subtitle2"
-                            android:textColor="?android:attr/textColorSecondary"
-                            tools:ignore="RtlSymmetry" />
-
-                        <TextView
-                            android:id="@+id/currency_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toEndOf="@id/currency_ron"
-                            android:includeFontPadding="false"
-                            android:lines="1"
-                            android:textAppearance="@style/App.TextAppearance.Subtitle1"
-                            android:textColor="?android:textColorPrimary"
-                            android:textSize="18sp"
-                            tools:text="4.1235" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:id="@+id/currency_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:lines="1"
-                        android:textAppearance="@style/App.TextAppearance.Body2"
-                        android:textColor="?android:textColorSecondary"
-                        tools:text="September 28, 2019" />
-                </LinearLayout>
-
-                <FrameLayout
-                    android:id="@+id/container"
+                <TextView
+                    android:id="@+id/currency_date"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="72dp" />
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:lines="1"
+                    android:textAppearance="@style/App.TextAppearance.Body2"
+                    android:textColor="?android:textColorSecondary"
+                    tools:text="September 28, 2019" />
             </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -131,8 +125,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:layout_marginStart="0dp"
+            android:layout_marginEnd="@dimen/activity_margin"
+            android:layout_marginBottom="@dimen/activity_margin"
             android:visibility="invisible"
             app:fabSize="auto"
             app:srcCompat="@drawable/ic_action_info"

@@ -5,10 +5,10 @@
         <item name="android:statusBarColor">@color/grey</item>
 
         <item name="colorPrimary">@color/green_500</item>
-        <item name="colorPrimaryVariant">@color/dark_green_700</item>
+        <item name="colorPrimaryVariant">@color/green_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/green_500</item>
-        <item name="colorSecondaryVariant">@color/dark_green_700</item>
+        <item name="colorSecondaryVariant">@color/green_700</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="colorError">@color/yellow_500</item>
         <item name="colorOnError">@color/white</item>
@@ -45,9 +45,16 @@
         <item name="android:fontFamily">@font/fira_sans_condensed</item>
     </style>
 
+    <style name="App.TextAppearance.Title" parent="App.TextAppearance.Headline6">
+        <item name="fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="App.TextAppearance.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="fontFamily">@font/titillium_web</item>
         <item name="android:fontFamily">@font/titillium_web</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="App.TextAppearance.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">

@@ -23,15 +23,16 @@
     <RelativeLayout
         android:id="@+id/currency"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="@dimen/list_item_height"
         android:background="?selectableItemBackground"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingStart="@dimen/list_item_padding_start"
+        android:paddingEnd="@dimen/list_item_padding_end">
 
         <ImageView
             android:id="@+id/currency_flag"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/list_item_icon_size"
+            android:layout_height="@dimen/list_item_icon_size"
+            android:padding="@dimen/list_item_icon_padding"
             android:layout_centerVertical="true"
             android:contentDescription="@{model.getCurrency(position).code}"
             app:src="@{model.getCurrencyIconRes(position)}"
@@ -50,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/list_item_padding_start"
             android:layout_toStartOf="@id/currency_ron"
             android:layout_toEndOf="@id/currency_flag"
             android:orientation="vertical">
@@ -62,9 +63,8 @@
                 android:includeFontPadding="false"
                 android:lines="1"
                 android:text="@{model.getCurrencyDisplayCode(position)}"
-                android:textAppearance="@style/App.TextAppearance.Headline6"
+                android:textAppearance="@style/App.TextAppearance.Title"
                 android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position, true))}"
-                android:textSize="18sp"
                 tools:text="USD" />
 
             <TextView
@@ -102,7 +102,6 @@
             android:text="@{String.format(`%.4f`, model.getCurrency(position).rate)}"
             android:textAppearance="@style/App.TextAppearance.Subtitle1"
             android:textColor="@{ContextCompat.getColor(context, model.getTrendColorRes(position))}"
-            android:textSize="18sp"
             tools:text="4.1235" />
     </RelativeLayout>
 </layout>

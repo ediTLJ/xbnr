@@ -43,7 +43,6 @@
             android:text="@string/no_data_found"
             android:textAppearance="@style/App.TextAppearance.Body1"
             android:textColor="?android:attr/textColorSecondary"
-            android:textSize="18sp"
             android:visibility="gone" />
     </FrameLayout>
 </layout>
