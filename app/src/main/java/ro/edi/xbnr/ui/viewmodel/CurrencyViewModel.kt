@@ -18,9 +18,6 @@ package ro.edi.xbnr.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
 import ro.edi.xbnr.R
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
@@ -52,17 +49,6 @@ class CurrencyViewModel(application: Application) : AndroidViewModel(application
 
     fun getCurrencyIconRes(): Int {
         return Helper.getCurrencyIconRes(currency.value?.code)
-    }
-
-    fun getRate(): Double {
-        currency.value?.let { return it.rate }
-        return 0.0
-    }
-
-    fun getRateDisplayDate(): String? {
-        return currency.value?.let {
-            LocalDate.parse(it.date).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
-        }
     }
 
     fun getIsStarred(): Boolean? {

@@ -35,18 +35,16 @@ fun getAppVersionName(context: Context): String {
 fun ImageView.setImageUrl(@DrawableRes src: Int? = null, @DrawableRes errorSrc: Int? = null, @DrawableRes placeholderSrc: Int? = null) {
     val builder = GlideApp.with(context).load(src)
 
-    with(builder) {
+    builder.apply {
         errorSrc?.let {
-            this.error(errorSrc)
+            error(errorSrc)
         }
         placeholderSrc?.let {
-            this.placeholder(placeholderSrc)
+            placeholder(placeholderSrc)
         }
-        this.transition(DrawableTransitionOptions.withCrossFade(150))
-        this.fitCenter()
-    }
-
-    builder.into(this)
+        transition(DrawableTransitionOptions.withCrossFade(150))
+        fitCenter()
+    }.into(this)
 }
 
 fun getColorRes(context: Context, @AttrRes attrRes: Int): Int {

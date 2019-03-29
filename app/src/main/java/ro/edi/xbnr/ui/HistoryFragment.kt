@@ -39,9 +39,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.chip.Chip
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentHistoryBinding
@@ -114,13 +111,11 @@ class HistoryFragment : Fragment() {
             val clickListener = object : OnChartValueSelectedListener {
                 override fun onValueSelected(e: Entry, h: Highlight) {
                     val rate = e.data as DateRate
-                    // historyModel.chartHighlightX = h.x
                     historyModel.chartHighlight = rate
                     show(rate)
                 }
 
                 override fun onNothingSelected() {
-                    // historyModel.chartHighlightX = -1f
                     historyModel.chartHighlight = null
                     historyModel.rates.value?.lastOrNull()?.let {
                         show(it)
@@ -129,10 +124,8 @@ class HistoryFragment : Fragment() {
 
                 private fun show(rate: DateRate) {
                     activity?.run {
-                        findViewById<TextView>(R.id.currency_date).text =
-                            LocalDate.parse(rate.date).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
-
-                        findViewById<TextView>(R.id.currency_value).text = String.format("%.4f", rate.rate)
+                        findViewById<TextView>(R.id.currency_date).text = historyModel.getDisplayDate(rate)
+                        findViewById<TextView>(R.id.currency_value).text = historyModel.getDisplayRate(rate)
                     }
                 }
             }

@@ -25,9 +25,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentRatesBinding
@@ -87,14 +84,10 @@ class RatesFragment : Fragment() {
 
                 activity?.apply {
                     val tvDate = findViewById<TextView>(R.id.toolbar_date)
-                    val latestDateString = ratesModel.getCurrency(0)?.date
-                        .also { logd("latest date string: %s", it) }
 
-                    val latestDate = LocalDate.parse(latestDateString)
-                        .also { logd("latest date: %s", it) }
-                    val txtDate = latestDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
-                        .also { logd("txtDate: %s", it) }
+                    val txtDate = ratesModel.getCurrencyDisplayDate(0)
 
+                    // TODO make it green if these are the latest rates?
                     if (tvDate.text.isNullOrEmpty() || tvDate.text == txtDate) {
                         tvDate.setTextColor(textColorSecondary)
                     } else {

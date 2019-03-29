@@ -18,6 +18,9 @@ package ro.edi.xbnr.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.data.DataManager
@@ -69,6 +72,12 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         val currency: Currency? = getCurrency(position)
 
         return Helper.getCurrencyNameRes(currency?.code)
+    }
+
+    fun getCurrencyDisplayDate(position: Int): String? {
+        return getCurrency(position)?.let {
+            LocalDate.parse(it.date).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+        }
     }
 
     private fun getTrend(position: Int): Int {

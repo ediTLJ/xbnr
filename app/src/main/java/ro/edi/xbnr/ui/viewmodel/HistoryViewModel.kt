@@ -22,6 +22,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.preference.PreferenceManager
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.DateRate
 
@@ -29,7 +32,6 @@ const val PREFS_KEY_CHART_INTERVAL = "chart_interval"
 
 class HistoryViewModel(application: Application) : AndroidViewModel(application) {
     private var currencyId = -1
-    // var chartHighlightX = -1f
     var chartHighlight: DateRate? = null
 
     private val countLiveData = MutableLiveData<Int>()
@@ -64,5 +66,13 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         }
 
         sharedPrefs.registerOnSharedPreferenceChangeListener(prefsListener)
+    }
+
+    fun getDisplayRate(rate: DateRate): String {
+        return String.format("%.4f", rate.rate)
+    }
+
+    fun getDisplayDate(rate: DateRate): String {
+        return LocalDate.parse(rate.date).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
     }
 }
