@@ -25,6 +25,7 @@
     </string>
 
     <!-- EMPTY VIEWS -->
+    <string name="loading">Loading…</string>
     <string name="no_data_found">No data found.</string>
 
     <!-- ACCESSIBILITY -->

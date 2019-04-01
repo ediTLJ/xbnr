@@ -23,6 +23,7 @@
     </string>
 
     <!-- EMPTY VIEWS -->
+    <string name="loading">Se încarcă…</string>
     <string name="no_data_found">Lipsă date.</string>
 
     <!-- ACCESSIBILITY -->

@@ -38,6 +38,8 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         DataManager.getInstance(getApplication()).getPreviousRates()
     }
 
+    val fetchingData = DataManager.getInstance(getApplication()).isFetching as LiveData<Boolean>
+
     fun getCurrency(position: Int): Currency? {
         return currencies.value?.getOrNull(position)
     }

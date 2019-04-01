@@ -63,17 +63,29 @@ class RatesFragment : Fragment() {
             getColorRes(binding.root.context, android.R.attr.textColorSecondary)
         )
 
+        ratesModel.fetchingData.observe(viewLifecycleOwner, Observer {
+            logi("ratesModel fetchingData changed to %b", it)
+
+            if (it) {
+                binding.loading.show()
+            } else if (binding.loading.isShown) {
+                binding.loading.hide()
+
+                if (ratesModel.currencies.value.isNullOrEmpty()) {
+                    binding.empty.visibility = View.VISIBLE
+                    binding.rates.visibility = View.GONE
+                } else {
+                    binding.empty.visibility = View.GONE
+                    binding.rates.visibility = View.VISIBLE
+                }
+            }
+        })
+
         ratesModel.currencies.observe(viewLifecycleOwner, Observer { list ->
             logi("ratesModel currencies changed")
 
-            // TODO replace with databinding
-            if (list == null) {
-                binding.loading.show()
-                binding.empty.visibility = View.GONE
-                binding.rates.visibility = View.GONE
-            } else if (list.isEmpty()) {
-                binding.loading.hide()
-                binding.empty.visibility = View.VISIBLE
+            if (list.isEmpty()) {
+                binding.empty.visibility = if (ratesModel.fetchingData.value == false) View.VISIBLE else View.GONE
                 binding.rates.visibility = View.GONE
             } else {
                 binding.loading.hide()

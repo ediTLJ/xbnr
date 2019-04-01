@@ -17,6 +17,7 @@ package ro.edi.xbnr.data
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
@@ -48,8 +49,10 @@ import timber.log.Timber.i as logi
 class DataManager private constructor(application: Application) {
     private val db: AppDatabase by lazy { AppDatabase.getInstance(application) }
 
+    val isFetching = MutableLiveData<Boolean>()
+
     init {
-        // ...
+        isFetching.value = true
     }
 
     companion object : Singleton<DataManager, Application>(::DataManager)
@@ -61,6 +64,8 @@ class DataManager private constructor(application: Application) {
      */
     fun getRates(): LiveData<List<Currency>> {
         AppExecutors.networkIO().execute {
+            isFetching.postValue(true)
+
             val latestDateString = db.rateDao().getLatestDate()
 
             val zoneIdRomania = ZoneId.of("Europe/Bucharest")
@@ -69,7 +74,6 @@ class DataManager private constructor(application: Application) {
 
             if (latestDateString.isNullOrEmpty()) {
                 logi("no date in the db")
-                // fetchRates(10)
                 fetchRates(today.year)
                 fetchRates(today.year - 1)
                 return@execute
@@ -79,14 +83,15 @@ class DataManager private constructor(application: Application) {
                 .also { logi("latest date: %s", it) }
 
             val previousWorkday =
-                if (today.dayOfWeek == DayOfWeek.MONDAY)
+                if (today.dayOfWeek == DayOfWeek.MONDAY) {
                     today.minusDays(3)
-                else today.minusDays(1)
+                } else {
+                    today.minusDays(1)
+                }
 
             // another option would be to use Period.between(latestDate, today)
 
             // TODO what if latest date is older than 1-2 years ago? :)
-
             // if latestDate == today => all good, don't do anything
             if (latestDate.isBefore(today.minusWeeks(1))) {
                 // add service to fetch data weekly? so we should never reach this
@@ -104,10 +109,12 @@ class DataManager private constructor(application: Application) {
                 } else { // before 1pm
                     // no rates published yet, no need to do anything
                     logi("before 1pm => nothing to do")
+                    isFetching.postValue(false)
                 }
             } else { // today
                 // all good, don't do anything
                 logi("today => nothing to do")
+                isFetching.postValue(false)
             }
         }
 
@@ -168,6 +175,7 @@ class DataManager private constructor(application: Application) {
 
         val response = runCatching { call.execute() }.getOrElse {
             loge(it, "error fetching or parsing rates")
+            isFetching.postValue(false)
             return
         }
 
@@ -204,5 +212,7 @@ class DataManager private constructor(application: Application) {
             // ignore errors, for now
             loge("error fetching rates [%d]: %s", response.code(), response.errorBody())
         }
+
+        isFetching.postValue(false)
     }
 }
