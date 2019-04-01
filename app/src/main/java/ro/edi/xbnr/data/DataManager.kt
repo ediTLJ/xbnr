@@ -148,12 +148,12 @@ class DataManager private constructor(application: Application) {
         // }
 
         val zoneIdRomania = ZoneId.of("Europe/Bucharest")
-        val yesterday = LocalDate.now(zoneIdRomania).minusDays(1)
+        val today = LocalDate.now(zoneIdRomania)
 
         val since = when (monthsCount) {
-            12 -> yesterday.minusYears(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
-            1, 3 -> yesterday.minusMonths(monthsCount.toLong()).format(DateTimeFormatter.ISO_LOCAL_DATE)
-            else -> yesterday.minusMonths(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
+            12 -> today.minusYears(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
+            1, 3 -> today.minusMonths(monthsCount.toLong()).format(DateTimeFormatter.ISO_LOCAL_DATE)
+            else -> today.minusMonths(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
         }
 
         return db.rateDao().getRates(currencyId, since)
