@@ -34,13 +34,13 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
     private var currencyId = -1
     var chartHighlight: DateRate? = null
 
-    private val countLiveData = MutableLiveData<Int>()
+    private val monthsCountLiveData = MutableLiveData<Int>()
     private lateinit var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     val rates: LiveData<List<DateRate>> = Transformations.switchMap(
-        countLiveData
-    ) { count ->
-        DataManager.getInstance(getApplication()).getRates(currencyId, count)
+        monthsCountLiveData
+    ) { monthsCount ->
+        DataManager.getInstance(getApplication()).getRates(currencyId, monthsCount)
     }
 
     constructor(application: Application, currencyId: Int) : this(application) {
@@ -48,22 +48,12 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
 
         prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPrefs, key ->
             if (PREFS_KEY_CHART_INTERVAL == key) {
-                countLiveData.value = when (sharedPrefs.getInt(key, 1)) {
-                    1 -> 20
-                    3 -> 64
-                    12 -> 260
-                    else -> 20
-                }
+                monthsCountLiveData.value = sharedPrefs.getInt(key, 1)
             }
         }
 
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application)
-        countLiveData.value = when (sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)) {
-            1 -> 20
-            3 -> 64
-            12 -> 260
-            else -> 20
-        }
+        monthsCountLiveData.value = sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)
 
         sharedPrefs.registerOnSharedPreferenceChangeListener(prefsListener)
     }

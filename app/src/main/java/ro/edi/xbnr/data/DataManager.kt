@@ -22,6 +22,7 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
 import ro.edi.util.AppExecutors
 import ro.edi.util.Singleton
 import ro.edi.xbnr.data.db.AppDatabase
@@ -140,15 +141,22 @@ class DataManager private constructor(application: Application) {
         return db.rateDao().getCurrency(currencyId)
     }
 
-    fun getRates(currencyId: Int, count: Int): LiveData<List<DateRate>> {
-        // fetch data if needed, based on count and existing db entries
-        // not needed yet, as we only show latest 20 rates in current version
+    fun getRates(currencyId: Int, monthsCount: Int): LiveData<List<DateRate>> {
+        // fetch data if needed, based on monthsCount and existing db entries
+        // not needed yet, we only show latest 1/3/12 months in current version (& we fetch more data on first app start)
         // AppExecutors.networkIO().execute {
         // }
 
-        // FIXME I should use "since", instead of "count"
+        val zoneIdRomania = ZoneId.of("Europe/Bucharest")
+        val yesterday = LocalDate.now(zoneIdRomania).minusDays(1)
 
-        return db.rateDao().getRates(currencyId, count)
+        val since = when (monthsCount) {
+            12 -> yesterday.minusYears(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
+            1, 3 -> yesterday.minusMonths(monthsCount.toLong()).format(DateTimeFormatter.ISO_LOCAL_DATE)
+            else -> yesterday.minusMonths(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
+        }
+
+        return db.rateDao().getRates(currencyId, since)
     }
 
     /**
