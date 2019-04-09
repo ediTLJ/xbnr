@@ -56,7 +56,7 @@
                     android:contentDescription="@{model.getCurrencyDisplayCode()}"
                     android:padding="@dimen/list_item_icon_padding"
                     app:src="@{model.getCurrencyIconRes()}"
-                    tools:src="@drawable/ic_flag_usd" />
+                    tools:src="@sample/rates.json/data/flag" />
 
                 <TextView
                     android:id="@+id/currency_code"
@@ -69,7 +69,7 @@
                     android:text="@{model.getCurrencyDisplayCode()}"
                     android:textAppearance="@style/App.TextAppearance.Title"
                     android:textColor="?android:textColorPrimary"
-                    tools:text="USD" />
+                    tools:text="@sample/rates.json/data/code" />
 
                 <RelativeLayout
                     android:id="@+id/currency_rate"
@@ -100,7 +100,7 @@
                         android:lines="1"
                         android:textAppearance="@style/App.TextAppearance.Subtitle1"
                         android:textColor="?android:textColorPrimary"
-                        tools:text="4.1235" />
+                        tools:text="@sample/rates.json/data/value" />
                 </RelativeLayout>
 
                 <TextView
@@ -111,7 +111,7 @@
                     android:lines="1"
                     android:textAppearance="@style/App.TextAppearance.Body2"
                     android:textColor="?android:textColorSecondary"
-                    tools:text="September 28, 2019" />
+                    tools:text="April 8, 2019" />
             </LinearLayout>
 
             <FrameLayout

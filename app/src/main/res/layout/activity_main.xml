@@ -30,7 +30,7 @@
                 android:paddingEnd="2dp"
                 android:textAppearance="@style/App.TextAppearance.Body2"
                 android:textColor="?android:attr/textColorSecondary"
-                tools:text="Oct 10, 2018" />
+                tools:text="Apr 8, 2019" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

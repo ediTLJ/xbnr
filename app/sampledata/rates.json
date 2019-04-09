@@ -1,0 +1,60 @@
+{
+  "data": [
+    {
+      "id": 0,
+      "code": "EUR",
+      "flag": "@drawable/ic_flag_eur",
+      "name": "@string/name_eur",
+      "value": "4.7507"
+    },
+    {
+      "id": 1,
+      "code": "GBP",
+      "flag": "@drawable/ic_flag_gbp",
+      "name": "@string/name_gbp",
+      "value": "5.5193"
+    },
+    {
+      "id": 2,
+      "code": "USD",
+      "flag": "@drawable/ic_flag_usd",
+      "name": "@string/name_usd",
+      "value": "4.2277"
+    },
+    {
+      "id": 3,
+      "code": "XAU",
+      "flag": "@drawable/ic_flag_xau",
+      "name": "@string/name_xau",
+      "value": "176.3534"
+    },
+    {
+      "id": 4,
+      "code": "AED",
+      "flag": "@drawable/ic_flag_aed",
+      "name": "@string/name_aed",
+      "value": "1.1510"
+    },
+    {
+      "id": 5,
+      "code": "100 HUF",
+      "flag": "@drawable/ic_flag_huf",
+      "name": "@string/name_huf",
+      "value": "1.4766"
+    },
+    {
+      "id": 6,
+      "code": "100 JPY",
+      "flag": "@drawable/ic_flag_jpy",
+      "name": "@string/name_jpy",
+      "value": "3.7945"
+    },
+    {
+      "id": 7,
+      "code": "MDL",
+      "flag": "@drawable/ic_flag_mdl",
+      "name": "@string/name_mdl",
+      "value": "0.2426"
+    }
+  ]
+}
