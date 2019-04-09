@@ -88,7 +88,7 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
 
         previousRates.value?.let {
             for (previous in it) {
-                if (previous.currency_id == currency.id) {
+                if (previous.currencyId == currency.id) {
                     return when {
                         currency.rate > previous.rate -> 1
                         currency.rate < previous.rate -> -1
@@ -110,7 +110,7 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getIsStarredColorRes(context: Context, position: Int, isPrimary: Boolean): Int {
+    fun getCurrencyTextColorRes(context: Context, position: Int, isPrimary: Boolean): Int {
         getCurrency(position)?.let {
             return if (isPrimary)
                 if (it.isStarred) R.color.yellow_300 else getColorRes(

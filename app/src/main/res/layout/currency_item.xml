@@ -32,11 +32,11 @@
             android:id="@+id/currency_flag"
             android:layout_width="@dimen/list_item_icon_size"
             android:layout_height="@dimen/list_item_icon_size"
-            android:padding="@dimen/list_item_icon_padding"
             android:layout_centerVertical="true"
             android:contentDescription="@{model.getCurrency(position).code}"
+            android:padding="@dimen/list_item_icon_padding"
             app:src="@{model.getCurrencyIconRes(position)}"
-            tools:src="@drawable/ic_flag_usd" />
+            tools:src="@sample/rates.json/data/flag" />
 
         <!--<ImageView-->
         <!--android:id="@+id/currency_flag_checked"-->
@@ -64,8 +64,8 @@
                 android:lines="1"
                 android:text="@{model.getCurrencyDisplayCode(position)}"
                 android:textAppearance="@style/App.TextAppearance.Title"
-                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position, true))}"
-                tools:text="USD" />
+                android:textColor="@{ContextCompat.getColor(context, model.getCurrencyTextColorRes(context, position, true))}"
+                tools:text="@sample/rates.json/data/code" />
 
             <TextView
                 android:id="@+id/currency_name"
@@ -74,8 +74,8 @@
                 android:lines="1"
                 android:text="@{model.getCurrencyNameRes(position)}"
                 android:textAppearance="@style/App.TextAppearance.Body2"
-                android:textColor="@{ContextCompat.getColor(context, model.getIsStarredColorRes(context, position, false))}"
-                tools:text="US Dollar" />
+                android:textColor="@{ContextCompat.getColor(context, model.getCurrencyTextColorRes(context, position, false))}"
+                tools:text="@sample/rates.json/data/name" />
         </LinearLayout>
 
         <TextView
@@ -102,6 +102,6 @@
             android:text="@{String.format(`%.4f`, model.getCurrency(position).rate)}"
             android:textAppearance="@style/App.TextAppearance.Subtitle1"
             android:textColor="@{ContextCompat.getColor(context, model.getTrendColorRes(position))}"
-            tools:text="4.1235" />
+            tools:text="@sample/rates.json/data/value" />
     </RelativeLayout>
 </layout>

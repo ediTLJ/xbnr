@@ -27,11 +27,12 @@ import ro.edi.xbnr.data.db.entity.DbRate
 
 @Database(entities = [DbCurrency::class, DbRate::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun currencyDao(): CurrencyDao
-    abstract fun rateDao(): RateDao
-
     companion object : Singleton<AppDatabase, Application>({
         Room.databaseBuilder(it, AppDatabase::class.java, "rates.db")
             .fallbackToDestructiveMigration().build()
     })
+
+    abstract fun currencyDao(): CurrencyDao
+
+    abstract fun rateDao(): RateDao
 }

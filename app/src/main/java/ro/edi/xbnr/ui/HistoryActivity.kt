@@ -32,7 +32,7 @@ import timber.log.Timber.i as logi
 
 class HistoryActivity : AppCompatActivity() {
     companion object {
-        const val EXTRA_CURRENCY_ID = "ro.edi.xbnr.ui.history.extra_currency_id"
+        const val EXTRA_CURRENCY_ID = "ro.edi.xbnr.ui.history.currency_id"
     }
 
     private val currencyModel: CurrencyViewModel by lazy(LazyThreadSafetyMode.NONE) {
@@ -66,13 +66,11 @@ class HistoryActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_history, menu)
 
-        menu?.let {
-            it.findItem(R.id.action_star).isVisible = currencyModel.getIsStarred()?.not() ?: false
-            it.findItem(R.id.action_unstar).isVisible = currencyModel.getIsStarred() ?: false
-        }
+        menu.findItem(R.id.action_star).isVisible = currencyModel.getIsStarred()?.not() ?: false
+        menu.findItem(R.id.action_unstar).isVisible = currencyModel.getIsStarred() ?: false
 
         return true
     }

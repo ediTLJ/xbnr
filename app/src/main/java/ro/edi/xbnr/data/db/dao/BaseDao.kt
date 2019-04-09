@@ -34,12 +34,6 @@ interface BaseDao<T> {
     @Transaction
     fun update(objList: List<T>)
 
-    @Transaction
-    fun insertOrUpdate(obj: T) {
-        val id = insert(obj)
-        if (id == -1L) update(obj)
-    }
-
     @Delete
     fun delete(obj: T)
 
