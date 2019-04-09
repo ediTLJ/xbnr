@@ -34,4 +34,6 @@
     <color name="blue_100">#B2F2FF</color>
 
     <color name="gold">#FFD700</color>
+
+    <color name="action_tint">#A0FFFFFF</color>
 </resources>
