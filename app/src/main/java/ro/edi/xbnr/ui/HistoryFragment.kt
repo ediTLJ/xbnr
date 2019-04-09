@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.MarkerImage
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
@@ -74,6 +75,10 @@ class HistoryFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val tfFiraCondensed = ResourcesCompat.getFont(binding.root.context, R.font.fira_sans_condensed)
+        val tfFTitilliumWeb = ResourcesCompat.getFont(binding.root.context, R.font.titillium_web)
+
         val colorPrimary = ContextCompat.getColor(
             binding.root.context,
             getColorRes(binding.root.context, R.attr.colorPrimary)
@@ -82,6 +87,9 @@ class HistoryFragment : Fragment() {
             binding.root.context,
             getColorRes(binding.root.context, android.R.attr.textColorSecondary)
         )
+        val colorOrange = ContextCompat.getColor(binding.root.context, R.color.orange_300)
+        val colorGreen = ContextCompat.getColor(binding.root.context, R.color.green_300)
+
         val bkgChart = ContextCompat.getDrawable(binding.root.context, R.drawable.bkg_chart)
 
         binding.lineChart.apply {
@@ -92,11 +100,15 @@ class HistoryFragment : Fragment() {
             setDrawGridBackground(false)
             setScaleEnabled(false)
             xAxis.isEnabled = false
-            axisLeft.isEnabled = false
             axisRight.isEnabled = false
 
             // setVisibleXRangeMaximum(20f)
             minOffset = 8f
+
+            axisLeft.isEnabled = true
+            axisLeft.setDrawAxisLine(false)
+            axisLeft.setDrawGridLines(false)
+            axisLeft.setDrawLabels(false)
 
             val marker = MarkerImage(context, R.drawable.ic_dot)
             marker.setOffset(-10f, -10f) // drawable size + line width
@@ -104,7 +116,7 @@ class HistoryFragment : Fragment() {
 
             setNoDataText(getString(R.string.no_data_found))
             setNoDataTextColor(textColorSecondary)
-            ResourcesCompat.getFont(context, R.font.fira_sans_condensed)?.let {
+            tfFiraCondensed?.let {
                 setNoDataTextTypeface(it)
             }
 
@@ -201,6 +213,32 @@ class HistoryFragment : Fragment() {
             binding.lineChart.apply {
                 data = LineData(dataSet)
                 notifyDataSetChanged()
+
+                val llMax = LimitLine(data.yMax, String.format("%.4f", data.yMax))
+                llMax.lineWidth = 1f
+                llMax.lineColor = colorOrange
+                llMax.enableDashedLine(12f, 18f, 0f)
+                llMax.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
+                llMax.textSize = 14f
+                llMax.textColor = colorOrange
+                tfFTitilliumWeb?.let {
+                    llMax.typeface = it
+                }
+
+                val llMin = LimitLine(data.yMin, String.format("%.4f", data.yMin))
+                llMin.lineWidth = 1f
+                llMin.lineColor = colorGreen
+                llMin.enableDashedLine(12f, 18f, 0f)
+                llMin.labelPosition = LimitLine.LimitLabelPosition.LEFT_BOTTOM
+                llMin.textSize = 14f
+                llMin.textColor = colorGreen
+                tfFTitilliumWeb?.let {
+                    llMin.typeface = it
+                }
+
+                axisLeft.removeAllLimitLines()
+                axisLeft.addLimitLine(llMax)
+                axisLeft.addLimitLine(llMin)
 
                 val dataX = historyModel.chartHighlight?.let {
                     var x = -1f
