@@ -15,7 +15,6 @@
 */
 package ro.edi.xbnr.ui.adapter
 
-import android.content.Context
 import android.content.Intent
 import android.view.View
 import androidx.databinding.ViewDataBinding
@@ -42,13 +41,13 @@ class RatesAdapter(private val ratesModel: RatesViewModel) : BaseAdapter() {
         return R.layout.currency_item
     }
 
-    override fun onClick(context: Context, position: Int) {
-        val i = Intent(context, HistoryActivity::class.java)
+    override fun onClick(v: View, position: Int) {
+        val i = Intent(v.context, HistoryActivity::class.java)
         i.putExtra(HistoryActivity.EXTRA_CURRENCY_ID, ratesModel.getCurrencyId(position))
-        context.startActivity(i)
+        v.context.startActivity(i)
     }
 
-    override fun onLongClick(context: Context, position: Int): Boolean {
+    override fun onLongClick(v: View, position: Int): Boolean {
         return false
     }
 
