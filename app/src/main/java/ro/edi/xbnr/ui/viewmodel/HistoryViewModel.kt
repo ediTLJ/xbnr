@@ -37,10 +37,10 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
     private val monthsCountLiveData = MutableLiveData<Int>()
     private lateinit var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener
 
-    val rates: LiveData<List<DateRate>> = Transformations.switchMap(
-        monthsCountLiveData
-    ) { monthsCount ->
-        DataManager.getInstance(getApplication()).getRates(currencyId, monthsCount)
+    val rates: LiveData<List<DateRate>> by lazy(LazyThreadSafetyMode.NONE) {
+        Transformations.switchMap(monthsCountLiveData) { monthsCount ->
+            DataManager.getInstance(getApplication()).getRates(currencyId, monthsCount)
+        }
     }
 
     constructor(application: Application, currencyId: Int) : this(application) {

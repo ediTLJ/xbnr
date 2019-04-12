@@ -237,8 +237,6 @@ class HistoryFragment : Fragment() {
                 }
 
                 axisLeft.removeAllLimitLines()
-                axisLeft.addLimitLine(llMax)
-                axisLeft.addLimitLine(llMin)
 
                 val dataX = historyModel.chartHighlight?.let {
                     var x = -1f
@@ -258,6 +256,9 @@ class HistoryFragment : Fragment() {
 
                 if (isResumed) {
                     handler.postDelayed({
+                        axisLeft.addLimitLine(llMax)
+                        axisLeft.addLimitLine(llMin)
+
                         binding.loading.hide()
                         binding.loadingContainer.visibility = View.GONE
                         visibility = View.VISIBLE
@@ -266,6 +267,9 @@ class HistoryFragment : Fragment() {
                         animateX(300, Easing.Linear)
                     }, 300)
                 } else {
+                    axisLeft.addLimitLine(llMax)
+                    axisLeft.addLimitLine(llMin)
+
                     binding.loading.hide()
                     binding.loadingContainer.visibility = View.GONE
                     visibility = View.VISIBLE

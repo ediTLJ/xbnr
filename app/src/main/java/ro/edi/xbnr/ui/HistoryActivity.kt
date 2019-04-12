@@ -32,7 +32,7 @@ import timber.log.Timber.i as logi
 
 class HistoryActivity : AppCompatActivity() {
     companion object {
-        const val EXTRA_CURRENCY_ID = "ro.edi.xbnr.ui.history.currency_id"
+        const val EXTRA_CURRENCY_ID = "ro.edi.xbnr.ui.history.extra_currency_id"
     }
 
     private val currencyModel: CurrencyViewModel by lazy(LazyThreadSafetyMode.NONE) {
