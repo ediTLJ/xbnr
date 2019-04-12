@@ -92,7 +92,7 @@ class RatesFragment : Fragment() {
                 binding.empty.visibility = View.GONE
                 binding.rates.visibility = View.VISIBLE
 
-                ratesAdapter.notifyDataSetChanged()
+                ratesAdapter.submitList(list)
 
                 activity?.apply {
                     val tvDate = findViewById<TextView>(R.id.toolbar_date)
@@ -113,7 +113,10 @@ class RatesFragment : Fragment() {
 
         ratesModel.previousRates.observe(viewLifecycleOwner, Observer {
             logi("ratesModel previous rates changed")
-            ratesAdapter.notifyDataSetChanged()
+
+            // TODO optimize: send payload with rate value only
+            ratesAdapter.notifyItemRangeChanged(0, it.size)
+            // ratesAdapter.notifyDataSetChanged()
         })
 
         with(binding.rates) {

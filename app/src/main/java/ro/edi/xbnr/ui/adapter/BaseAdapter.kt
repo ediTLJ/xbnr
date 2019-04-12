@@ -21,11 +21,14 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ro.edi.xbnr.BR
 
-abstract class BaseAdapter :
-    RecyclerView.Adapter<BaseAdapter.BaseViewHolder>() {
+abstract class BaseAdapter<T>(itemCallback: DiffUtil.ItemCallback<T>) :
+    ListAdapter<T, BaseAdapter<T>.BaseViewHolder>(itemCallback) {
+    protected abstract fun getModel(): ViewModel
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -43,33 +46,44 @@ abstract class BaseAdapter :
         return getItemLayoutId(position)
     }
 
-    protected abstract fun getModel(): ViewModel
-
     protected abstract fun getItemLayoutId(position: Int): Int
 
-    protected abstract fun bind(position: Int, binding: ViewDataBinding)
+    protected abstract fun onItemClick(itemView: View, position: Int)
+
+    protected abstract fun onItemLongClick(itemView: View, position: Int): Boolean
+
+    protected abstract fun getClickableViewIds(): IntArray
 
     protected abstract fun onClick(v: View, position: Int)
 
-    protected abstract fun onLongClick(v: View, position: Int): Boolean
+    protected abstract fun bind(binding: ViewDataBinding, position: Int)
 
     inner class BaseViewHolder(private val binding: ViewDataBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
 
         init {
-            binding.root.setOnClickListener(this)
-            binding.root.setOnLongClickListener(this)
+            itemView.setOnClickListener(this)
+            itemView.setOnLongClickListener(this)
+
+            val ids = getClickableViewIds()
+            for (id in ids) {
+                itemView.findViewById<View>(id)?.setOnClickListener(this)
+            }
         }
 
         override fun onClick(v: View?) {
             v?.let {
-                onClick(it, adapterPosition)
+                if (v.id == itemView.id) {
+                    onItemClick(it, adapterPosition)
+                } else {
+                    onClick(it, adapterPosition)
+                }
             }
         }
 
         override fun onLongClick(v: View?): Boolean {
             v?.let {
-                return onLongClick(it, adapterPosition)
+                return onItemLongClick(it, adapterPosition)
             }
 
             return false
@@ -78,7 +92,7 @@ abstract class BaseAdapter :
         fun bind(model: ViewModel, position: Int) {
             binding.setVariable(BR.model, model)
             binding.setVariable(BR.position, position)
-            bind(position, binding)
+            bind(binding, position)
             binding.executePendingBindings()
         }
     }

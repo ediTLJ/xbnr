@@ -19,58 +19,59 @@ import android.content.Intent
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.DiffUtil
 import ro.edi.xbnr.R
+import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.ui.HistoryActivity
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
 
-class RatesAdapter(private val ratesModel: RatesViewModel) : BaseAdapter() {
-
-    override fun getItemId(position: Int): Long {
-        return ratesModel.getCurrencyId(position).toLong()
-    }
-
-    override fun getItemCount(): Int {
-        return ratesModel.currencies.value?.size ?: 0
-    }
-
+class RatesAdapter(private val ratesModel: RatesViewModel) : BaseAdapter<Currency>(CurrencyDiffCallback()) {
     override fun getModel(): ViewModel {
         return ratesModel
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id.toLong()
     }
 
     override fun getItemLayoutId(position: Int): Int {
         return R.layout.currency_item
     }
 
-    override fun onClick(v: View, position: Int) {
-        val i = Intent(v.context, HistoryActivity::class.java)
-        i.putExtra(HistoryActivity.EXTRA_CURRENCY_ID, ratesModel.getCurrencyId(position))
-        v.context.startActivity(i)
+    override fun onItemClick(itemView: View, position: Int) {
+        val i = Intent(itemView.context, HistoryActivity::class.java)
+        i.putExtra(HistoryActivity.EXTRA_CURRENCY_ID, getItem(position).id)
+        itemView.context.startActivity(i)
     }
 
-    override fun onLongClick(v: View, position: Int): Boolean {
+    override fun onItemLongClick(itemView: View, position: Int): Boolean {
         return false
     }
 
-    override fun bind(position: Int, binding: ViewDataBinding) {
-        val vFlag = binding.root.findViewById<View>(R.id.currency_flag)
-        // val vFlagChecked = binding.root.findViewById<View>(R.id.currency_flag_checked)
+    override fun getClickableViewIds(): IntArray {
+        val ids = IntArray(1)
+        ids[0] = R.id.currency_flag
 
-        vFlag.setOnClickListener {
-            // binding.root.isActivated = true
-            // it.visibility = View.GONE
-            // vFlagChecked.visibility = View.VISIBLE
-            ratesModel.getCurrency(position)?.let {
-                ratesModel.setIsStarred(position, !it.isStarred)
-            }
+        return ids
+    }
+
+    override fun onClick(v: View, position: Int) {
+        if (v.id == R.id.currency_flag) {
+            ratesModel.setIsStarred(position, !getItem(position).isStarred)
+        }
+    }
+
+    override fun bind(binding: ViewDataBinding, position: Int) {
+
+    }
+
+    class CurrencyDiffCallback : DiffUtil.ItemCallback<Currency>() {
+        override fun areItemsTheSame(oldItem: Currency, newItem: Currency): Boolean {
+            return oldItem.id == newItem.id
         }
 
-//        vFlagChecked.setOnClickListener {
-//            // binding.root.isActivated = false
-//            // it.visibility = View.GONE
-//            // vFlag.visibility = View.VISIBLE
-//            ratesModel.getCurrency(position)?.let {
-//                ratesModel.setIsStarred(position, !it.isStarred)
-//            }
-//        }
+        override fun areContentsTheSame(oldItem: Currency, newItem: Currency): Boolean {
+            return oldItem == newItem
+        }
     }
 }
