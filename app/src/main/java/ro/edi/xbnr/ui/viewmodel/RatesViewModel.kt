@@ -30,15 +30,12 @@ import ro.edi.xbnr.model.CurrencyRate
 import ro.edi.xbnr.ui.util.Helper
 
 class RatesViewModel(application: Application) : AndroidViewModel(application) {
+    val fetchingData = DataManager.getInstance(getApplication()).isFetching as LiveData<Boolean>
+    val previousRates: LiveData<List<CurrencyRate>> = DataManager.getInstance(getApplication()).getPreviousRates()
+
     val currencies: LiveData<List<Currency>> by lazy(LazyThreadSafetyMode.NONE) {
         DataManager.getInstance(getApplication()).getRates()
     }
-
-    val previousRates: LiveData<List<CurrencyRate>> by lazy(LazyThreadSafetyMode.NONE) {
-        DataManager.getInstance(getApplication()).getPreviousRates()
-    }
-
-    val fetchingData = DataManager.getInstance(getApplication()).isFetching as LiveData<Boolean>
 
     fun getCurrency(position: Int): Currency? {
         return currencies.value?.getOrNull(position)
