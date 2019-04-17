@@ -3,11 +3,11 @@
     <color name="ic_launcher_background">@color/grey</color>
 
     <color name="black">#000000</color>
-    <color name="grey">#161816</color>
-    <color name="grey_light">#3C3E3C</color>
+    <color name="grey">#212321</color>
+    <color name="grey_light">#484A48</color>
 
-    <color name="white_dark">#9B9D9B</color>
-    <color name="white">#EBEDEB</color>
+    <color name="white_dark">#A1A3A1</color>
+    <color name="white">#F1F3F1</color>
 
     <color name="green_700">#007D51</color>
     <color name="green_500">#1EB980</color>
