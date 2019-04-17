@@ -25,6 +25,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentRatesBinding
@@ -92,7 +93,11 @@ class RatesFragment : Fragment() {
                 binding.empty.visibility = View.GONE
                 binding.rates.visibility = View.VISIBLE
 
-                ratesAdapter.submitList(list)
+                val layoutManager = binding.rates.layoutManager as LinearLayoutManager
+                val firstVisible = layoutManager.findFirstVisibleItemPosition()
+                val offset = layoutManager.findViewByPosition(firstVisible)?.top ?: 0
+
+                ratesAdapter.submitList(list) { layoutManager.scrollToPositionWithOffset(firstVisible, offset) }
 
                 activity?.apply {
                     val tvDate = findViewById<TextView>(R.id.toolbar_date)
