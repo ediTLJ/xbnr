@@ -25,12 +25,10 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import ro.edi.xbnr.BuildConfig
 import ro.edi.xbnr.data.remote.model.BnrDays
-import javax.net.ssl.HostnameVerifier
-import javax.net.ssl.SSLSession
 
 interface BnrService {
     companion object {
-        private const val API_BASE_URL = "https://bnr.ro/"
+        private const val API_BASE_URL = "https://www.bnr.ro"
 
         val instance: BnrService by lazy {
             val okBuilder = OkHttpClient.Builder()
@@ -44,11 +42,7 @@ interface BnrService {
                 okBuilder.addInterceptor(logging)
             }
 
-            okBuilder.hostnameVerifier(object : HostnameVerifier {
-                override fun verify(hostname: String, session: SSLSession): Boolean {
-                    return hostname == "bnr.ro"
-                }
-            })
+            okBuilder.hostnameVerifier { hostname, _ -> hostname == "www.bnr.ro" }
 
             val tikXml = TikXml.Builder()
                 .exceptionOnUnreadXml(false)
@@ -63,10 +57,10 @@ interface BnrService {
         }
     }
 
-    @get:GET("nbrfxrates.xml")
+    @get:GET("/nbrfxrates.xml")
     val latestRates: Call<BnrDays>
 
-    @get:GET("nbrfxrates10days.xml")
+    @get:GET("/nbrfxrates10days.xml")
     val last10Rates: Call<BnrDays>
 
     @GET("/files/xml/years/nbrfxrates{year}.xml")
