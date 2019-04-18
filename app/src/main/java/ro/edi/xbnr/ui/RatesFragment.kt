@@ -119,9 +119,9 @@ class RatesFragment : Fragment() {
         ratesModel.previousRates.observe(viewLifecycleOwner, Observer {
             logi("ratesModel previous rates changed")
 
-            // TODO optimize: send payload with rate value only
-            ratesAdapter.notifyItemRangeChanged(0, it.size)
-            // ratesAdapter.notifyDataSetChanged()
+            val payload = mutableSetOf<String>()
+            payload.add(RatesAdapter.CURRENCY_DATE)
+            ratesAdapter.notifyItemRangeChanged(0, it.size, payload)
         })
 
         with(binding.rates) {

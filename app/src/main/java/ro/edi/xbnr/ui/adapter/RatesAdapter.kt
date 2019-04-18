@@ -17,15 +17,22 @@ package ro.edi.xbnr.ui.adapter
 
 import android.content.Intent
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import ro.edi.xbnr.R
+import ro.edi.xbnr.databinding.CurrencyItemBinding
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.ui.HistoryActivity
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
 
 class RatesAdapter(private val ratesModel: RatesViewModel) : BaseAdapter<Currency>(CurrencyDiffCallback()) {
+    companion object {
+        const val CURRENCY_RATE = "currency_rate"
+        const val CURRENCY_DATE = "currency_date"
+    }
+
     override fun getModel(): ViewModel {
         return ratesModel
     }
@@ -44,11 +51,7 @@ class RatesAdapter(private val ratesModel: RatesViewModel) : BaseAdapter<Currenc
         itemView.context.startActivity(i)
     }
 
-    override fun onItemLongClick(itemView: View, position: Int): Boolean {
-        return false
-    }
-
-    override fun getClickableViewIds(): IntArray {
+    override fun getClickableViewIds(): IntArray? {
         val ids = IntArray(1)
         ids[0] = R.id.currency_flag
 
@@ -61,8 +64,21 @@ class RatesAdapter(private val ratesModel: RatesViewModel) : BaseAdapter<Currenc
         }
     }
 
-    override fun bind(binding: ViewDataBinding, position: Int) {
+    override fun bind(binding: ViewDataBinding, position: Int, payloads: MutableList<Any>) {
+        val b = binding as CurrencyItemBinding
 
+        val payload = payloads.first() as Set<*>
+        payload.forEach {
+            when (it) {
+                CURRENCY_RATE -> b.currencyValue.text = String.format("%.4f", getItem(position).rate)
+                CURRENCY_DATE -> b.currencyValue.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        ratesModel.getTrendColorRes(position)
+                    )
+                )
+            }
+        }
     }
 
     class CurrencyDiffCallback : DiffUtil.ItemCallback<Currency>() {
@@ -72,6 +88,23 @@ class RatesAdapter(private val ratesModel: RatesViewModel) : BaseAdapter<Currenc
 
         override fun areContentsTheSame(oldItem: Currency, newItem: Currency): Boolean {
             return oldItem == newItem
+        }
+
+        override fun getChangePayload(oldItem: Currency, newItem: Currency): Any? {
+            val payload = mutableSetOf<String>()
+
+            if (oldItem.rate != newItem.rate) {
+                payload.add(CURRENCY_RATE)
+            }
+            if (oldItem.date != newItem.date) {
+                payload.add(CURRENCY_DATE)
+            }
+
+            if (payload.isEmpty()) {
+                return null
+            }
+
+            return payload
         }
     }
 }

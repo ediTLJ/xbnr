@@ -35,11 +35,16 @@ abstract class BaseAdapter<T>(itemCallback: DiffUtil.ItemCallback<T>) :
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
             layoutInflater, viewType, parent, false
         )
+        binding.setVariable(BR.model, getModel())
         return BaseViewHolder(binding)
     }
 
     final override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        holder.bind(getModel(), position)
+        holder.bind(position)
+    }
+
+    final override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) {
+        holder.bind(position, payloads)
     }
 
     final override fun getItemViewType(position: Int): Int {
@@ -48,15 +53,29 @@ abstract class BaseAdapter<T>(itemCallback: DiffUtil.ItemCallback<T>) :
 
     protected abstract fun getItemLayoutId(position: Int): Int
 
-    protected abstract fun onItemClick(itemView: View, position: Int)
+    protected open fun onItemClick(itemView: View, position: Int) {
 
-    protected abstract fun onItemLongClick(itemView: View, position: Int): Boolean
+    }
 
-    protected abstract fun getClickableViewIds(): IntArray
+    protected open fun onItemLongClick(itemView: View, position: Int): Boolean {
+        return false
+    }
 
-    protected abstract fun onClick(v: View, position: Int)
+    protected open fun getClickableViewIds(): IntArray? {
+        return null
+    }
 
-    protected abstract fun bind(binding: ViewDataBinding, position: Int)
+    protected open fun onClick(v: View, position: Int) {
+
+    }
+
+    protected open fun bind(binding: ViewDataBinding, position: Int) {
+
+    }
+
+    protected open fun bind(binding: ViewDataBinding, position: Int, payloads: MutableList<Any>) {
+
+    }
 
     inner class BaseViewHolder(private val binding: ViewDataBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
@@ -65,9 +84,10 @@ abstract class BaseAdapter<T>(itemCallback: DiffUtil.ItemCallback<T>) :
             itemView.setOnClickListener(this)
             itemView.setOnLongClickListener(this)
 
-            val ids = getClickableViewIds()
-            for (id in ids) {
-                itemView.findViewById<View>(id)?.setOnClickListener(this)
+            getClickableViewIds()?.let { ids ->
+                for (id in ids) {
+                    itemView.findViewById<View>(id)?.setOnClickListener(this)
+                }
             }
         }
 
@@ -89,11 +109,20 @@ abstract class BaseAdapter<T>(itemCallback: DiffUtil.ItemCallback<T>) :
             return false
         }
 
-        fun bind(model: ViewModel, position: Int) {
-            binding.setVariable(BR.model, model)
+        fun bind(position: Int) {
             binding.setVariable(BR.position, position)
             bind(binding, position)
             binding.executePendingBindings()
+        }
+
+        fun bind(position: Int, payloads: MutableList<Any>) {
+            if (payloads.isEmpty()) {
+                bind(position)
+                return
+            }
+
+            binding.setVariable(BR.position, position)
+            bind(binding, position, payloads)
         }
     }
 }
