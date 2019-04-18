@@ -5,5 +5,5 @@
 
 # Change Log
 
-## v1.0 [MMM dd, 2019]
+## v1.0 [Apr 1, 2019]
 * MVP release
