@@ -30,7 +30,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
-import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.MarkerImage
 import com.github.mikephil.charting.components.YAxis
@@ -46,9 +45,7 @@ import ro.edi.xbnr.databinding.FragmentHistoryBinding
 import ro.edi.xbnr.model.DateRate
 import ro.edi.xbnr.ui.viewmodel.HistoryViewModel
 import ro.edi.xbnr.ui.viewmodel.PREFS_KEY_CHART_INTERVAL
-import timber.log.Timber.d as logd
 import timber.log.Timber.i as logi
-import timber.log.Timber.w as logw
 
 class HistoryFragment : Fragment() {
     companion object {
@@ -217,7 +214,7 @@ class HistoryFragment : Fragment() {
                 val llMax = LimitLine(data.yMax, String.format("%.4f", data.yMax))
                 llMax.lineWidth = 1f
                 llMax.lineColor = colorOrange
-                llMax.enableDashedLine(12f, 18f, 0f)
+                // llMax.enableDashedLine(12f, 18f, 0f)
                 llMax.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
                 llMax.textSize = 14f
                 llMax.textColor = colorOrange
@@ -228,7 +225,7 @@ class HistoryFragment : Fragment() {
                 val llMin = LimitLine(data.yMin, String.format("%.4f", data.yMin))
                 llMin.lineWidth = 1f
                 llMin.lineColor = colorGreen
-                llMin.enableDashedLine(12f, 18f, 0f)
+                // llMin.enableDashedLine(12f, 18f, 0f)
                 llMin.labelPosition = LimitLine.LimitLabelPosition.LEFT_BOTTOM
                 llMin.textSize = 14f
                 llMin.textColor = colorGreen
@@ -255,7 +252,7 @@ class HistoryFragment : Fragment() {
                 highlightValue(dataX, 0, true)
 
                 if (isResumed) {
-                    handler.postDelayed({
+                    handler.post {
                         axisLeft.addLimitLine(llMax)
                         axisLeft.addLimitLine(llMin)
 
@@ -264,8 +261,9 @@ class HistoryFragment : Fragment() {
                         visibility = View.VISIBLE
                         binding.chartInterval.visibility = View.VISIBLE
 
-                        animateX(300, Easing.Linear)
-                    }, 300)
+                        invalidate()
+                        // animateX(300, Easing.Linear)
+                    }
                 } else {
                     axisLeft.addLimitLine(llMax)
                     axisLeft.addLimitLine(llMin)
