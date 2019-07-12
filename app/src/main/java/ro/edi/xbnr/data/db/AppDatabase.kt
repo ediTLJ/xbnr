@@ -25,10 +25,12 @@ import ro.edi.xbnr.data.db.dao.RateDao
 import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 
+const val DB_NAME = "rates.db"
+
 @Database(entities = [DbCurrency::class, DbRate::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     companion object : Singleton<AppDatabase, Application>({
-        Room.databaseBuilder(it, AppDatabase::class.java, "rates.db")
+        Room.databaseBuilder(it, AppDatabase::class.java, DB_NAME)
             .fallbackToDestructiveMigration().build()
     })
 
