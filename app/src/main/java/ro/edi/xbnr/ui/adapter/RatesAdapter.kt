@@ -47,6 +47,7 @@ class RatesAdapter(private val ratesModel: RatesViewModel) : BaseAdapter<Currenc
 
     override fun onItemClick(itemView: View, position: Int) {
         val i = Intent(itemView.context, HistoryActivity::class.java)
+        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         i.putExtra(HistoryActivity.EXTRA_CURRENCY_ID, getItem(position).id)
         itemView.context.startActivity(i)
     }
