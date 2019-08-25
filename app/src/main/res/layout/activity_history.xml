@@ -52,6 +52,7 @@
                     android:layout_height="@dimen/list_item_icon_size"
                     android:contentDescription="@{model.getCurrencyDisplayCode()}"
                     android:padding="@dimen/list_item_icon_padding"
+                    android:scaleType="fitCenter"
                     app:src="@{model.getCurrencyIconRes()}"
                     tools:src="@sample/rates.json/data/flag" />
 

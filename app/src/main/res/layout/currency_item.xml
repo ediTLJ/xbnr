@@ -35,6 +35,7 @@
             android:layout_centerVertical="true"
             android:contentDescription="@{model.getCurrency(position).code}"
             android:padding="@dimen/list_item_icon_padding"
+            android:scaleType="fitCenter"
             app:src="@{model.getCurrencyIconRes(position)}"
             tools:src="@sample/rates.json/data/flag" />
 

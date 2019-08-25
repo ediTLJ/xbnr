@@ -55,6 +55,7 @@
                     android:layout_marginTop="@dimen/activity_margin"
                     android:contentDescription="@{model.getCurrencyDisplayCode()}"
                     android:padding="@dimen/list_item_icon_padding"
+                    android:scaleType="fitCenter"
                     app:src="@{model.getCurrencyIconRes()}"
                     tools:src="@sample/rates.json/data/flag" />
 
