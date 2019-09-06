@@ -22,7 +22,6 @@ import androidx.annotation.AttrRes
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import coil.api.load
-import ro.edi.xbnr.R
 
 /**
  * @return Application's version name from `PackageManager`.
@@ -34,33 +33,19 @@ fun getAppVersionName(context: Context): String {
 
 @BindingAdapter(value = ["src", "errorSrc", "placeholderSrc"], requireAll = false)
 fun ImageView.setImageUrl(@DrawableRes src: Int? = null, @DrawableRes errorSrc: Int? = null, @DrawableRes placeholderSrc: Int? = null) {
+    // coil.util.CoilLogger.setEnabled(true)
     src?.let { res ->
-        setImageResource(res)
-//        load(res) {
-//            errorSrc?.let {
-//                error(it)
-//            }
-//            placeholderSrc?.let {
-//                placeholder(it)
-//            }
-//            crossfade(150)
-//        }
+        load(res) {
+            allowHardware(false)
+            errorSrc?.let {
+                error(it)
+            }
+            placeholderSrc?.let {
+                placeholder(it)
+            }
+            crossfade(150)
+        }
     }
-
-//    load(R.drawable.ic_action_info)
-
-//    val builder = GlideApp.with(context).load(src)
-//
-//    builder.apply {
-//        errorSrc?.let {
-//            error(errorSrc)
-//        }
-//        placeholderSrc?.let {
-//            placeholder(placeholderSrc)
-//        }
-//        transition(DrawableTransitionOptions.withCrossFade(150))
-//        fitCenter()
-//    }.into(this)
 }
 
 fun getColorRes(context: Context, @AttrRes attrRes: Int): Int {
