@@ -38,8 +38,8 @@
 
     <color name="gold">#FFD700</color>
 
-    <color name="action_tint">#A0FFFFFF</color>
+    <color name="action_tint">@color/white</color> <!-- #A0FFFFFF -->
 
     <color name="status_grey">#CC212321</color>
-    <color name="nav_grey">#80111311</color>
+    <color name="nav_grey">#80212321</color>
 </resources>

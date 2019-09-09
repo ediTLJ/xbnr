@@ -64,12 +64,19 @@ class MainActivity : AppCompatActivity() {
             SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
         ViewCompat.setOnApplyWindowInsetsListener(toolbar) { _, insets ->
-            toolbar.setMarginTop(insets.systemWindowInsetTop)
+            toolbar.setMargins(
+                insets.systemWindowInsetTop,
+                insets.systemWindowInsetLeft,
+                insets.systemWindowInsetRight
+            )
             insets
         }
     }
 
-    private fun View.setMarginTop(value: Int) = updateLayoutParams<ViewGroup.MarginLayoutParams> {
-        topMargin = value
-    }
+    private fun View.setMargins(topValue: Int, leftValue: Int, rightValue: Int) =
+        updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = topValue
+            leftMargin = leftValue
+            rightMargin = rightValue
+        }
 }

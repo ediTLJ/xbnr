@@ -149,6 +149,8 @@ class RatesFragment : Fragment() {
                 ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
                     updatePadding(top = toolbarHeight + insets.systemWindowInsetTop)
                     updatePadding(bottom = insets.systemWindowInsetBottom)
+                    updatePadding(left = insets.systemWindowInsetLeft)
+                    updatePadding(right = insets.systemWindowInsetRight)
                     insets
                 }
             }
