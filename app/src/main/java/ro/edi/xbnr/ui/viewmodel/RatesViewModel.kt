@@ -101,8 +101,8 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
     fun getTrendColorRes(position: Int): Int {
         val trend = getTrend(position)
         return when {
-            trend > 0 -> R.color.orange_300
-            trend < 0 -> R.color.green_300
+            trend > 0 -> R.color.orange_500
+            trend < 0 -> R.color.green_500
             else -> R.color.white
         }
     }

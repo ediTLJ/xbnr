@@ -84,8 +84,8 @@ class HistoryFragment : Fragment() {
             binding.root.context,
             getColorRes(binding.root.context, android.R.attr.textColorSecondary)
         )
-        val colorOrange = ContextCompat.getColor(binding.root.context, R.color.orange_300)
-        val colorGreen = ContextCompat.getColor(binding.root.context, R.color.green_300)
+        val colorOrange = ContextCompat.getColor(binding.root.context, R.color.orange_500)
+        val colorGreen = ContextCompat.getColor(binding.root.context, R.color.green_500)
 
         val bkgChart = ContextCompat.getDrawable(binding.root.context, R.drawable.bkg_chart)
 
@@ -216,7 +216,7 @@ class HistoryFragment : Fragment() {
                 llMax.lineColor = colorOrange
                 // llMax.enableDashedLine(12f, 18f, 0f)
                 llMax.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
-                llMax.textSize = 14f
+                llMax.textSize = 16f
                 llMax.textColor = colorOrange
                 tfFTitilliumWeb?.let {
                     llMax.typeface = it
@@ -227,7 +227,7 @@ class HistoryFragment : Fragment() {
                 llMin.lineColor = colorGreen
                 // llMin.enableDashedLine(12f, 18f, 0f)
                 llMin.labelPosition = LimitLine.LimitLabelPosition.LEFT_BOTTOM
-                llMin.textSize = 14f
+                llMin.textSize = 16f
                 llMin.textColor = colorGreen
                 tfFTitilliumWeb?.let {
                     llMin.typeface = it
@@ -252,17 +252,19 @@ class HistoryFragment : Fragment() {
                 highlightValue(dataX, 0, true)
 
                 if (isResumed) {
-                    handler.post {
-                        axisLeft.addLimitLine(llMax)
-                        axisLeft.addLimitLine(llMin)
+                    if (handler != null) {
+                        handler.post {
+                            axisLeft.addLimitLine(llMax)
+                            axisLeft.addLimitLine(llMin)
 
-                        binding.loading.hide()
-                        binding.loadingContainer.visibility = View.GONE
-                        visibility = View.VISIBLE
-                        binding.chartInterval.visibility = View.VISIBLE
+                            binding.loading.hide()
+                            binding.loadingContainer.visibility = View.GONE
+                            visibility = View.VISIBLE
+                            binding.chartInterval.visibility = View.VISIBLE
 
-                        invalidate()
-                        // animateX(300, Easing.Linear)
+                            invalidate()
+                            // animateX(300, Easing.Linear)
+                        }
                     }
                 } else {
                     axisLeft.addLimitLine(llMax)
