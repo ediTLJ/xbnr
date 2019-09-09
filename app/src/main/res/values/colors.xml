@@ -39,4 +39,7 @@
     <color name="gold">#FFD700</color>
 
     <color name="action_tint">#A0FFFFFF</color>
+
+    <color name="status_grey">#CC212321</color>
+    <color name="nav_grey">#80111311</color>
 </resources>

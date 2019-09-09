@@ -3,7 +3,8 @@
     <!-- application theme -->
     <style name="App.Theme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:statusBarColor">@color/grey</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/nav_grey</item>
 
         <item name="colorPrimary">@color/green_500</item>
         <item name="colorPrimaryVariant">@color/green_700</item>
@@ -34,11 +35,8 @@
         <item name="textAppearanceCaption">@style/App.TextAppearance.Caption</item>
     </style>
 
-    <style name="App.Theme.Toolbar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <item name="android:background">@color/grey</item>
-
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColorSecondary">@color/white_dark</item>
+    <style name="App.Toolbar" parent="">
+        <item name="android:background">@color/status_grey</item>
     </style>
 
     <style name="App.TextAppearance.Headline6" parent="TextAppearance.MaterialComponents.Headline6">

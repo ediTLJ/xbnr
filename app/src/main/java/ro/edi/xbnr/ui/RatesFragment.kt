@@ -21,18 +21,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.updatePadding
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_main.*
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentRatesBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
-import timber.log.Timber.d as logd
 import timber.log.Timber.i as logi
+
 
 class RatesFragment : Fragment() {
     companion object {
@@ -47,9 +50,18 @@ class RatesFragment : Fragment() {
         ratesModel = ViewModelProviders.of(this).get(RatesViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding =
-            DataBindingUtil.inflate<FragmentRatesBinding>(inflater, R.layout.fragment_rates, container, false)
+            DataBindingUtil.inflate<FragmentRatesBinding>(
+                inflater,
+                R.layout.fragment_rates,
+                container,
+                false
+            )
         binding.lifecycleOwner = viewLifecycleOwner
 
         val ratesAdapter = RatesAdapter(ratesModel)
@@ -86,7 +98,8 @@ class RatesFragment : Fragment() {
             logi("ratesModel currencies changed")
 
             if (list.isEmpty()) {
-                binding.empty.visibility = if (ratesModel.fetchingData.value == false) View.VISIBLE else View.GONE
+                binding.empty.visibility =
+                    if (ratesModel.fetchingData.value == false) View.VISIBLE else View.GONE
                 binding.rates.visibility = View.GONE
             } else {
                 binding.loading.hide()
@@ -97,7 +110,12 @@ class RatesFragment : Fragment() {
                 val firstVisible = layoutManager.findFirstVisibleItemPosition()
                 val offset = layoutManager.findViewByPosition(firstVisible)?.top ?: 0
 
-                ratesAdapter.submitList(list) { layoutManager.scrollToPositionWithOffset(firstVisible, offset) }
+                ratesAdapter.submitList(list) {
+                    layoutManager.scrollToPositionWithOffset(
+                        firstVisible,
+                        offset
+                    )
+                }
 
                 activity?.apply {
                     val tvDate = findViewById<TextView>(R.id.toolbar_date)
@@ -125,6 +143,16 @@ class RatesFragment : Fragment() {
         })
 
         with(binding.rates) {
+            activity?.let { a ->
+                val toolbarHeight = a.toolbar.layoutParams.height
+
+                ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
+                    updatePadding(top = toolbarHeight + insets.systemWindowInsetTop)
+                    updatePadding(bottom = insets.systemWindowInsetBottom)
+                    insets
+                }
+            }
+
             setHasFixedSize(true)
             adapter = ratesAdapter
         }
