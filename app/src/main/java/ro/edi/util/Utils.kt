@@ -36,7 +36,7 @@ fun ImageView.setImageUrl(@DrawableRes src: Int? = null, @DrawableRes errorSrc: 
     // coil.util.CoilLogger.setEnabled(true)
     src?.let { res ->
         load(res) {
-            allowHardware(false)
+            // allowHardware(false)
             errorSrc?.let {
                 error(it)
             }
