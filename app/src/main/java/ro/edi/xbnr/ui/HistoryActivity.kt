@@ -42,19 +42,12 @@ class HistoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding: ActivityHistoryBinding = DataBindingUtil.setContentView(this, R.layout.activity_history)
+        val binding: ActivityHistoryBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_history)
         binding.lifecycleOwner = this
         binding.model = currencyModel
 
-        currencyModel.currency.observe(this, Observer {
-            logi("found currency: %s", it)
-            invalidateOptionsMenu()
-            binding.invalidateAll()
-        })
-
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        initView(binding)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -81,6 +74,18 @@ class HistoryActivity : AppCompatActivity() {
             R.id.action_unstar -> currencyModel.setIsStarred(false)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun initView(binding: ActivityHistoryBinding) {
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        currencyModel.currency.observe(this, Observer {
+            logi("found currency: %s", it)
+            invalidateOptionsMenu()
+            binding.invalidateAll()
+        })
     }
 
     private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

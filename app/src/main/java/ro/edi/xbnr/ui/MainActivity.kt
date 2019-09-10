@@ -19,12 +19,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.View.*
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
-import kotlinx.android.synthetic.main.activity_main.*
 import ro.edi.xbnr.R
 
 
@@ -33,12 +32,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
         setContentView(R.layout.activity_main)
         initView()
-
-        // val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -60,8 +58,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        window.decorView.systemUiVisibility = SYSTEM_UI_FLAG_LAYOUT_STABLE or
-            SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         ViewCompat.setOnApplyWindowInsetsListener(toolbar) { _, insets ->
             toolbar.setMargins(
