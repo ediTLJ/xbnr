@@ -110,7 +110,7 @@ class RatesFragment : Fragment() {
         val pbLoading = view.findViewById<ContentLoadingProgressBar>(R.id.loading)
         val tvEmpty = view.findViewById<TextView>(R.id.empty)
 
-        ratesModel.fetchingData.observe(viewLifecycleOwner, Observer {fetchingData ->
+        ratesModel.fetchingData.observe(viewLifecycleOwner, Observer { fetchingData ->
             logi("ratesModel fetchingData changed to %b", fetchingData)
 
             if (fetchingData) {
@@ -142,13 +142,18 @@ class RatesFragment : Fragment() {
 
                 val layoutManager = rvRates.layoutManager as LinearLayoutManager
                 val firstVisible = layoutManager.findFirstVisibleItemPosition()
-                val offset = layoutManager.findViewByPosition(firstVisible)?.top ?: 0
+                val offset = (layoutManager.findViewByPosition(firstVisible)?.top
+                    ?: 0) - layoutManager.paddingTop
 
                 (rvRates.adapter as RatesAdapter).submitList(ratesList) {
-                    layoutManager.scrollToPositionWithOffset(
-                        firstVisible,
-                        offset
-                    )
+                    if (firstVisible != RecyclerView.NO_POSITION) {
+                        layoutManager.scrollToPositionWithOffset(
+                            firstVisible,
+                            offset
+                        )
+
+                        ViewCompat.requestApplyInsets(view)
+                    }
                 }
 
                 activity?.apply {
