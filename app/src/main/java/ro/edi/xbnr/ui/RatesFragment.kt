@@ -20,15 +20,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.recyclerview.widget.RecyclerView
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentRatesBinding
@@ -63,54 +65,86 @@ class RatesFragment : Fragment() {
                 false
             )
         binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
+    }
 
-        val ratesAdapter = RatesAdapter(ratesModel)
-        ratesAdapter.setHasStableIds(true)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        logi("onViewCreated: %s", savedInstanceState)
+
+        val rvRates = view.findViewById<RecyclerView>(R.id.rates)
+
+        activity?.apply {
+            val toolbar = findViewById<Toolbar>(R.id.toolbar)
+
+            rvRates.apply {
+                ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
+                    updatePadding(
+                        insets.systemWindowInsetLeft,
+                        toolbar.layoutParams.height + insets.systemWindowInsetTop,
+                        insets.systemWindowInsetRight,
+                        insets.systemWindowInsetBottom
+                    )
+                    insets
+                }
+            }
+        }
+
+        rvRates.apply {
+            setHasFixedSize(true)
+            adapter = RatesAdapter(ratesModel).apply {
+                setHasStableIds(true)
+            }
+        }
 
         val colorPrimary = ContextCompat.getColor(
-            binding.root.context,
-            getColorRes(binding.root.context, R.attr.colorPrimary)
+            view.context,
+            getColorRes(view.context, R.attr.colorPrimary)
         )
         val textColorSecondary = ContextCompat.getColor(
-            binding.root.context,
-            getColorRes(binding.root.context, android.R.attr.textColorSecondary)
+            view.context,
+            getColorRes(view.context, android.R.attr.textColorSecondary)
         )
 
-        ratesModel.fetchingData.observe(viewLifecycleOwner, Observer {
-            logi("ratesModel fetchingData changed to %b", it)
+        val pbLoading = view.findViewById<ContentLoadingProgressBar>(R.id.loading)
+        val tvEmpty = view.findViewById<TextView>(R.id.empty)
 
-            if (it) {
-                binding.loading.show()
-            } else if (binding.loading.isShown) {
-                binding.loading.hide()
+        ratesModel.fetchingData.observe(viewLifecycleOwner, Observer {fetchingData ->
+            logi("ratesModel fetchingData changed to %b", fetchingData)
+
+            if (fetchingData) {
+                pbLoading.show()
+            } else if (pbLoading.isShown) {
+                pbLoading.hide()
 
                 if (ratesModel.currencies.value.isNullOrEmpty()) {
-                    binding.empty.visibility = View.VISIBLE
-                    binding.rates.visibility = View.GONE
+                    tvEmpty.visibility = View.VISIBLE
+                    rvRates.visibility = View.GONE
                 } else {
-                    binding.empty.visibility = View.GONE
-                    binding.rates.visibility = View.VISIBLE
+                    tvEmpty.visibility = View.GONE
+                    rvRates.visibility = View.VISIBLE
                 }
             }
         })
 
-        ratesModel.currencies.observe(viewLifecycleOwner, Observer { list ->
+        ratesModel.currencies.observe(viewLifecycleOwner, Observer { ratesList ->
             logi("ratesModel currencies changed")
 
-            if (list.isEmpty()) {
-                binding.empty.visibility =
+            if (ratesList.isEmpty()) {
+                tvEmpty.visibility =
                     if (ratesModel.fetchingData.value == false) View.VISIBLE else View.GONE
-                binding.rates.visibility = View.GONE
+                rvRates.visibility = View.GONE
             } else {
-                binding.loading.hide()
-                binding.empty.visibility = View.GONE
-                binding.rates.visibility = View.VISIBLE
+                pbLoading.hide()
+                tvEmpty.visibility = View.GONE
+                rvRates.visibility = View.VISIBLE
 
-                val layoutManager = binding.rates.layoutManager as LinearLayoutManager
+                val layoutManager = rvRates.layoutManager as LinearLayoutManager
                 val firstVisible = layoutManager.findFirstVisibleItemPosition()
                 val offset = layoutManager.findViewByPosition(firstVisible)?.top ?: 0
 
-                ratesAdapter.submitList(list) {
+                (rvRates.adapter as RatesAdapter).submitList(ratesList) {
                     layoutManager.scrollToPositionWithOffset(
                         firstVisible,
                         offset
@@ -139,26 +173,9 @@ class RatesFragment : Fragment() {
 
             val payload = mutableSetOf<String>()
             payload.add(RatesAdapter.CURRENCY_DATE)
-            ratesAdapter.notifyItemRangeChanged(0, it.size, payload)
+            (rvRates.adapter as RatesAdapter).notifyItemRangeChanged(0, it.size, payload)
         })
 
-        with(binding.rates) {
-            activity?.let { a ->
-                val toolbarHeight = a.toolbar.layoutParams.height
-
-                ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
-                    updatePadding(top = toolbarHeight + insets.systemWindowInsetTop)
-                    updatePadding(bottom = insets.systemWindowInsetBottom)
-                    updatePadding(left = insets.systemWindowInsetLeft)
-                    updatePadding(right = insets.systemWindowInsetRight)
-                    insets
-                }
-            }
-
-            setHasFixedSize(true)
-            adapter = ratesAdapter
-        }
-
-        return binding.root
+        ViewCompat.requestApplyInsets(view)
     }
 }

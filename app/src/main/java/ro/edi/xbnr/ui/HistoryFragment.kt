@@ -23,6 +23,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -30,6 +31,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.MarkerImage
 import com.github.mikephil.charting.components.YAxis
@@ -39,6 +41,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentHistoryBinding
@@ -66,30 +69,46 @@ class HistoryFragment : Fragment() {
         historyModel = ViewModelProviders.of(this, factory).get(HistoryViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding =
-            DataBindingUtil.inflate<FragmentHistoryBinding>(inflater, R.layout.fragment_history, container, false)
+            DataBindingUtil.inflate<FragmentHistoryBinding>(
+                inflater,
+                R.layout.fragment_history,
+                container,
+                false
+            )
         binding.lifecycleOwner = viewLifecycleOwner
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-        val tfFiraCondensed = ResourcesCompat.getFont(binding.root.context, R.font.fira_sans_condensed)
-        val tfFTitilliumWeb = ResourcesCompat.getFont(binding.root.context, R.font.titillium_web)
+        val tfFiraCondensed = ResourcesCompat.getFont(view.context, R.font.fira_sans_condensed)
+        val tfFTitilliumWeb = ResourcesCompat.getFont(view.context, R.font.titillium_web)
 
         val colorPrimary = ContextCompat.getColor(
-            binding.root.context,
-            getColorRes(binding.root.context, R.attr.colorPrimary)
+            view.context,
+            getColorRes(view.context, R.attr.colorPrimary)
         )
         val textColorSecondary = ContextCompat.getColor(
-            binding.root.context,
-            getColorRes(binding.root.context, android.R.attr.textColorSecondary)
+            view.context,
+            getColorRes(view.context, android.R.attr.textColorSecondary)
         )
-        val colorOrange = ContextCompat.getColor(binding.root.context, R.color.orange_500)
-        val colorGreen = ContextCompat.getColor(binding.root.context, R.color.green_500)
+        val colorOrange = ContextCompat.getColor(view.context, R.color.orange_500)
+        val colorGreen = ContextCompat.getColor(view.context, R.color.green_500)
 
-        val bkgChart = ContextCompat.getDrawable(binding.root.context, R.drawable.bkg_chart)
+        val bkgChart = ContextCompat.getDrawable(view.context, R.drawable.bkg_chart)
 
-        binding.lineChart.apply {
+        val lcHistory = view.findViewById<LineChart>(R.id.history)
+        lcHistory.apply {
             isAutoScaleMinMaxEnabled = true
             isKeepPositionOnRotation = true
             legend.isEnabled = false
@@ -133,15 +152,18 @@ class HistoryFragment : Fragment() {
 
                 private fun show(rate: DateRate) {
                     activity?.run {
-                        findViewById<TextView>(R.id.currency_date).text = historyModel.getDisplayDate(rate)
-                        findViewById<TextView>(R.id.currency_value).text = historyModel.getDisplayRate(rate)
+                        findViewById<TextView>(R.id.currency_date).text =
+                            historyModel.getDisplayDate(rate)
+                        findViewById<TextView>(R.id.currency_value).text =
+                            historyModel.getDisplayRate(rate)
                     }
                 }
             }
             setOnChartValueSelectedListener(clickListener)
         }
 
-        binding.chartInterval.apply {
+        val cgInterval = view.findViewById<ChipGroup>(R.id.interval)
+        cgInterval.apply {
             val checkedId = when (sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)) {
                 1 -> R.id.interval_1m
                 3 -> R.id.interval_3m
@@ -162,7 +184,7 @@ class HistoryFragment : Fragment() {
                     chip.isChecked = chip.id == chipGroup.checkedChipId
                 }
 
-                binding.lineChart.apply {
+                lcHistory.apply {
                     val interval: Int = when (id) {
                         R.id.interval_1m -> 1
                         R.id.interval_3m -> 3
@@ -177,12 +199,15 @@ class HistoryFragment : Fragment() {
             }
         }
 
+        val pbLoading = view.findViewById<ContentLoadingProgressBar>(R.id.loading)
+        val vLoadingContainer = view.findViewById<View>(R.id.loading_container)
+
         historyModel.rates.observe(viewLifecycleOwner, Observer { rates ->
             logi("ratesModel currencies changed")
 
-            binding.lineChart.visibility = View.GONE
-            binding.loadingContainer.visibility = View.VISIBLE
-            binding.loading.visibility = View.VISIBLE
+            lcHistory.visibility = View.GONE
+            pbLoading.show()
+            vLoadingContainer.visibility = View.VISIBLE
 
             if (rates.isNullOrEmpty()) {
                 return@Observer
@@ -207,7 +232,7 @@ class HistoryFragment : Fragment() {
                 fillDrawable = bkgChart
             }
 
-            binding.lineChart.apply {
+            lcHistory.apply {
                 data = LineData(dataSet)
                 notifyDataSetChanged()
 
@@ -257,10 +282,10 @@ class HistoryFragment : Fragment() {
                             axisLeft.addLimitLine(llMax)
                             axisLeft.addLimitLine(llMin)
 
-                            binding.loading.hide()
-                            binding.loadingContainer.visibility = View.GONE
+                            pbLoading.hide()
+                            vLoadingContainer.visibility = View.GONE
                             visibility = View.VISIBLE
-                            binding.chartInterval.visibility = View.VISIBLE
+                            cgInterval.visibility = View.VISIBLE
 
                             invalidate()
                             // animateX(300, Easing.Linear)
@@ -270,17 +295,15 @@ class HistoryFragment : Fragment() {
                     axisLeft.addLimitLine(llMax)
                     axisLeft.addLimitLine(llMin)
 
-                    binding.loading.hide()
-                    binding.loadingContainer.visibility = View.GONE
+                    pbLoading.hide()
+                    vLoadingContainer.visibility = View.GONE
                     visibility = View.VISIBLE
-                    binding.chartInterval.visibility = View.VISIBLE
+                    cgInterval.visibility = View.VISIBLE
 
                     invalidate()
                 }
             }
         })
-
-        return binding.root
     }
 
     private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

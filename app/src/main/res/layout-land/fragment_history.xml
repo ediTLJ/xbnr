@@ -35,7 +35,7 @@
         </FrameLayout>
 
         <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/line_chart"
+            android:id="@+id/history"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="start|top"
@@ -44,7 +44,7 @@
             tools:visibility="visible" />
 
         <com.github.mikephil.charting.charts.CandleStickChart
-            android:id="@+id/candle_chart"
+            android:id="@+id/history_extended"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="start|top"
@@ -52,7 +52,7 @@
             android:visibility="gone" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chart_interval"
+            android:id="@+id/interval"
             android:layout_width="56dp"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
