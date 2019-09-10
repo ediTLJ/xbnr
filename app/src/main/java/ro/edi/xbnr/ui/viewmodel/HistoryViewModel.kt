@@ -63,6 +63,7 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun getDisplayDate(rate: DateRate): String {
-        return LocalDate.parse(rate.date).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+        return LocalDate.parse(rate.date)
+            .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
     }
 }

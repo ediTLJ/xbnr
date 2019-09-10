@@ -43,7 +43,11 @@ abstract class BaseAdapter<T>(itemCallback: DiffUtil.ItemCallback<T>) :
         holder.bind(position)
     }
 
-    final override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) {
+    final override fun onBindViewHolder(
+        holder: BaseViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
         holder.bind(position, payloads)
     }
 

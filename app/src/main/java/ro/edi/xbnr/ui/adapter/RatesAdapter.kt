@@ -27,7 +27,8 @@ import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.ui.HistoryActivity
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
 
-class RatesAdapter(private val ratesModel: RatesViewModel) : BaseAdapter<Currency>(CurrencyDiffCallback()) {
+class RatesAdapter(private val ratesModel: RatesViewModel) :
+    BaseAdapter<Currency>(CurrencyDiffCallback()) {
     companion object {
         const val CURRENCY_RATE = "currency_rate"
         const val CURRENCY_DATE = "currency_date"
@@ -71,7 +72,8 @@ class RatesAdapter(private val ratesModel: RatesViewModel) : BaseAdapter<Currenc
         val payload = payloads.first() as Set<*>
         payload.forEach {
             when (it) {
-                CURRENCY_RATE -> b.currencyValue.text = String.format("%.4f", getItem(position).rate)
+                CURRENCY_RATE -> b.currencyValue.text =
+                    String.format("%.4f", getItem(position).rate)
                 CURRENCY_DATE -> b.currencyValue.setTextColor(
                     ContextCompat.getColor(
                         binding.root.context,

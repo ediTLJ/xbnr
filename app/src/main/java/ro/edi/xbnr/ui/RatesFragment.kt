@@ -70,8 +70,7 @@ class RatesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        logi("onViewCreated: %s", savedInstanceState)
+        // logi("onViewCreated: %s", savedInstanceState)
 
         val rvRates = view.findViewById<RecyclerView>(R.id.rates)
 
