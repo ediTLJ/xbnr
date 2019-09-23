@@ -16,6 +16,7 @@
 package ro.edi.xbnr
 
 import android.app.Application
+import coil.util.CoilLogger
 import com.jakewharton.threetenabp.AndroidThreeTen
 import ro.edi.util.ReleaseTree
 import timber.log.Timber
@@ -31,5 +32,7 @@ class MyApp : Application() {
             Timber.plant(ReleaseTree())
         }
         AndroidThreeTen.init(this)
+
+        CoilLogger.setEnabled(BuildConfig.DEBUG)
     }
 }

@@ -33,7 +33,6 @@ fun getAppVersionName(context: Context): String {
 
 @BindingAdapter(value = ["src", "errorSrc", "placeholderSrc"], requireAll = false)
 fun ImageView.setImageUrl(@DrawableRes src: Int? = null, @DrawableRes errorSrc: Int? = null, @DrawableRes placeholderSrc: Int? = null) {
-    // coil.util.CoilLogger.setEnabled(true)
     src?.let { res ->
         load(res) {
             // allowHardware(false)
