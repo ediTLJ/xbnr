@@ -15,9 +15,23 @@
 */
 package ro.edi.xbnr.ui.util
 
+import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import ro.edi.xbnr.R
 
 object Helper {
+    fun setTheme(theme: String?) {
+        val mode: Int = when (theme) {
+            "light" -> AppCompatDelegate.MODE_NIGHT_NO
+            "dark" -> AppCompatDelegate.MODE_NIGHT_YES
+            else -> if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+            } else {
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            }
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
+    }
 
     fun getCurrencyIconRes(code: String?): Int {
         return when (code) {

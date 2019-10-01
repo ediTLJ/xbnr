@@ -16,9 +16,11 @@
 package ro.edi.xbnr
 
 import android.app.Application
+import androidx.preference.PreferenceManager
 import coil.util.CoilLogger
 import com.jakewharton.threetenabp.AndroidThreeTen
 import ro.edi.util.ReleaseTree
+import ro.edi.xbnr.ui.util.Helper
 import timber.log.Timber
 
 class MyApp : Application() {
@@ -31,6 +33,11 @@ class MyApp : Application() {
         } else {
             Timber.plant(ReleaseTree())
         }
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val theme = prefs.getString("key_theme", "dark")
+        Helper.setTheme(theme)
+
         AndroidThreeTen.init(this)
 
         CoilLogger.setEnabled(BuildConfig.DEBUG)

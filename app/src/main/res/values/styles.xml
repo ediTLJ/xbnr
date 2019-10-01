@@ -1,42 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- application theme -->
-    <style name="App.Theme" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="windowActionModeOverlay">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@color/nav_grey</item>
-
-        <item name="colorPrimary">@color/green_500</item>
-        <item name="colorPrimaryVariant">@color/green_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/green_500</item>
-        <item name="colorSecondaryVariant">@color/green_700</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="colorError">@color/yellow_500</item>
-        <item name="colorOnError">@color/white</item>
-        <item name="colorSurface">@color/grey_dark</item>
-        <item name="colorOnSurface">@color/white</item>
-        <item name="android:colorBackground">@color/grey</item>
-        <item name="colorOnBackground">@color/green_500</item>
-
-        <!--<item name="colorControlNormal">@color/green_500</item>-->
-        <!--<item name="colorControlActivated">@color/green_500</item>-->
-        <item name="colorControlHighlight">@color/grey_light</item>
-
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColorSecondary">@color/white_dark</item>
-
-        <item name="textAppearanceHeadline6">@style/App.TextAppearance.Headline6</item>
-        <item name="textAppearanceSubtitle1">@style/App.TextAppearance.Subtitle1</item>
-        <item name="textAppearanceSubtitle2">@style/App.TextAppearance.Subtitle2</item>
-        <item name="textAppearanceBody1">@style/App.TextAppearance.Body1</item>
-        <item name="textAppearanceBody2">@style/App.TextAppearance.Body2</item>
-        <item name="textAppearanceButton">@style/App.TextAppearance.Button</item>
-        <item name="textAppearanceCaption">@style/App.TextAppearance.Caption</item>
-    </style>
-
     <style name="App.Toolbar" parent="">
-        <item name="android:background">@color/status_grey</item>
+        <item name="android:background">@color/colorToolbarBackground</item>
     </style>
 
     <style name="App.TextAppearance.Headline6" parent="TextAppearance.MaterialComponents.Headline6">

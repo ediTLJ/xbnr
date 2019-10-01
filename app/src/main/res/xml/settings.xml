@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="@string/prefs_display">
+        <ListPreference
+            android:defaultValue="dark"
+            android:entries="@array/prefs_themes"
+            android:entryValues="@array/prefs_themes_values"
+            android:key="key_theme"
+            android:title="@string/prefs_theme"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/prefs_info">
+        <Preference
+            android:key="key_version"
+            android:summary="1.0.0"
+            android:title="@string/prefs_version" />
+    </PreferenceCategory>
+</PreferenceScreen>

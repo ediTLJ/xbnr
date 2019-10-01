@@ -3,10 +3,12 @@
     <string name="app_name" translatable="false">xbnr</string>
 
     <!-- TOOLBAR TITLES & ACTIONS -->
-    <string name="title_history">History</string>
     <string name="action_info">Info</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_history">History</string>
     <string name="action_star">Add star</string>
     <string name="action_unstar">Remove star</string>
+    <string name="title_settings">Settings</string>
 
     <!-- BUTTONS -->
     <string name="btn_ok">OK</string>
@@ -30,5 +32,14 @@
 
     <!-- ACCESSIBILITY -->
     <string name="description_nbr_reference_rates">NBR Reference Rates</string>
+
+    <!-- SETTINGS -->
+    <string name="prefs_display">Display</string>
+    <string name="prefs_theme">Theme</string>
+    <string name="prefs_theme_default">System Default</string>
+    <string name="prefs_theme_light">Light</string>
+    <string name="prefs_theme_dark">Dark</string>
+    <string name="prefs_info">Info</string>
+    <string name="prefs_version">Version</string>
 
 </resources>
