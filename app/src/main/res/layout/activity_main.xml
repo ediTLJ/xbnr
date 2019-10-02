@@ -23,17 +23,28 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            app:logo="@drawable/logo"
-            app:logoDescription="@string/description_nbr_reference_rates">
+            android:layout_height="?actionBarSize">
+
+            <TextView
+                android:id="@+id/toolbar_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/xbnr"
+                android:gravity="top"
+                android:includeFontPadding="false"
+                android:text="@string/app_name"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="?actionBarSize" />
 
             <TextView
                 android:id="@+id/toolbar_date"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="end|center_vertical"
-                android:paddingStart="2dp"
-                android:paddingEnd="2dp"
+                android:gravity="bottom"
+                android:includeFontPadding="false"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="4dp"
                 android:textAppearance="@style/App.TextAppearance.Body2"
                 android:textColor="?android:attr/textColorSecondary"
                 tools:text="Apr 8, 2019" />
