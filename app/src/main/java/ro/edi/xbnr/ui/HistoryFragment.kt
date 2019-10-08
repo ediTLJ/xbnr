@@ -102,8 +102,8 @@ class HistoryFragment : Fragment() {
             view.context,
             getColorRes(view.context, android.R.attr.textColorSecondary)
         )
-        val colorOrange = ContextCompat.getColor(view.context, R.color.orange_500)
-        val colorGreen = ContextCompat.getColor(view.context, R.color.green_500)
+        val colorTrendUp = ContextCompat.getColor(view.context, R.color.textColorTrendUp)
+        val colorTrendDown = ContextCompat.getColor(view.context, R.color.textColorTrendDown)
 
         val bkgChart = ContextCompat.getDrawable(view.context, R.drawable.bkg_chart)
 
@@ -127,7 +127,7 @@ class HistoryFragment : Fragment() {
             axisLeft.setDrawLabels(false)
 
             val marker = MarkerImage(context, R.drawable.ic_dot)
-            marker.setOffset(-10f, -10f) // drawable size + line width
+            marker.setOffset(-12f, -12f) // drawable size + line width
             setMarker(marker)
 
             setNoDataText(getString(R.string.no_data_found))
@@ -238,22 +238,22 @@ class HistoryFragment : Fragment() {
 
                 val llMax = LimitLine(data.yMax, String.format("%.4f", data.yMax))
                 llMax.lineWidth = 1f
-                llMax.lineColor = colorOrange
+                llMax.lineColor = colorTrendUp
                 // llMax.enableDashedLine(12f, 18f, 0f)
                 llMax.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
                 llMax.textSize = 16f
-                llMax.textColor = colorOrange
+                llMax.textColor = colorTrendUp
                 tfFTitilliumWeb?.let {
                     llMax.typeface = it
                 }
 
                 val llMin = LimitLine(data.yMin, String.format("%.4f", data.yMin))
                 llMin.lineWidth = 1f
-                llMin.lineColor = colorGreen
+                llMin.lineColor = colorTrendDown
                 // llMin.enableDashedLine(12f, 18f, 0f)
                 llMin.labelPosition = LimitLine.LimitLabelPosition.LEFT_BOTTOM
                 llMin.textSize = 16f
-                llMin.textColor = colorGreen
+                llMin.textColor = colorTrendDown
                 tfFTitilliumWeb?.let {
                     llMin.typeface = it
                 }

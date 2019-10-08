@@ -89,7 +89,7 @@
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
             android:text="@string/symbol_ron"
-            android:textAppearance="@style/App.TextAppearance.Subtitle2"
+            android:textAppearance="@style/App.TextAppearance.Subtitle.Symbol"
             android:textColor="?android:attr/textColorSecondary" />
 
         <TextView
@@ -101,8 +101,8 @@
             android:includeFontPadding="false"
             android:lines="1"
             android:text="@{String.format(`%.4f`, model.getCurrency(position).rate)}"
-            android:textAppearance="@style/App.TextAppearance.Subtitle1"
-            android:textColor="@{ContextCompat.getColor(context, model.getTrendColorRes(position))}"
+            android:textAppearance="@style/App.TextAppearance.Subtitle"
+            android:textColor="@{ContextCompat.getColor(context, model.getTrendColorRes(context, position))}"
             tools:text="@sample/rates.json/data/value" />
     </RelativeLayout>
 </layout>

@@ -9,6 +9,11 @@
     <color name="colorBackground">@color/white</color>
     <color name="colorNavigationBar">@color/grey_a80</color>
 
+    <color name="colorPrimary">@color/green_700</color>
+    <color name="colorPrimaryVariant">@color/green_500</color>
+    <color name="colorSecondary">@color/green_700</color>
+    <color name="colorSecondaryVariant">@color/green_500</color>
+    <color name="colorOnBackground">@color/green_700</color>
     <color name="colorSurface">@color/white</color>
     <color name="colorOnSurface">@color/grey_dark</color>
 
@@ -16,6 +21,14 @@
     <!--<color name="colorControlActivated">@color/green_500</color>-->
     <color name="colorControlHighlight">@color/white_dark_a33</color>
 
+    <color name="colorChartGradientStart">@color/green_500_a00</color>
+    <color name="colorChartGradientEnd">@color/green_500</color>
+
     <color name="textColorPrimary">@color/grey</color>
     <color name="textColorSecondary">@color/grey_light</color>
+
+    <color name="textColorStarredPrimary">@color/amber_900</color>
+    <color name="textColorStarredSecondary">@color/amber_700</color>
+    <color name="textColorTrendUp">@color/orange_700</color>
+    <color name="textColorTrendDown">@color/green_700</color>
 </resources>

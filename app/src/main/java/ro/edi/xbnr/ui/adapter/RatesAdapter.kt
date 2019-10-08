@@ -78,7 +78,7 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
                 CURRENCY_DATE -> b.currencyValue.setTextColor(
                     ContextCompat.getColor(
                         binding.root.context,
-                        ratesModel.getTrendColorRes(position)
+                        ratesModel.getTrendColorRes(binding.root.context, position)
                     )
                 )
                 CURRENCY_IS_STARRED -> {

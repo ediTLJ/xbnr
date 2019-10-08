@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient android:angle="90" android:centerColor="@color/dark_green_700_transparent" android:centerX="0.1" android:endColor="@color/dark_green_700" android:startColor="@color/dark_green_700_transparent"/>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="90"
+        android:centerColor="@color/colorChartGradientStart"
+        android:centerX="0.1"
+        android:endColor="@color/colorChartGradientEnd"
+        android:startColor="@color/colorChartGradientStart" />
 </shape>

@@ -91,7 +91,7 @@
                             android:lines="1"
                             android:paddingEnd="4dp"
                             android:text="@string/symbol_ron"
-                            android:textAppearance="@style/App.TextAppearance.Subtitle2"
+                            android:textAppearance="@style/App.TextAppearance.Subtitle.Symbol"
                             android:textColor="?android:attr/textColorSecondary"
                             tools:ignore="RtlSymmetry" />
 
@@ -102,7 +102,7 @@
                             android:layout_toEndOf="@id/currency_ron"
                             android:includeFontPadding="false"
                             android:lines="1"
-                            android:textAppearance="@style/App.TextAppearance.Subtitle1"
+                            android:textAppearance="@style/App.TextAppearance.Subtitle"
                             android:textColor="?android:textColorPrimary"
                             tools:text="@sample/rates.json/data/value" />
                     </RelativeLayout>

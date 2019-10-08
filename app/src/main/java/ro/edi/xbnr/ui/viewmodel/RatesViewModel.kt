@@ -99,24 +99,27 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         return 0
     }
 
-    fun getTrendColorRes(position: Int): Int {
+    fun getTrendColorRes(context: Context, position: Int): Int {
         val trend = getTrend(position)
         return when {
-            trend > 0 -> R.color.orange_500
-            trend < 0 -> R.color.green_500
-            else -> R.color.white
+            trend > 0 -> R.color.textColorTrendUp
+            trend < 0 -> R.color.textColorTrendDown
+            else -> getColorRes(
+                context,
+                android.R.attr.textColorPrimary
+            )
         }
     }
 
     fun getCurrencyTextColorRes(context: Context, position: Int, isPrimary: Boolean): Int {
         getCurrency(position)?.let {
             return if (isPrimary)
-                if (it.isStarred) R.color.yellow_300 else getColorRes(
+                if (it.isStarred) R.color.textColorStarredPrimary else getColorRes(
                     context,
                     android.R.attr.textColorPrimary
                 )
             else
-                if (it.isStarred) R.color.yellow_500 else getColorRes(
+                if (it.isStarred) R.color.textColorStarredSecondary else getColorRes(
                     context,
                     android.R.attr.textColorSecondary
                 )

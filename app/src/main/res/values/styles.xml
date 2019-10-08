@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="App.Toolbar" parent="">
         <item name="android:background">@color/colorToolbarBackground</item>
     </style>
@@ -10,20 +11,31 @@
     </style>
 
     <style name="App.TextAppearance.Title" parent="App.TextAppearance.Headline6">
-        <item name="fontFamily">@font/fira_sans_condensed</item>
-        <item name="android:fontFamily">@font/fira_sans_condensed</item>
+        <item name="fontFamily">@font/fira_sans_condensed_medium</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed_medium</item>
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="App.TextAppearance.Subtitle" parent="App.TextAppearance.Subtitle1">
+        <item name="fontFamily">@font/titillium_web</item>
+        <item name="android:fontFamily">@font/titillium_web</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="App.TextAppearance.Subtitle.Symbol" parent="App.TextAppearance.Subtitle2">
+        <item name="fontFamily">@font/titillium_web</item>
+        <item name="android:fontFamily">@font/titillium_web</item>
     </style>
 
     <style name="App.TextAppearance.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">@font/titillium_web</item>
-        <item name="android:fontFamily">@font/titillium_web</item>
-        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed</item>
     </style>
 
     <style name="App.TextAppearance.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="fontFamily">@font/titillium_web</item>
-        <item name="android:fontFamily">@font/titillium_web</item>
+        <item name="fontFamily">@font/fira_sans_condensed_medium</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed_medium</item>
     </style>
 
     <style name="App.TextAppearance.Body1" parent="TextAppearance.MaterialComponents.Body1">
@@ -33,8 +45,8 @@
     </style>
 
     <style name="App.TextAppearance.Body2" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="fontFamily">@font/fira_sans_condensed</item>
-        <item name="android:fontFamily">@font/fira_sans_condensed</item>
+        <item name="fontFamily">@font/fira_sans_condensed_medium</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed_medium</item>
         <item name="android:letterSpacing">0.00714285714</item>
     </style>
 
