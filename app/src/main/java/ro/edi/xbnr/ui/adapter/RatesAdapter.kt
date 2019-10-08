@@ -32,6 +32,7 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
     companion object {
         const val CURRENCY_RATE = "currency_rate"
         const val CURRENCY_DATE = "currency_date"
+        const val CURRENCY_IS_STARRED = "currency_is_starred"
     }
 
     override fun getModel(): ViewModel {
@@ -80,6 +81,24 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
                         ratesModel.getTrendColorRes(position)
                     )
                 )
+                CURRENCY_IS_STARRED -> {
+                    b.currencyCode.setTextColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            ratesModel.getCurrencyTextColorRes(
+                                binding.root.context, position, true
+                            )
+                        )
+                    )
+                    b.currencyName.setTextColor(
+                        ContextCompat.getColor(
+                            binding.root.context,
+                            ratesModel.getCurrencyTextColorRes(
+                                binding.root.context, position, false
+                            )
+                        )
+                    )
+                }
             }
         }
     }
@@ -101,6 +120,9 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
             }
             if (oldItem.date != newItem.date) {
                 payload.add(CURRENCY_DATE)
+            }
+            if (oldItem.isStarred != newItem.isStarred) {
+                payload.add(CURRENCY_IS_STARRED)
             }
 
             if (payload.isEmpty()) {
