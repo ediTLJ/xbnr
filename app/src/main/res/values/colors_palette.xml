@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="grey_dark">#111311</color>
+    <color name="grey">#212321</color>
+    <color name="grey_aCC">#CC212321</color>
+    <color name="grey_a80">#80212321</color>
+    <color name="grey_light">#717371</color>
+    <color name="grey_light_a33">#33717371</color>
+
+    <color name="white_dark">#A1A3A1</color>
+    <color name="white_dark_a33">#33A1A3A1</color>
+    <color name="white">#F1F3F1</color>
+    <color name="white_aCC">#CCF1F3F1</color>
+    <color name="white_a80">#80F1F3F1</color>
+
+    <color name="green_700">#007D51</color>
+    <color name="green_500">#1EB980</color>
+    <color name="green_400">#00E5A8</color>
+    <color name="green_300">#37EFBA</color>
+
+    <color name="dark_green_700">#045D56</color>
+    <color name="dark_green_700_transparent">#00045D56</color>
+
+    <!--    <color name="orange_500">#FF0600</color>-->
+    <!--    <color name="orange_400">#FF3522</color>-->
+    <!--    <color name="orange_300">#FF6859</color>-->
+    <!--    <color name="orange_200">#FF857C</color>-->
+    <!--    <color name="orange_50">#FFD7D0</color>-->
+    <color name="orange_900">#BF360C</color>
+    <!--<color name="orange_700_dark">#AC0800</color>-->
+    <color name="orange_700">#E64A19</color>
+    <!--<color name="orange_500_dark">#C41C00</color>-->
+    <color name="orange_500">#FF5722</color>
+    <color name="orange_400">#FF7043</color>
+    <color name="orange_300">#FF8A65</color>
+    <color name="orange_100">#FFCCBC</color>
+
+    <color name="yellow_500">#FFAC12</color>
+    <color name="yellow_300">#FFCF44</color>
+    <color name="yellow_200">#FFDC78</color>
+
+    <color name="purple_500">#A000F1</color>
+    <color name="purple_300">#A932FF</color>
+    <color name="purple_200">#B15DFF</color>
+    <color name="purple_50">#DECAF7</color>
+
+    <color name="blue_700">#0082FB</color>
+    <color name="blue_300">#1ED0FF</color>
+    <color name="blue_200">#72DEFF</color>
+    <color name="blue_100">#B2F2FF</color>
+
+    <color name="gold">#FFD700</color>
+</resources>
