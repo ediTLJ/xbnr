@@ -109,10 +109,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:lines="1"
+                    android:maxLines="2"
                     android:textAppearance="@style/App.TextAppearance.Body2"
                     android:textColor="?android:textColorSecondary"
-                    tools:text="April 8, 2019" />
+                    tools:text="Wednesday, December 28, 2019" />
             </LinearLayout>
 
             <FrameLayout

@@ -15,6 +15,7 @@
 */
 package ro.edi.xbnr.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -153,7 +154,11 @@ class HistoryFragment : Fragment() {
                 private fun show(rate: DateRate) {
                     activity?.run {
                         findViewById<TextView>(R.id.currency_date).text =
-                            historyModel.getDisplayDate(rate)
+                            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                historyModel.getDisplayDate(rate).replaceFirst(' ', '\n')
+                            } else {
+                                historyModel.getDisplayDate(rate)
+                            }
                         findViewById<TextView>(R.id.currency_value).text =
                             historyModel.getDisplayRate(rate)
                     }
