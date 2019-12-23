@@ -92,7 +92,7 @@ class HistoryFragment : Fragment() {
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         val tfFiraCondensed = ResourcesCompat.getFont(view.context, R.font.fira_sans_condensed)
-        val tfFTitilliumWeb = ResourcesCompat.getFont(view.context, R.font.titillium_web)
+        val tfTitilliumWeb = ResourcesCompat.getFont(view.context, R.font.titillium_web)
 
         val colorPrimary = ContextCompat.getColor(
             view.context,
@@ -243,7 +243,7 @@ class HistoryFragment : Fragment() {
                 llMax.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
                 llMax.textSize = 16f
                 llMax.textColor = colorTrendUp
-                tfFTitilliumWeb?.let {
+                tfTitilliumWeb?.let {
                     llMax.typeface = it
                 }
 
@@ -254,7 +254,7 @@ class HistoryFragment : Fragment() {
                 llMin.labelPosition = LimitLine.LimitLabelPosition.LEFT_BOTTOM
                 llMin.textSize = 16f
                 llMin.textColor = colorTrendDown
-                tfFTitilliumWeb?.let {
+                tfTitilliumWeb?.let {
                     llMin.typeface = it
                 }
 
