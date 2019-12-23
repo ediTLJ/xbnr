@@ -43,6 +43,7 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentHistoryBinding
@@ -199,6 +200,13 @@ class HistoryFragment : Fragment() {
                         .putInt(PREFS_KEY_CHART_INTERVAL, interval)
                         .apply()
                 }
+            }
+        }
+
+        activity?.apply {
+            val fabConverter = findViewById<FloatingActionButton>(R.id.fab_converter)
+            fabConverter.setOnClickListener {
+                // FIXME open converter screen using historyModel.currencyId & historyModel.chartHighlight data
             }
         }
 

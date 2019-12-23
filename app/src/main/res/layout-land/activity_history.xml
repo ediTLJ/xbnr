@@ -123,14 +123,13 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_converter"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/activity_margin"
             android:layout_marginBottom="@dimen/activity_margin"
-            android:visibility="invisible"
             app:fabSize="auto"
-            app:srcCompat="@drawable/ic_action_info"
-            tools:visibility="visible" />
+            app:srcCompat="@drawable/ic_convert" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
