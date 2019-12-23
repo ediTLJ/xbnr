@@ -174,14 +174,12 @@ class HistoryFragment : Fragment() {
             for (i in 0 until childCount) {
                 val chip = getChildAt(i) as Chip
                 chip.isClickable = chip.id != checkedId
-                chip.isChecked = chip.id == checkedId
             }
 
             setOnCheckedChangeListener { chipGroup, id ->
                 for (i in 0 until chipGroup.childCount) {
                     val chip = chipGroup.getChildAt(i) as Chip
                     chip.isClickable = chip.id != chipGroup.checkedChipId
-                    chip.isChecked = chip.id == chipGroup.checkedChipId
                 }
 
                 lcHistory.apply {

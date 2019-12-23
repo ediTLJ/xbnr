@@ -58,15 +58,17 @@
             android:layout_gravity="start"
             android:visibility="invisible"
             app:chipSpacingHorizontal="0dp"
+            app:selectionRequired="true"
             app:singleSelection="true"
             tools:visibility="visible">
 
-            <!-- FIXME move repeating attributes in a style -->
+            <!-- TODO move repeating attributes in a style -->
             <com.google.android.material.chip.Chip
                 android:id="@+id/interval_1m"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:checked="true"
                 android:text="@string/interval_1m"
                 android:textAlignment="center"
                 android:textAppearance="@style/App.TextAppearance.Button"
