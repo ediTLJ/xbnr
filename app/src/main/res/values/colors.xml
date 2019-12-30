@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">@color/grey_light</color>
+    <color name="ic_launcher_background">@color/green_900</color>
 
     <color name="action_tint">@color/grey</color>
 
