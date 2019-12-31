@@ -63,7 +63,7 @@ dependencies {
     // Architecture Components: LiveData, ViewModel...
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.1.0'
+    kapt 'androidx.lifecycle:lifecycle-common-java8:2.1.0'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
     // Room
@@ -89,7 +89,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.7.0'
 
     // Coil
-    implementation 'io.coil-kt:coil:0.8.0'
+    implementation 'io.coil-kt:coil:0.9.1'
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
