@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- TOOLBAR TITLES & ACTIONS -->
-    <string name="title_history">Istoric</string>
     <string name="action_info">Info</string>
+    <string name="action_settings">Setări</string>
+    <string name="title_history">Istoric</string>
     <string name="action_star">Marchează cu stea</string>
     <string name="action_unstar">Elimină steaua</string>
+    <string name="title_converter">Convertor</string>
+    <string name="title_settings">Setări</string>
 
     <!-- BUTTONS -->
     <string name="btn_ok">OK</string>
@@ -28,5 +31,14 @@
 
     <!-- ACCESSIBILITY -->
     <string name="description_nbr_reference_rates">Cursuri de referință BNR</string>
+
+    <!-- SETTINGS -->
+    <string name="prefs_display">Afișaj</string>
+    <string name="prefs_theme">Temă</string>
+    <string name="prefs_theme_default">Setată de sistem</string>
+    <string name="prefs_theme_light">Luminoasă</string>
+    <string name="prefs_theme_dark">Întunecată</string>
+    <string name="prefs_info">Info</string>
+    <string name="prefs_version">Versiune</string>
 
 </resources>
