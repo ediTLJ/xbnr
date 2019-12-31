@@ -5,6 +5,28 @@
         <item name="android:background">@color/colorToolbarBackground</item>
     </style>
 
+    <style name="App.TextAppearance.Headline4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="App.TextAppearance.Headline4.Number" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/titillium_web</item>
+        <item name="android:fontFamily">@font/titillium_web</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="App.TextAppearance.Headline5" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/fira_sans_condensed</item>
+        <item name="android:fontFamily">@font/fira_sans_condensed</item>
+    </style>
+
+    <style name="App.TextAppearance.Headline5.Number" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/titillium_web</item>
+        <item name="android:fontFamily">@font/titillium_web</item>
+    </style>
+
     <style name="App.TextAppearance.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="fontFamily">@font/fira_sans_condensed</item>
         <item name="android:fontFamily">@font/fira_sans_condensed</item>
@@ -13,7 +35,7 @@
     <style name="App.TextAppearance.Title" parent="App.TextAppearance.Headline6">
         <item name="fontFamily">@font/fira_sans_condensed_medium</item>
         <item name="android:fontFamily">@font/fira_sans_condensed_medium</item>
-        <item name="android:textSize">18sp</item>
+
     </style>
 
     <style name="App.TextAppearance.Subtitle" parent="App.TextAppearance.Subtitle1">

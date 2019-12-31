@@ -30,6 +30,7 @@ import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
 import ro.edi.xbnr.model.Currency
+import ro.edi.xbnr.model.CurrencyMinimal
 import ro.edi.xbnr.model.CurrencyRate
 import ro.edi.xbnr.model.DateRate
 import timber.log.Timber.d as logd
@@ -137,8 +138,20 @@ class DataManager private constructor(application: Application) {
         }
     }
 
+    fun getCurrencies(): LiveData<List<CurrencyMinimal>> {
+        return db.currencyDao().getCurrencies()
+    }
+
     fun getCurrency(currencyId: Int): LiveData<Currency> {
         return db.rateDao().getCurrency(currencyId)
+    }
+
+    fun getCurrency(currencyId: Int, date: String?): LiveData<Currency> {
+        if (date == null) {
+            return db.rateDao().getCurrency(currencyId)
+        }
+
+        return db.rateDao().getCurrency(currencyId, date)
     }
 
     fun getRates(currencyId: Int, monthsCount: Int): LiveData<List<DateRate>> {

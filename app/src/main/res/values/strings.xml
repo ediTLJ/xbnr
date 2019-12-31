@@ -8,6 +8,7 @@
     <string name="title_history">History</string>
     <string name="action_star">Add star</string>
     <string name="action_unstar">Remove star</string>
+    <string name="title_converter">Converter</string>
     <string name="title_settings">Settings</string>
 
     <!-- BUTTONS -->

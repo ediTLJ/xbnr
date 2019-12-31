@@ -36,11 +36,14 @@ abstract class RateDao : BaseDao<DbRate> {
     @Query("SELECT currency_id, code, multiplier, is_starred, date, rate FROM rates LEFT OUTER JOIN currencies ON rates.currency_id = currencies.id WHERE currency_id = :id AND date = (SELECT MAX(date) FROM rates)")
     protected abstract fun query(id: Int): LiveData<Currency>
 
+    @Query("SELECT currency_id, code, multiplier, is_starred, date, rate FROM rates LEFT OUTER JOIN currencies ON rates.currency_id = currencies.id WHERE currency_id = :id AND date = :date")
+    protected abstract fun query(id: Int, date: String): LiveData<Currency>
+
     @Query("SELECT id, date, rate FROM (SELECT id, date, rate FROM rates WHERE currency_id = :id ORDER BY date DESC LIMIT :count) ORDER BY date ASC")
-    protected abstract fun query(id: Int, count: Int): LiveData<List<DateRate>>
+    protected abstract fun queryRates(id: Int, count: Int): LiveData<List<DateRate>>
 
     @Query("SELECT id, date, rate FROM (SELECT id, date, rate FROM rates WHERE currency_id = :id AND date > :since) ORDER BY date ASC")
-    protected abstract fun query(id: Int, since: String): LiveData<List<DateRate>>
+    protected abstract fun queryRates(id: Int, since: String): LiveData<List<DateRate>>
 
     @Query("SELECT MAX(date) FROM rates")
     abstract fun getLatestDate(): String?
@@ -63,12 +66,20 @@ abstract class RateDao : BaseDao<DbRate> {
     fun getCurrency(id: Int): LiveData<Currency> = query(id).getDistinct()
 
     /**
+     * Get currency info & rate for a specific date.
+     *
+     * @param id currency id
+     */
+    fun getCurrency(id: Int, date: String): LiveData<Currency> = query(id, date).getDistinct()
+
+    /**
      * Get latest [count] rates for the specified currency.
      *
      * @param id currency id
      * @param count days count
      */
-    fun getRates(id: Int, count: Int): LiveData<List<DateRate>> = query(id, count).getDistinct()
+    fun getRates(id: Int, count: Int): LiveData<List<DateRate>> =
+        queryRates(id, count).getDistinct()
 
     /**
      * Get rates since [since] for the specified currency.
@@ -76,7 +87,8 @@ abstract class RateDao : BaseDao<DbRate> {
      * @param id currency id
      * @param since date
      */
-    fun getRates(id: Int, since: String): LiveData<List<DateRate>> = query(id, since).getDistinct()
+    fun getRates(id: Int, since: String): LiveData<List<DateRate>> =
+        queryRates(id, since).getDistinct()
 
     @Query("DELETE FROM rates")
     abstract fun deleteAll()

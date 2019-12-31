@@ -15,6 +15,7 @@
 */
 package ro.edi.xbnr.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -52,7 +53,7 @@ class HistoryActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(
                     R.id.container,
-                    HistoryFragment.newInstance(intent.getIntExtra(EXTRA_CURRENCY_ID, -1))
+                    HistoryFragment.newInstance(intent.getIntExtra(EXTRA_CURRENCY_ID, 0))
                 )
                 .commitNow()
         }
@@ -79,10 +80,19 @@ class HistoryActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        currencyModel.currency.observe(this, Observer {
-            logi("found currency: %s", it)
+        currencyModel.currency.observe(this, Observer { currency ->
+            logi("found currency: %s", currency)
             invalidateOptionsMenu()
             binding.invalidateAll()
+
+            binding.fabConverter.setOnClickListener {
+                // TODO open converter screen using historyModel.currencyId & historyModel.chartHighlight data?
+                val i = Intent(this, ConverterActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                i.putExtra(ConverterActivity.EXTRA_CURRENCY_ID, currency.id)
+                i.putExtra(ConverterActivity.EXTRA_CURRENCY_DATE, currency.date)
+                startActivity(i)
+            }
         })
     }
 
@@ -91,7 +101,7 @@ class HistoryActivity : AppCompatActivity() {
             @Suppress("UNCHECKED_CAST")
             return CurrencyViewModel(
                 application,
-                intent.getIntExtra(EXTRA_CURRENCY_ID, -1)
+                intent.getIntExtra(EXTRA_CURRENCY_ID, 0)
             ) as T
         }
     }

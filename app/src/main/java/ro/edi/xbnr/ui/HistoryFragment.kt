@@ -25,7 +25,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.ContentLoadingProgressBar
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -43,7 +42,6 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentHistoryBinding
@@ -76,14 +74,10 @@ class HistoryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding =
-            DataBindingUtil.inflate<FragmentHistoryBinding>(
-                inflater,
-                R.layout.fragment_history,
-                container,
-                false
-            )
-        binding.lifecycleOwner = viewLifecycleOwner
+        val binding = FragmentHistoryBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            model = historyModel
+        }
 
         return binding.root
     }
@@ -203,18 +197,11 @@ class HistoryFragment : Fragment() {
             }
         }
 
-        activity?.apply {
-            val fabConverter = findViewById<FloatingActionButton>(R.id.fab_converter)
-            fabConverter.setOnClickListener {
-                // FIXME open converter screen using historyModel.currencyId & historyModel.chartHighlight data
-            }
-        }
-
         val pbLoading = view.findViewById<ContentLoadingProgressBar>(R.id.loading)
         val vLoadingContainer = view.findViewById<View>(R.id.loading_container)
 
         historyModel.rates.observe(viewLifecycleOwner, Observer { rates ->
-            logi("ratesModel currencies changed")
+            logi("historyModel rates changed")
 
             lcHistory.visibility = View.GONE
             pbLoading.show()
@@ -322,7 +309,7 @@ class HistoryFragment : Fragment() {
             @Suppress("UNCHECKED_CAST")
             return HistoryViewModel(
                 (activity as AppCompatActivity).application,
-                arguments?.getInt(ARG_CURRENCY_ID, -1) ?: -1
+                arguments?.getInt(ARG_CURRENCY_ID, 0) ?: 0
             ) as T
         }
     }

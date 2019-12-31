@@ -31,6 +31,10 @@
             android:name=".ui.SettingsActivity"
             android:parentActivityName=".ui.MainActivity" />
 
+        <activity
+            android:name=".ui.ConverterActivity"
+            android:parentActivityName=".ui.HistoryActivity" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

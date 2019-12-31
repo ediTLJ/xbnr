@@ -110,4 +110,43 @@ object Helper {
             else -> R.string.name_default
         }
     }
+
+    fun getCurrencySymbolRes(code: String?): Int {
+        return when (code) {
+            "AED" -> R.string.symbol_aed
+            "AUD" -> R.string.symbol_aud
+            "BGN" -> R.string.symbol_bgn
+            "BRL" -> R.string.symbol_brl
+            "CAD" -> R.string.symbol_cad
+            "CHF" -> R.string.symbol_chf
+            "CNY" -> R.string.symbol_cny
+            "CZK" -> R.string.symbol_czk
+            "DKK" -> R.string.symbol_dkk
+            "EGP" -> R.string.symbol_egp
+            "EUR" -> R.string.symbol_eur
+            "GBP" -> R.string.symbol_gbp
+            "HRK" -> R.string.symbol_hrk
+            "HUF" -> R.string.symbol_huf
+            "INR" -> R.string.symbol_inr
+            "JPY" -> R.string.symbol_jpy
+            "KRW" -> R.string.symbol_krw
+            "MDL" -> R.string.symbol_mdl
+            "MXN" -> R.string.symbol_mxn
+            "NOK" -> R.string.symbol_nok
+            "NZD" -> R.string.symbol_nzd
+            "PLN" -> R.string.symbol_pln
+            "RSD" -> R.string.symbol_rsd
+            "RUB" -> R.string.symbol_rub
+            "SEK" -> R.string.symbol_sek
+            "THB" -> R.string.symbol_thb
+            "TRY" -> R.string.symbol_try
+            "UAH" -> R.string.symbol_uah
+            "USD" -> R.string.symbol_usd
+            "XAU" -> R.string.symbol_xau
+            "XDR" -> R.string.symbol_xdr
+            "ZAR" -> R.string.symbol_zar
+            "RON" -> R.string.symbol_ron
+            else -> R.string.symbol_default
+        }
+    }
 }
