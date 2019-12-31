@@ -20,7 +20,7 @@ import androidx.room.ColumnInfo
 data class Currency(
     @ColumnInfo(name = "currency_id") val id: Int,
     val code: String,
-    val multiplier: Int,
+    val multiplier: Int = 1,
     @ColumnInfo(name = "is_starred", index = true) val isStarred: Boolean = false,
     val date: String,
     val rate: Double

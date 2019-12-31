@@ -24,7 +24,7 @@ import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.ui.util.Helper
 
 class CurrencyViewModel(application: Application) : AndroidViewModel(application) {
-    private var currencyId = -1
+    private var currencyId = 0
 
     val currency: LiveData<Currency> by lazy(LazyThreadSafetyMode.NONE) {
         DataManager.getInstance(getApplication()).getCurrency(currencyId)

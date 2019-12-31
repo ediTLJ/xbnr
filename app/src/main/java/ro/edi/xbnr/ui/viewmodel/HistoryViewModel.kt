@@ -31,7 +31,7 @@ import ro.edi.xbnr.model.DateRate
 const val PREFS_KEY_CHART_INTERVAL = "chart_interval"
 
 class HistoryViewModel(application: Application) : AndroidViewModel(application) {
-    private var currencyId = -1
+    private var currencyId = 0
     var chartHighlight: DateRate? = null
 
     private val monthsCountLiveData = MutableLiveData<Int>()

@@ -47,7 +47,7 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
             return it.id
         }
 
-        return -1
+        return 0
     }
 
     fun getCurrencyDisplayCode(position: Int): String? {
