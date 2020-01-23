@@ -25,7 +25,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.ContentLoadingProgressBar
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -57,14 +56,10 @@ class RatesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding =
-            DataBindingUtil.inflate<FragmentRatesBinding>(
-                inflater,
-                R.layout.fragment_rates,
-                container,
-                false
-            )
-        binding.lifecycleOwner = viewLifecycleOwner
+        val binding = FragmentRatesBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            model = ratesModel
+        }
         return binding.root
     }
 

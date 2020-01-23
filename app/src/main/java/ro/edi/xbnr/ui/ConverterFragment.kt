@@ -27,10 +27,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import ro.edi.util.onAfterTextChanged
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentConverterBinding
 import ro.edi.xbnr.ui.viewmodel.ConverterViewModel
+import kotlin.math.roundToLong
 import timber.log.Timber.i as logi
 
 class ConverterFragment : Fragment() {
@@ -76,7 +79,22 @@ class ConverterFragment : Fragment() {
         val fromInput = view.findViewById<TextInputLayout>(R.id.from_input)
         fromInput.requestFocus()
 
-        //val fromValue = view.findViewById<TextInputEditText>(R.id.from_value)
+        val fromValue = view.findViewById<TextInputEditText>(R.id.from_value)
+        val toValue = view.findViewById<TextInputEditText>(R.id.to_value)
+
+        fromValue.onAfterTextChanged { txtValue ->
+            txtValue ?: return@onAfterTextChanged
+
+            val value = if (txtValue.isEmpty()) 0.0 else txtValue.toDouble()
+            val result = value * converterModel.getRate()
+
+            val txtPrevResult = toValue.text.toString()
+            val prevResult = if (txtPrevResult.isEmpty()) 0.0 else txtPrevResult.toDouble()
+
+            if ((prevResult * 100).roundToLong() != (result * 100).roundToLong()) {
+                toValue.setText(String.format("%.2f", result))
+            }
+        }
         //fromValue.setOnEditorActionListener { _, actionId, _ ->
         //    if (actionId == EditorInfo.IME_ACTION_DONE) {
         //        // activity?.finish()
@@ -84,6 +102,20 @@ class ConverterFragment : Fragment() {
         //    }
         //    false
         //}
+
+        toValue.onAfterTextChanged { txtValue ->
+            txtValue ?: return@onAfterTextChanged
+
+            val value = if (txtValue.isEmpty()) 0.0 else txtValue.toDouble()
+            val result = value / converterModel.getRate()
+
+            val txtPrevResult = fromValue.text.toString()
+            val prevResult = if (txtPrevResult.isEmpty()) 0.0 else txtPrevResult.toDouble()
+
+            if ((prevResult * 100).roundToLong() != (result * 100).roundToLong()) {
+                fromValue.setText(String.format("%.2f", result))
+            }
+        }
 
         converterModel.fromCurrency.observe(viewLifecycleOwner, Observer { currency ->
             logi("converterModel from currency changed: $currency")
@@ -104,8 +136,6 @@ class ConverterFragment : Fragment() {
         converterModel.currencies.observe(viewLifecycleOwner, Observer { currencies ->
             logi("converterModel currencies changed")
 
-            /// FragmentConverterBinding.
-            // DataBindingUtil.
             binding.invalidateAll()
 
             if (currencies.isNullOrEmpty()) {

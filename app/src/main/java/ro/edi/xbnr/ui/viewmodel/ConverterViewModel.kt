@@ -118,7 +118,7 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         val fromSymbol = context.getString(Helper.getCurrencySymbolRes(fromCode))
         val toSymbol = context.getString(Helper.getCurrencySymbolRes(toCode))
 
-        return String.format("${fromSymbol}1 = $toSymbol%.4f", getRate())
+        return String.format("${fromSymbol}1 = $toSymbol%.2f", getRate())
     }
 
 //    fun getDisplayDate(rate: DateRate): String {

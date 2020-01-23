@@ -16,7 +16,10 @@
 package ro.edi.util
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.TypedValue
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.AttrRes
 import androidx.annotation.DrawableRes
@@ -29,6 +32,17 @@ import coil.api.load
 fun getAppVersionName(context: Context): String {
     val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
     return packageInfo.versionName
+}
+
+fun EditText.onAfterTextChanged(doAfterTextChanged: (String?) -> Unit) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            doAfterTextChanged(s?.toString())
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    })
 }
 
 @BindingAdapter(value = ["src", "errorSrc", "placeholderSrc"], requireAll = false)
