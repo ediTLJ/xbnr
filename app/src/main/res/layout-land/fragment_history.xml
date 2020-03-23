@@ -67,7 +67,6 @@
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:checked="true"
                 android:text="@string/interval_1m"
                 android:textAlignment="center"
                 android:textAppearance="@style/App.TextAppearance.Button"
