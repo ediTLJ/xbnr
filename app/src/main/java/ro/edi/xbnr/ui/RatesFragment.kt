@@ -27,7 +27,7 @@ import androidx.core.view.updatePadding
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ro.edi.util.getColorRes
@@ -48,7 +48,7 @@ class RatesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ratesModel = ViewModelProviders.of(this).get(RatesViewModel::class.java)
+        ratesModel = ViewModelProvider(this).get(RatesViewModel::class.java)
     }
 
     override fun onCreateView(

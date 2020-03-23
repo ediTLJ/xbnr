@@ -24,7 +24,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.ActivityHistoryBinding
 import ro.edi.xbnr.ui.viewmodel.CurrencyViewModel
@@ -36,7 +35,7 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private val currencyModel: CurrencyViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProviders.of(this, factory).get(CurrencyViewModel::class.java)
+        ViewModelProvider(this, factory).get(CurrencyViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

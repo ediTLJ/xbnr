@@ -29,7 +29,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.LimitLine
@@ -66,7 +65,7 @@ class HistoryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        historyModel = ViewModelProviders.of(this, factory).get(HistoryViewModel::class.java)
+        historyModel = ViewModelProvider(this, factory).get(HistoryViewModel::class.java)
     }
 
     override fun onCreateView(

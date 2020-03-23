@@ -26,7 +26,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import ro.edi.util.onAfterTextChanged
@@ -58,7 +57,7 @@ class ConverterFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        converterModel = ViewModelProviders.of(this, factory).get(ConverterViewModel::class.java)
+        converterModel = ViewModelProvider(this, factory).get(ConverterViewModel::class.java)
     }
 
     override fun onCreateView(
