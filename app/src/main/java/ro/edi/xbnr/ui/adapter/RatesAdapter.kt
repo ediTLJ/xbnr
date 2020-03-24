@@ -73,8 +73,7 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
         val payload = payloads.first() as Set<*>
         payload.forEach {
             when (it) {
-                CURRENCY_RATE -> b.currencyValue.text =
-                    String.format("%.4f", getItem(position).rate)
+                CURRENCY_RATE -> b.currencyValue.text = ratesModel.getCurrencyDisplayRate(position)
                 CURRENCY_DATE -> b.currencyValue.setTextColor(
                     ContextCompat.getColor(
                         binding.root.context,

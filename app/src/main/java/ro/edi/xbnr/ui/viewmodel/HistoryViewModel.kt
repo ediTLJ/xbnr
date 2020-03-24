@@ -27,6 +27,8 @@ import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.DateRate
+import java.math.RoundingMode
+import java.text.NumberFormat
 
 const val PREFS_KEY_CHART_INTERVAL = "chart_interval"
 
@@ -43,6 +45,8 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    private val nf = NumberFormat.getNumberInstance()
+
     constructor(application: Application, currencyId: Int) : this(application) {
         this.currencyId = currencyId
 
@@ -56,10 +60,14 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         monthsCountLiveData.value = sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)
 
         sharedPrefs.registerOnSharedPreferenceChangeListener(prefsListener)
+
+        nf.roundingMode = RoundingMode.HALF_UP
+        nf.minimumFractionDigits = 4
+        nf.maximumFractionDigits = 4
     }
 
     fun getDisplayRate(rate: DateRate): String {
-        return String.format("%.4f", rate.rate)
+        return nf.format(rate.rate)
     }
 
     fun getDisplayDate(rate: DateRate): String {

@@ -47,6 +47,8 @@ import ro.edi.xbnr.databinding.FragmentHistoryBinding
 import ro.edi.xbnr.model.DateRate
 import ro.edi.xbnr.ui.viewmodel.HistoryViewModel
 import ro.edi.xbnr.ui.viewmodel.PREFS_KEY_CHART_INTERVAL
+import java.math.RoundingMode
+import java.text.NumberFormat
 import timber.log.Timber.i as logi
 
 class HistoryFragment : Fragment() {
@@ -194,6 +196,11 @@ class HistoryFragment : Fragment() {
         val pbLoading = view.findViewById<ContentLoadingProgressBar>(R.id.loading)
         val vLoadingContainer = view.findViewById<View>(R.id.loading_container)
 
+        val nf = NumberFormat.getNumberInstance()
+        nf.roundingMode = RoundingMode.HALF_UP
+        nf.minimumFractionDigits = 4
+        nf.maximumFractionDigits = 4
+
         historyModel.rates.observe(viewLifecycleOwner, Observer { rates ->
             logi("historyModel rates changed")
 
@@ -228,7 +235,7 @@ class HistoryFragment : Fragment() {
                 data = LineData(dataSet)
                 notifyDataSetChanged()
 
-                val llMax = LimitLine(data.yMax, String.format("%.4f", data.yMax))
+                val llMax = LimitLine(data.yMax, nf.format(data.yMax))
                 llMax.lineWidth = 1f
                 llMax.lineColor = colorTrendUp
                 // llMax.enableDashedLine(12f, 18f, 0f)
@@ -239,7 +246,7 @@ class HistoryFragment : Fragment() {
                     llMax.typeface = it
                 }
 
-                val llMin = LimitLine(data.yMin, String.format("%.4f", data.yMin))
+                val llMin = LimitLine(data.yMin, nf.format(data.yMin))
                 llMin.lineWidth = 1f
                 llMin.lineColor = colorTrendDown
                 // llMin.enableDashedLine(12f, 18f, 0f)

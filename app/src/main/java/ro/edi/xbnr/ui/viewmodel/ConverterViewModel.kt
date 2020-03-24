@@ -22,6 +22,8 @@ import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyMinimal
 import ro.edi.xbnr.ui.util.Helper
+import java.math.RoundingMode
+import java.text.NumberFormat
 import timber.log.Timber.i as logi
 
 class ConverterViewModel(application: Application) : AndroidViewModel(application) {
@@ -37,7 +39,7 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         Transformations.switchMap(RateLiveData(fromCurrencyId, date)) {
             logi("from switchMap")
             if (it.currencyId == null || it.currencyId == 0) {
-                return@switchMap MutableLiveData<Currency>(Currency(0, "RON", 1, false, "", 1.0))
+                return@switchMap MutableLiveData(Currency(0, "RON", 1, false, "", 1.0))
             }
             DataManager.getInstance(application).getCurrency(it.currencyId, it.date)
         }
@@ -47,11 +49,13 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         Transformations.switchMap(RateLiveData(toCurrencyId, date)) {
             logi("to switchMap")
             if (it.currencyId == null || it.currencyId == 0) {
-                return@switchMap MutableLiveData<Currency>(Currency(0, "RON", 1, false, "", 1.0))
+                return@switchMap MutableLiveData(Currency(0, "RON", 1, false, "", 1.0))
             }
             DataManager.getInstance(application).getCurrency(it.currencyId, it.date)
         }
     }
+
+    private val nf = NumberFormat.getNumberInstance()
 
     constructor(
         application: Application,
@@ -66,6 +70,10 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         // logi("from id: %s", fromCurrencyId)
         // logi("to id: %s", toCurrencyId)
         // logi("date: %s", date)
+
+        nf.roundingMode = RoundingMode.HALF_UP
+        nf.minimumFractionDigits = 4
+        nf.maximumFractionDigits = 4
     }
 
     fun updateSource(fromCurrencyId: Int, toCurrencyId: Int, date: String?) {
@@ -91,6 +99,8 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun getRate(): Double {
+        // FIXME multiplier
+
         val fromRate = getFrom()?.rate
         fromRate ?: return 0.0
 
@@ -109,16 +119,26 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
     fun getDisplayRate(context: Context): String? {
         // e.g. €1 = lei 4.7599
 
+        val fromMultiplier = getFrom()?.multiplier
+        fromMultiplier ?: return null
+
         val fromCode = getFrom()?.code
         fromCode ?: return null
 
         val toCode = getTo()?.code
         toCode ?: return null
 
-        val fromSymbol = context.getString(Helper.getCurrencySymbolRes(fromCode))
-        val toSymbol = context.getString(Helper.getCurrencySymbolRes(toCode))
+        val fromSymbol = context.getText(Helper.getCurrencySymbolRes(fromCode))
+        val toSymbol = context.getText(Helper.getCurrencySymbolRes(toCode))
 
-        return String.format("${fromSymbol}1 = $toSymbol%.2f", getRate())
+        val sb = StringBuilder(32)
+        sb.append(fromSymbol)
+        sb.append(fromMultiplier)
+        sb.append(" = ")
+        sb.append(toSymbol)
+        sb.append(nf.format(getRate()))
+
+        return sb.toString()
     }
 
 //    fun getDisplayDate(rate: DateRate): String {

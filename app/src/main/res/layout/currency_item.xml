@@ -100,7 +100,7 @@
             android:layout_centerVertical="true"
             android:includeFontPadding="false"
             android:lines="1"
-            android:text="@{String.format(`%.4f`, model.getCurrency(position).rate)}"
+            android:text="@{model.getCurrencyDisplayRate(position)}"
             android:textAppearance="@style/App.TextAppearance.Subtitle"
             android:textColor="@{ContextCompat.getColor(context, model.getTrendColorRes(context, position))}"
             tools:text="@sample/rates.json/data/value" />

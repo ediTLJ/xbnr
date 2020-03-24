@@ -28,6 +28,8 @@ import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyRate
 import ro.edi.xbnr.ui.util.Helper
+import java.math.RoundingMode
+import java.text.NumberFormat
 
 class RatesViewModel(application: Application) : AndroidViewModel(application) {
     val fetchingData = DataManager.getInstance(getApplication()).isFetching as LiveData<Boolean>
@@ -36,6 +38,14 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
 
     val currencies: LiveData<List<Currency>> by lazy(LazyThreadSafetyMode.NONE) {
         DataManager.getInstance(getApplication()).getRates()
+    }
+
+    private val nf = NumberFormat.getNumberInstance()
+
+    init {
+        nf.roundingMode = RoundingMode.HALF_UP
+        nf.minimumFractionDigits = 4
+        nf.maximumFractionDigits = 4
     }
 
     fun getCurrency(position: Int): Currency? {
@@ -60,6 +70,12 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
                     it.code
                 )
             } else it.code
+        }
+    }
+
+    fun getCurrencyDisplayRate(position: Int): String? {
+        return getCurrency(position)?.let {
+            nf.format(it.rate)
         }
     }
 

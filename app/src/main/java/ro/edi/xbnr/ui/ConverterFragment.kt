@@ -32,6 +32,8 @@ import ro.edi.util.onAfterTextChanged
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentConverterBinding
 import ro.edi.xbnr.ui.viewmodel.ConverterViewModel
+import java.math.RoundingMode
+import java.text.NumberFormat
 import kotlin.math.roundToLong
 import timber.log.Timber.i as logi
 
@@ -81,17 +83,24 @@ class ConverterFragment : Fragment() {
         val fromValue = view.findViewById<TextInputEditText>(R.id.from_value)
         val toValue = view.findViewById<TextInputEditText>(R.id.to_value)
 
+        val nf = NumberFormat.getNumberInstance()
+        nf.roundingMode = RoundingMode.HALF_UP
+        nf.minimumFractionDigits = 2
+        nf.maximumFractionDigits = 2
+
         fromValue.onAfterTextChanged { txtValue ->
             txtValue ?: return@onAfterTextChanged
 
-            val value = if (txtValue.isEmpty()) 0.0 else txtValue.toDouble()
+            val value = if (txtValue.isEmpty()) 0.0 else nf.parse(txtValue)?.toDouble() ?: 0.0
+
             val result = value * converterModel.getRate()
 
             val txtPrevResult = toValue.text.toString()
-            val prevResult = if (txtPrevResult.isEmpty()) 0.0 else txtPrevResult.toDouble()
+            val prevResult =
+                if (txtPrevResult.isEmpty()) 0.0 else nf.parse(txtPrevResult)?.toDouble() ?: 0.0
 
             if ((prevResult * 100).roundToLong() != (result * 100).roundToLong()) {
-                toValue.setText(String.format("%.2f", result))
+                toValue.setText(nf.format(result))
             }
         }
         //fromValue.setOnEditorActionListener { _, actionId, _ ->
@@ -105,14 +114,15 @@ class ConverterFragment : Fragment() {
         toValue.onAfterTextChanged { txtValue ->
             txtValue ?: return@onAfterTextChanged
 
-            val value = if (txtValue.isEmpty()) 0.0 else txtValue.toDouble()
+            val value = if (txtValue.isEmpty()) 0.0 else nf.parse(txtValue)?.toDouble() ?: 0.0
             val result = value / converterModel.getRate()
 
             val txtPrevResult = fromValue.text.toString()
-            val prevResult = if (txtPrevResult.isEmpty()) 0.0 else txtPrevResult.toDouble()
+            val prevResult =
+                if (txtPrevResult.isEmpty()) 0.0 else nf.parse(txtPrevResult)?.toDouble() ?: 0.0
 
             if ((prevResult * 100).roundToLong() != (result * 100).roundToLong()) {
-                fromValue.setText(String.format("%.2f", result))
+                fromValue.setText(nf.format(result))
             }
         }
 
