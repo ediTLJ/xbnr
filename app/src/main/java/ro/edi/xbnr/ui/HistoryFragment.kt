@@ -104,6 +104,8 @@ class HistoryFragment : Fragment() {
 
         val bkgChart = ContextCompat.getDrawable(view.context, R.drawable.bkg_chart)
 
+        val txtRonSymbol = getString(R.string.symbol_ron)
+
         val lcHistory = view.findViewById<LineChart>(R.id.history)
         lcHistory.apply {
             isAutoScaleMinMaxEnabled = true
@@ -235,7 +237,7 @@ class HistoryFragment : Fragment() {
                 data = LineData(dataSet)
                 notifyDataSetChanged()
 
-                val llMax = LimitLine(data.yMax, nf.format(data.yMax))
+                val llMax = LimitLine(data.yMax, txtRonSymbol.plus(nf.format(data.yMax)))
                 llMax.lineWidth = 1f
                 llMax.lineColor = colorTrendUp
                 // llMax.enableDashedLine(12f, 18f, 0f)
@@ -246,7 +248,7 @@ class HistoryFragment : Fragment() {
                     llMax.typeface = it
                 }
 
-                val llMin = LimitLine(data.yMin, nf.format(data.yMin))
+                val llMin = LimitLine(data.yMin, txtRonSymbol.plus(nf.format(data.yMin)))
                 llMin.lineWidth = 1f
                 llMin.lineColor = colorTrendDown
                 // llMin.enableDashedLine(12f, 18f, 0f)
