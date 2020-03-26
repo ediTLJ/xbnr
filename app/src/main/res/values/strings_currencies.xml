@@ -67,6 +67,6 @@
     <string name="symbol_xau" translatable="false">g</string>
     <string name="symbol_xdr" translatable="false">SDR</string>
     <string name="symbol_zar" translatable="false">R</string>
-    <string name="symbol_ron" translatable="false">lei</string>
+    <string name="symbol_ron" translatable="false">lei&#160;</string>
     <string name="symbol_default" translatable="false" />
 </resources>
