@@ -84,11 +84,15 @@ class ConverterFragment : Fragment() {
         val toValue = view.findViewById<TextInputEditText>(R.id.to_value)
 
         val nf = NumberFormat.getNumberInstance()
-        nf.roundingMode = RoundingMode.HALF_UP
+        nf.roundingMode = RoundingMode.HALF_UP // TODO add a setting for it (HALF_UP, HALF_EVEN & HALF_DOWN options)
         nf.minimumFractionDigits = 2
         nf.maximumFractionDigits = 2
 
         fromValue.onAfterTextChanged { txtValue ->
+            if (!fromValue.hasFocus()) {
+                return@onAfterTextChanged
+            }
+
             txtValue ?: return@onAfterTextChanged
 
             val value = if (txtValue.isEmpty()) 0.0 else nf.parse(txtValue)?.toDouble() ?: 0.0
@@ -112,6 +116,10 @@ class ConverterFragment : Fragment() {
         //}
 
         toValue.onAfterTextChanged { txtValue ->
+            if (!toValue.hasFocus()) {
+                return@onAfterTextChanged
+            }
+
             txtValue ?: return@onAfterTextChanged
 
             val value = if (txtValue.isEmpty()) 0.0 else nf.parse(txtValue)?.toDouble() ?: 0.0
