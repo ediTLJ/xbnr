@@ -98,45 +98,44 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         return Helper.getCurrencyIconRes(getTo()?.code)
     }
 
+    /**
+     * Get the rate to be used for currency conversion, by also taking multipliers into account.
+     */
     fun getRate(): Double {
-        // FIXME multiplier
+        val from = getFrom()
+        from ?: return 0.0
 
-        val fromRate = getFrom()?.rate
-        fromRate ?: return 0.0
+        val to = getTo()
+        to ?: return 0.0
 
-        val toRate = getTo()?.rate
-        toRate ?: return 0.0
-
-        if (toRate == 0.0) {
+        if (to.rate == 0.0) {
             return 0.0
         }
 
-        logi("rate: ${fromRate.div(toRate)}")
+        val rate = from.rate.times(to.multiplier).div(to.rate.times(from.multiplier))
 
-        return fromRate.div(toRate)
+        logi("rate: $rate")
+        return rate
     }
 
     fun getDisplayRate(context: Context): String? {
-        // e.g. €1 = lei 4.7599
+        // e.g. €1 = lei4.7599
 
-        val fromMultiplier = getFrom()?.multiplier
-        fromMultiplier ?: return null
+        val from = getFrom()
+        from ?: return null
 
-        val fromCode = getFrom()?.code
-        fromCode ?: return null
+        val to = getTo()
+        to ?: return null
 
-        val toCode = getTo()?.code
-        toCode ?: return null
-
-        val fromSymbol = context.getText(Helper.getCurrencySymbolRes(fromCode))
-        val toSymbol = context.getText(Helper.getCurrencySymbolRes(toCode))
+        val fromSymbol = context.getText(Helper.getCurrencySymbolRes(from.code))
+        val toSymbol = context.getText(Helper.getCurrencySymbolRes(to.code))
 
         val sb = StringBuilder(32)
         sb.append(fromSymbol)
-        sb.append(fromMultiplier)
+        sb.append(from.multiplier)
         sb.append(" = ")
         sb.append(toSymbol)
-        sb.append(nf.format(getRate()))
+        sb.append(nf.format(from.rate.div(to.rate)))
 
         return sb.toString()
     }
