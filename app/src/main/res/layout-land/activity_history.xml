@@ -46,7 +46,8 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/list_item_padding_start"
-                android:paddingBottom="@dimen/list_item_padding_end">
+                android:paddingBottom="@dimen/list_item_padding_end"
+                android:layout_marginEnd="@dimen/activity_margin">
 
                 <ImageView
                     android:id="@+id/currency_flag"
@@ -127,9 +128,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/activity_margin"
-            android:layout_marginBottom="@dimen/activity_margin"
-            app:fabSize="auto"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            app:fabCustomSize="48dp"
             app:srcCompat="@drawable/ic_convert" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -130,9 +130,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/activity_margin"
-            android:layout_marginBottom="@dimen/activity_margin"
-            app:fabSize="auto"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            app:fabCustomSize="48dp"
             app:srcCompat="@drawable/ic_convert" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
