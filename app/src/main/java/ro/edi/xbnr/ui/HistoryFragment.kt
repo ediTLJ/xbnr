@@ -126,7 +126,7 @@ class HistoryFragment : Fragment() {
             axisLeft.setDrawLabels(false)
 
             val marker = MarkerImage(context, R.drawable.ic_dot)
-            marker.setOffset(-12f, -12f) // drawable size + line width
+            marker.setOffset(-10f, -10f) // drawable size + line width
             setMarker(marker)
 
             setNoDataText(getString(R.string.no_data_found))

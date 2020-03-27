@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
     <size
-        android:width="10dp"
-        android:height="10dp" />
-    <solid android:color="@color/colorPrimary" />
+        android:width="8dp"
+        android:height="8dp" />
+    <solid android:color="@color/colorChartMarker" />
 </shape>

@@ -24,6 +24,7 @@
 
     <color name="colorChartGradientStart">@color/green_700_a00</color>
     <color name="colorChartGradientEnd">@color/green_700</color>
+    <color name="colorChartMarker">@color/white</color>
 
     <color name="textColorPrimary">@color/white</color>
     <color name="textColorSecondary">@color/white_dark</color>
