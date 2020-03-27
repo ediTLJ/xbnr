@@ -3,7 +3,12 @@
 * add currency converter
 * tablet UI
 
-# Change Log
+# Changelog
+
+## v1.5 [??? ??, 2020]
+* added currency converter
+* UI fixes & optimizations
+* fixed missing Romanian translations
 
 ## v1.4 [Dec 23, 2019]
 * added theme setting (system default, dark, light)
