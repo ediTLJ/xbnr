@@ -69,6 +69,10 @@ class HistoryActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
             R.id.action_star -> currencyModel.setIsStarred(true)
             R.id.action_unstar -> currencyModel.setIsStarred(false)
         }
@@ -85,6 +89,11 @@ class HistoryActivity : AppCompatActivity() {
             binding.invalidateAll()
 
             binding.fabConverter.setOnClickListener {
+                if (currency == null) {
+                    // just in case...
+                    return@setOnClickListener
+                }
+
                 // TODO open converter screen using historyModel.currencyId & historyModel.chartHighlight data?
                 val i = Intent(this, ConverterActivity::class.java)
                 i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
