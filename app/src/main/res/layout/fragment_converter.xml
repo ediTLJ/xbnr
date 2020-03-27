@@ -18,6 +18,8 @@
         android:layout_margin="@dimen/activity_margin"
         android:orientation="vertical">
 
+        <!-- FIXME show date -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="64dp"
@@ -65,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|end"
-                    android:hint="0"
+                    android:hint="0.00"
                     android:imeOptions="actionDone"
                     android:includeFontPadding="false"
                     android:inputType="number|numberDecimal"
@@ -74,7 +76,6 @@
                     android:paddingTop="0dp"
                     android:paddingEnd="0dp"
                     android:paddingBottom="0dp"
-                    android:selectAllOnFocus="true"
                     android:textAppearance="@style/App.TextAppearance.Headline5.Number"
                     android:textColorHint="?android:textColorSecondary" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -85,6 +86,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <!-- TODO add swap currencies button -->
 
             <View
                 android:id="@+id/divider"
@@ -157,7 +160,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|end"
-                    android:hint="0"
+                    android:hint="0.00"
                     android:imeOptions="actionDone"
                     android:includeFontPadding="false"
                     android:inputType="number|numberDecimal"
@@ -166,7 +169,6 @@
                     android:paddingTop="0dp"
                     android:paddingEnd="0dp"
                     android:paddingBottom="0dp"
-                    android:selectAllOnFocus="true"
                     android:textAppearance="@style/App.TextAppearance.Headline5.Number"
                     android:textColorHint="?android:textColorSecondary" />
             </com.google.android.material.textfield.TextInputLayout>

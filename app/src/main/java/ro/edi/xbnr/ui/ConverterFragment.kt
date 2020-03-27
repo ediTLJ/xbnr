@@ -34,9 +34,10 @@ import ro.edi.xbnr.databinding.FragmentConverterBinding
 import ro.edi.xbnr.ui.viewmodel.ConverterViewModel
 import java.math.RoundingMode
 import java.text.NumberFormat
-import kotlin.math.roundToLong
 import timber.log.Timber.i as logi
 
+// TODO use BigDecimal? do we need that kind of precision?
+// TODO fractional digits count on some currencies (e.g. Japanese Yen)... see https://en.wikipedia.org/wiki/ISO_4217
 class ConverterFragment : Fragment() {
     companion object {
         const val ARG_FROM_CURRENCY_ID = "ro.edi.xbnr.ui.converter.arg_from_currency_id"
@@ -84,9 +85,12 @@ class ConverterFragment : Fragment() {
         val toValue = view.findViewById<TextInputEditText>(R.id.to_value)
 
         val nf = NumberFormat.getNumberInstance()
-        nf.roundingMode = RoundingMode.HALF_UP // TODO add a setting for it (HALF_UP, HALF_EVEN & HALF_DOWN options)
+        nf.roundingMode =
+            RoundingMode.HALF_UP // TODO add a setting for it (HALF_UP, HALF_EVEN & HALF_DOWN options)
         nf.minimumFractionDigits = 2
         nf.maximumFractionDigits = 2
+
+        // FIXME auto-format input value (including when deleting separators)
 
         fromValue.onAfterTextChanged { txtValue ->
             if (!fromValue.hasFocus()) {
@@ -95,25 +99,27 @@ class ConverterFragment : Fragment() {
 
             txtValue ?: return@onAfterTextChanged
 
-            val value = if (txtValue.isEmpty()) 0.0 else nf.parse(txtValue)?.toDouble() ?: 0.0
+            if (txtValue.isEmpty()) {
+                toValue.setText("")
+                return@onAfterTextChanged
+            }
+
+            val value = nf.parse(txtValue)?.toDouble() ?: 0.0
 
             val result = value * converterModel.getRate()
+            toValue.setText(nf.format(result))
 
-            val txtPrevResult = toValue.text.toString()
-            val prevResult =
-                if (txtPrevResult.isEmpty()) 0.0 else nf.parse(txtPrevResult)?.toDouble() ?: 0.0
-
-            if ((prevResult * 100).roundToLong() != (result * 100).roundToLong()) {
-                toValue.setText(nf.format(result))
-            }
+//            val txtPrevResult = toValue.text.toString()
+//            if (txtPrevResult.isEmpty()) {
+//                toValue.setText(nf.format(result))
+//                return@onAfterTextChanged
+//            }
+//
+//            val prevResult = nf.parse(txtPrevResult)?.toDouble() ?: 0.0
+//            if ((prevResult * 100).roundToLong() != (result * 100).roundToLong()) {
+//                toValue.setText(nf.format(result))
+//            }
         }
-        //fromValue.setOnEditorActionListener { _, actionId, _ ->
-        //    if (actionId == EditorInfo.IME_ACTION_DONE) {
-        //        // activity?.finish()
-        //        return@setOnEditorActionListener true
-        //    }
-        //    false
-        //}
 
         toValue.onAfterTextChanged { txtValue ->
             if (!toValue.hasFocus()) {
@@ -122,16 +128,26 @@ class ConverterFragment : Fragment() {
 
             txtValue ?: return@onAfterTextChanged
 
-            val value = if (txtValue.isEmpty()) 0.0 else nf.parse(txtValue)?.toDouble() ?: 0.0
-            val result = value / converterModel.getRate()
-
-            val txtPrevResult = fromValue.text.toString()
-            val prevResult =
-                if (txtPrevResult.isEmpty()) 0.0 else nf.parse(txtPrevResult)?.toDouble() ?: 0.0
-
-            if ((prevResult * 100).roundToLong() != (result * 100).roundToLong()) {
-                fromValue.setText(nf.format(result))
+            if (txtValue.isEmpty()) {
+                fromValue.setText("")
+                return@onAfterTextChanged
             }
+
+            val value = nf.parse(txtValue)?.toDouble() ?: 0.0
+
+            val result = value / converterModel.getRate()
+            fromValue.setText(nf.format(result))
+
+//            val txtPrevResult = fromValue.text.toString()
+//            if (txtPrevResult.isEmpty()) {
+//                fromValue.setText(nf.format(result))
+//                return@onAfterTextChanged
+//            }
+//
+//            val prevResult = nf.parse(txtPrevResult)?.toDouble() ?: 0.0
+//            if ((prevResult * 100).roundToLong() != (result * 100).roundToLong()) {
+//                fromValue.setText(nf.format(result))
+//            }
         }
 
         converterModel.fromCurrency.observe(viewLifecycleOwner, Observer { currency ->
