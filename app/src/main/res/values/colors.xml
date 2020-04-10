@@ -11,8 +11,8 @@
 
     <color name="colorPrimary">@color/green_700</color>
     <color name="colorPrimaryVariant">@color/green_500</color>
-    <color name="colorSecondary">@color/grey</color>
-    <color name="colorSecondaryVariant">@color/green_700</color>
+    <color name="colorSecondary">@color/green_700</color>
+    <color name="colorSecondaryVariant">@color/green_500</color>
     <color name="colorOnSecondary">@color/white</color>
     <color name="colorOnBackground">@color/green_700</color>
     <color name="colorSurface">@color/white</color>
