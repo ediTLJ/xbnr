@@ -18,6 +18,9 @@ package ro.edi.xbnr.ui.viewmodel
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.*
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyMinimal
@@ -140,10 +143,19 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         return sb.toString()
     }
 
-//    fun getDisplayDate(rate: DateRate): String {
-//        return LocalDate.parse(rate.date)
-//            .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
-//    }
+    fun getDisplayDate(): String {
+        val from = getFrom()
+        from ?: return ""
+
+        val to = getTo()
+        to ?: return ""
+
+        // RON date is set to "" in the constructor
+        val date = if (from.date.isEmpty()) to.date else from.date
+
+        return LocalDate.parse(date)
+            .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
+    }
 
     data class RateSource<Int, String>(
         val currencyId: Int,

@@ -113,7 +113,7 @@
                         android:lines="1"
                         android:textAppearance="@style/App.TextAppearance.Body2"
                         android:textColor="?android:textColorSecondary"
-                        tools:text="April 8, 2019" />
+                        tools:text="Friday, April 10, 2020" />
                 </LinearLayout>
             </LinearLayout>
 

@@ -15,14 +15,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/activity_margin"
+        android:layout_marginStart="@dimen/activity_margin"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="@dimen/activity_margin"
+        android:layout_marginBottom="@dimen/activity_margin"
         android:orientation="vertical">
 
-        <!-- FIXME show date -->
+        <TextView
+            android:id="@+id/rate_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:lines="1"
+            android:text="@{model.getDisplayDate()}"
+            android:textAppearance="@style/App.TextAppearance.Body2"
+            android:textColor="?android:textColorSecondary"
+            tools:text="Friday, April 10, 2020" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="64dp"
+            android:layout_marginTop="8dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
