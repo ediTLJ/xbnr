@@ -5,7 +5,7 @@
 
 # Changelog
 
-## v1.5 [??? ??, 2020]
+## v1.5 [Apr 11, 2020]
 * added currency converter
 * UI fixes & optimizations
 
