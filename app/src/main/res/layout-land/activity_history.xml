@@ -43,11 +43,11 @@
                 android:id="@+id/currency"
                 android:layout_width="128dp"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/activity_margin"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/list_item_padding_start"
-                android:paddingBottom="@dimen/list_item_padding_end"
-                android:layout_marginEnd="@dimen/activity_margin">
+                android:paddingBottom="@dimen/list_item_padding_end">
 
                 <ImageView
                     android:id="@+id/currency_flag"
@@ -103,6 +103,20 @@
                         android:textColor="?android:textColorPrimary"
                         tools:text="@sample/rates.json/data/value" />
                 </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/currency_trend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:maxLines="2"
+                    android:textAppearance="@style/App.TextAppearance.Body1"
+                    tools:text="+0.0088 (20.00%)" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/currency_date"

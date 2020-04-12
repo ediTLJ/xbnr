@@ -95,12 +95,16 @@ class HistoryFragment : Fragment() {
             view.context,
             getColorRes(view.context, R.attr.colorPrimary)
         )
+        val textColorPrimary = ContextCompat.getColor(
+            view.context,
+            getColorRes(view.context, android.R.attr.textColorPrimary)
+        )
         val textColorSecondary = ContextCompat.getColor(
             view.context,
             getColorRes(view.context, android.R.attr.textColorSecondary)
         )
-        val colorTrendUp = ContextCompat.getColor(view.context, R.color.textColorTrendUp)
-        val colorTrendDown = ContextCompat.getColor(view.context, R.color.textColorTrendDown)
+        val textColorTrendUp = ContextCompat.getColor(view.context, R.color.textColorTrendUp)
+        val textColorTrendDown = ContextCompat.getColor(view.context, R.color.textColorTrendDown)
 
         val bkgChart = ContextCompat.getDrawable(view.context, R.drawable.bkg_chart)
 
@@ -155,10 +159,26 @@ class HistoryFragment : Fragment() {
                             if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                                 historyModel.getDisplayDate(rate).replaceFirst(' ', '\n')
                             } else {
+                                // the date textview in portrait mode is actually in the fragment
                                 historyModel.getDisplayDate(rate)
                             }
                         findViewById<TextView>(R.id.currency_value).text =
                             historyModel.getDisplayRate(rate)
+
+                        val tvTrend = findViewById<TextView>(R.id.currency_trend)
+                        val trend = historyModel.getDisplayTrend(rate)
+
+                        if (trend.isEmpty()) {
+                            tvTrend.visibility = View.GONE
+                        } else {
+                            tvTrend.visibility = View.VISIBLE
+                            tvTrend.text = trend
+                            when {
+                                trend.startsWith('+') -> tvTrend.setTextColor(textColorTrendUp)
+                                trend.startsWith('-') -> tvTrend.setTextColor(textColorTrendDown)
+                                else -> tvTrend.setTextColor(textColorPrimary)
+                            }
+                        }
                     }
                 }
             }
@@ -239,22 +259,22 @@ class HistoryFragment : Fragment() {
 
                 val llMax = LimitLine(data.yMax, txtRonSymbol.plus(nf.format(data.yMax)))
                 llMax.lineWidth = 1f
-                llMax.lineColor = colorTrendUp
+                llMax.lineColor = textColorTrendUp
                 // llMax.enableDashedLine(12f, 18f, 0f)
                 llMax.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
                 llMax.textSize = 16f
-                llMax.textColor = colorTrendUp
+                llMax.textColor = textColorTrendUp
                 tfTitilliumWeb?.let {
                     llMax.typeface = it
                 }
 
                 val llMin = LimitLine(data.yMin, txtRonSymbol.plus(nf.format(data.yMin)))
                 llMin.lineWidth = 1f
-                llMin.lineColor = colorTrendDown
+                llMin.lineColor = textColorTrendDown
                 // llMin.enableDashedLine(12f, 18f, 0f)
                 llMin.labelPosition = LimitLine.LimitLabelPosition.LEFT_BOTTOM
                 llMin.textSize = 16f
-                llMin.textColor = colorTrendDown
+                llMin.textColor = textColorTrendDown
                 tfTitilliumWeb?.let {
                     llMin.typeface = it
                 }

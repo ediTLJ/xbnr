@@ -51,6 +51,18 @@
             android:layout_weight="1"
             android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/currency_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="12dp"
+            android:lines="1"
+            android:textAppearance="@style/App.TextAppearance.Body2"
+            android:textColor="?android:textColorSecondary"
+            tools:text="Friday, April 10, 2020" />
+
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/interval"
             android:layout_width="wrap_content"

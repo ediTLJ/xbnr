@@ -29,6 +29,7 @@ import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.DateRate
 import java.math.RoundingMode
 import java.text.NumberFormat
+import kotlin.math.absoluteValue
 
 const val PREFS_KEY_CHART_INTERVAL = "chart_interval"
 
@@ -46,6 +47,7 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     private val nf = NumberFormat.getNumberInstance()
+    private val nfPercent = NumberFormat.getNumberInstance()
 
     constructor(application: Application, currencyId: Int) : this(application) {
         this.currencyId = currencyId
@@ -64,10 +66,39 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         nf.roundingMode = RoundingMode.HALF_UP
         nf.minimumFractionDigits = 4
         nf.maximumFractionDigits = 4
+
+        nfPercent.roundingMode = RoundingMode.HALF_UP
+        nfPercent.minimumFractionDigits = 2
+        nfPercent.maximumFractionDigits = 2
     }
 
     fun getDisplayRate(rate: DateRate): String {
         return nf.format(rate.rate)
+    }
+
+    fun getDisplayTrend(rate: DateRate): String {
+        val trend = StringBuilder(16)
+
+        rates.value?.let {
+            val idxRate = it.indexOf(rate)
+            if (idxRate <= 0) {
+                return@let
+            }
+
+            val diff = rate.rate - it[idxRate - 1].rate
+
+            if (diff > 0) {
+                trend.append('+')
+            }
+            trend.append(nf.format(diff))
+            trend.append(' ')
+            trend.append('(')
+            trend.append(nfPercent.format(diff.times(100).div(rate.rate).absoluteValue))
+            trend.append('%')
+            trend.append(')')
+        }
+
+        return trend.toString()
     }
 
     fun getDisplayDate(rate: DateRate): String {
