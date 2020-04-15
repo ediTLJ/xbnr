@@ -39,8 +39,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
+import com.google.android.material.tabs.TabLayout
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentHistoryBinding
@@ -51,7 +50,7 @@ import java.math.RoundingMode
 import java.text.NumberFormat
 import timber.log.Timber.i as logi
 
-class HistoryFragment : Fragment() {
+class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
     companion object {
         const val ARG_CURRENCY_ID = "ro.edi.xbnr.ui.history.arg_currency_id"
 
@@ -185,34 +184,27 @@ class HistoryFragment : Fragment() {
             setOnChartValueSelectedListener(clickListener)
         }
 
-        val cgInterval = view.findViewById<ChipGroup>(R.id.interval)
-        cgInterval.apply {
-            val checkedId = when (sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)) {
-                1 -> R.id.interval_1m
-                3 -> R.id.interval_3m
-                12 -> R.id.interval_1y
-                else -> R.id.interval_1m
+        val tabs = view.findViewById<TabLayout>(R.id.interval)
+        tabs.apply {
+            // FIXME do it in the XML?
+            getTabAt(0)?.tag = 1
+            getTabAt(1)?.tag = 6
+            getTabAt(2)?.tag = 12
+            getTabAt(3)?.tag = 60
+            getTabAt(4)?.tag = 0
+
+            // FIXME if tags set in xml, check by tag
+            when (sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)) {
+                1 -> selectTab(getTabAt(0))
+                3, 6 -> selectTab(getTabAt(1))
+                12 -> selectTab(getTabAt(2))
+                60 -> selectTab(getTabAt(3))
+                0 -> selectTab(getTabAt(4))
+                else -> selectTab(getTabAt(1))
             }
 
-            for (i in 0 until childCount) {
-                val chip = getChildAt(i) as Chip
-                chip.isChecked = chip.id == checkedId
-            }
-
-            setOnCheckedChangeListener { _, id ->
-                lcHistory.apply {
-                    val interval: Int = when (id) {
-                        R.id.interval_1m -> 1
-                        R.id.interval_3m -> 3
-                        R.id.interval_1y -> 12
-                        else -> 1
-                    }
-
-                    sharedPrefs.edit()
-                        .putInt(PREFS_KEY_CHART_INTERVAL, interval)
-                        .apply()
-                }
-            }
+            clearOnTabSelectedListeners()
+            addOnTabSelectedListener(this@HistoryFragment)
         }
 
         val pbLoading = view.findViewById<ContentLoadingProgressBar>(R.id.loading)
@@ -223,7 +215,8 @@ class HistoryFragment : Fragment() {
         nf.minimumFractionDigits = 4
         nf.maximumFractionDigits = 4
 
-        historyModel.rates.observe(viewLifecycleOwner, Observer { rates ->
+        historyModel.rates.observe(viewLifecycleOwner, Observer
+        { rates ->
             logi("historyModel rates changed")
 
             lcHistory.visibility = View.GONE
@@ -306,7 +299,7 @@ class HistoryFragment : Fragment() {
                             pbLoading.hide()
                             vLoadingContainer.visibility = View.GONE
                             visibility = View.VISIBLE
-                            cgInterval.visibility = View.VISIBLE
+                            tabs.visibility = View.VISIBLE
 
                             invalidate()
                             // animateX(300, Easing.Linear)
@@ -319,12 +312,27 @@ class HistoryFragment : Fragment() {
                     pbLoading.hide()
                     vLoadingContainer.visibility = View.GONE
                     visibility = View.VISIBLE
-                    cgInterval.visibility = View.VISIBLE
+                    tabs.visibility = View.VISIBLE
 
                     invalidate()
                 }
             }
         })
+    }
+
+    override fun onTabSelected(tab: TabLayout.Tab) {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(tab.view.context)
+        sharedPrefs.edit()
+            .putInt(PREFS_KEY_CHART_INTERVAL, tab.tag as Int)
+            .apply()
+    }
+
+    override fun onTabReselected(tab: TabLayout.Tab) {
+
+    }
+
+    override fun onTabUnselected(tab: TabLayout.Tab) {
+
     }
 
     private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

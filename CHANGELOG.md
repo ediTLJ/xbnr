@@ -1,9 +1,12 @@
-## next release(s)
-* write tests
-* add currency converter
+## nice to have
+* tests
 * tablet UI
 
 # Changelog
+
+## v1.6 [??? ??, 2020]
+* chart: added 5Y & MAX time interval options
+* history: show rate trend vs. previous day
 
 ## v1.5 [Apr 11, 2020]
 * added currency converter

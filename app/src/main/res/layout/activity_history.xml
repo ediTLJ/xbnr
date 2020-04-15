@@ -116,10 +116,22 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/currency_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="4dp"
+                android:lines="1"
+                android:textAppearance="@style/App.TextAppearance.Body2"
+                android:textColor="?android:textColorSecondary"
+                tools:text="Friday, April 10, 2020" />
+
             <FrameLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="0dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -128,9 +140,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
-            app:fabCustomSize="48dp"
+            android:layout_marginEnd="@dimen/activity_margin"
+            android:layout_marginBottom="@dimen/activity_margin"
+            app:fabCustomSize="56dp"
             app:srcCompat="@drawable/ic_convert" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

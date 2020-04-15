@@ -59,7 +59,14 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         }
 
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(application)
-        monthsCountLiveData.value = sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)
+
+        val monthsCount = sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)
+        if (monthsCount == 3) {
+            // 3 months option is deprecated... it was replaced by 6 months
+            monthsCountLiveData.value = 6
+        } else {
+            monthsCountLiveData.value = monthsCount
+        }
 
         sharedPrefs.registerOnSharedPreferenceChangeListener(prefsListener)
 

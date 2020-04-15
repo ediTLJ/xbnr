@@ -16,8 +16,10 @@
     <string name="btn_rate">RATE APP</string>
     <!--<string name="btn_other_apps">OTHER APPS</string>-->
     <string name="interval_1m">1M</string>
-    <string name="interval_3m">3M</string>
+    <string name="interval_6m">6M</string>
     <string name="interval_1y">1Y</string>
+    <string name="interval_5y">5Y</string>
+    <string name="interval_max">MAX</string>
 
     <!-- INFO -->
     <string name="info">xbnr is a simple exchange rates app with a nice &amp; clean UI.

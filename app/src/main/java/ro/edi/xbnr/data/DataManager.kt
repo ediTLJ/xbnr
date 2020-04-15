@@ -93,7 +93,7 @@ class DataManager private constructor(application: Application) {
 
             // another option would be to use Period.between(latestDate, today)
 
-            // TODO what if latest date is older than 1-2 years ago? :)
+            // FIXME what if latest date is older than 1-2 years ago? :)
             // if latestDate == today => all good, don't do anything
             if (latestDate.isBefore(today.minusWeeks(1))) {
                 // add service to fetch data weekly? so we should never reach this
@@ -155,17 +155,37 @@ class DataManager private constructor(application: Application) {
     }
 
     fun getRates(currencyId: Int, monthsCount: Int): LiveData<List<DateRate>> {
-        // fetch data if needed, based on monthsCount and existing db entries
-        // not needed yet, we only show latest 1/3/12 months in current version (& we fetch more data on first app start)
-        // AppExecutors.networkIO().execute {
-        // }
-
         val zoneIdRomania = ZoneId.of("Europe/Bucharest")
         val today = LocalDate.now(zoneIdRomania)
 
         val since = when (monthsCount) {
+            0 -> {
+                // FIXME fetch data if not stored in the db
+                AppExecutors.networkIO().execute {
+                    // isFetching.postValue(true)
+                    // FIXME replace today.year - 1 with oldest year in the db & make sure it's >= 2005
+                    // FIXME don't do anything if oldest year in the db is 2005+
+                    //for (year in 2005 until today.year - 1 - 1) {
+                    //    fetchRates(year)
+                    //}
+                }
+                return db.rateDao().getRates(currencyId)
+            }
+            60 -> {
+                // FIXME fetch data if not stored in the db
+                AppExecutors.networkIO().execute {
+                    // isFetching.postValue(true)
+                    // FIXME replace today.year - 1 with oldest year in the db & make sure it's >= 2005
+                    // FIXME don't do anything if oldest year in the db is (today.year - 1 - 4)+
+                    //fetchRates(today.year - 1 - 4)
+                    //fetchRates(today.year - 1 - 3)
+                    //fetchRates(today.year - 1 - 2)
+                    //etchRates(today.year - 1 - 1)
+                }
+                today.minusYears(5).format(DateTimeFormatter.ISO_LOCAL_DATE)
+            }
             12 -> today.minusYears(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
-            1, 3 -> today.minusMonths(monthsCount.toLong()).format(DateTimeFormatter.ISO_LOCAL_DATE)
+            1, 6 -> today.minusMonths(monthsCount.toLong()).format(DateTimeFormatter.ISO_LOCAL_DATE)
             else -> today.minusMonths(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
         }
 
@@ -180,7 +200,7 @@ class DataManager private constructor(application: Application) {
      * @param interval
      *     1 => 1 day (latest rates)
      *     10 => 10 days (last 10 days)
-     *     2005 or more => year 2005 or more
+     *     2005+ => year 2005+
      *     other => 1 day (latest rates)
      */
     private fun fetchRates(interval: Int) {

@@ -45,6 +45,9 @@ abstract class RateDao : BaseDao<DbRate> {
     @Query("SELECT id, date, rate FROM (SELECT id, date, rate FROM rates WHERE currency_id = :id AND date > :since) ORDER BY date ASC")
     protected abstract fun queryRates(id: Int, since: String): LiveData<List<DateRate>>
 
+    @Query("SELECT id, date, rate FROM (SELECT id, date, rate FROM rates WHERE currency_id = :id) ORDER BY date ASC")
+    protected abstract fun queryRates(id: Int): LiveData<List<DateRate>>
+
     @Query("SELECT MAX(date) FROM rates")
     abstract fun getLatestDate(): String?
 
@@ -89,6 +92,14 @@ abstract class RateDao : BaseDao<DbRate> {
      */
     fun getRates(id: Int, since: String): LiveData<List<DateRate>> =
         queryRates(id, since).getDistinct()
+
+    /**
+     * Get all rates for the specified currency.
+     *
+     * @param id currency id
+     */
+    fun getRates(id: Int): LiveData<List<DateRate>> =
+        queryRates(id).getDistinct()
 
     @Query("DELETE FROM rates")
     abstract fun deleteAll()

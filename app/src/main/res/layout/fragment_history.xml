@@ -51,87 +51,51 @@
             android:layout_weight="1"
             android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/currency_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="12dp"
-            android:lines="1"
-            android:textAppearance="@style/App.TextAppearance.Body2"
-            android:textColor="?android:textColorSecondary"
-            tools:text="Friday, April 10, 2020" />
-
-        <com.google.android.material.chip.ChipGroup
+        <com.google.android.material.tabs.TabLayout
             android:id="@+id/interval"
+            style="@style/Widget.MaterialComponents.TabLayout"
             android:layout_width="wrap_content"
-            android:layout_height="56dp"
+            android:layout_height="48dp"
             android:layout_gravity="start"
-            android:visibility="invisible"
-            app:chipSpacingHorizontal="0dp"
-            app:selectionRequired="true"
-            app:singleSelection="true"
-            tools:visibility="visible">
+            android:layout_marginEnd="72dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            app:tabGravity="center"
+            app:tabMinWidth="48dp"
+            app:tabMode="auto"
+            app:tabSelectedTextColor="@color/colorPrimary"
+            app:tabTextAppearance="@style/App.TextAppearance.Tab"
+            app:tabTextColor="@color/colorPrimaryVariant">
 
-            <!-- TODO move repeating attributes in a style -->
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.tabs.TabItem
                 android:id="@+id/interval_1m"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:text="@string/interval_1m"
-                android:textAlignment="center"
-                android:textAppearance="@style/App.TextAppearance.Button"
-                android:textColor="@color/check_green"
-                app:checkedIconVisible="false"
-                app:chipBackgroundColor="@android:color/transparent"
-                app:chipCornerRadius="1dp"
-                app:chipEndPadding="0dp"
-                app:chipIconVisible="false"
-                app:chipStartPadding="0dp"
-                app:chipSurfaceColor="@android:color/transparent"
-                app:textEndPadding="6dp"
-                app:textStartPadding="6dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/interval_1m" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/interval_3m"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:text="@string/interval_3m"
-                android:textAlignment="center"
-                android:textAppearance="@style/App.TextAppearance.Button"
-                android:textColor="@color/check_green"
-                app:checkedIconVisible="false"
-                app:chipBackgroundColor="@android:color/transparent"
-                app:chipCornerRadius="1dp"
-                app:chipEndPadding="0dp"
-                app:chipIconVisible="false"
-                app:chipStartPadding="0dp"
-                app:chipSurfaceColor="@android:color/transparent"
-                app:textEndPadding="6dp"
-                app:textStartPadding="6dp" />
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/interval_6m"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/interval_6m" />
 
-            <com.google.android.material.chip.Chip
+            <com.google.android.material.tabs.TabItem
                 android:id="@+id/interval_1y"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:maxWidth="48dp"
-                android:text="@string/interval_1y"
-                android:textAlignment="center"
-                android:textAppearance="@style/App.TextAppearance.Button"
-                android:textColor="@color/check_green"
-                app:checkedIconVisible="false"
-                app:chipBackgroundColor="@android:color/transparent"
-                app:chipCornerRadius="1dp"
-                app:chipEndPadding="0dp"
-                app:chipIconVisible="false"
-                app:chipStartPadding="0dp"
-                app:chipSurfaceColor="@android:color/transparent"
-                app:textEndPadding="8dp"
-                app:textStartPadding="8dp" />
-        </com.google.android.material.chip.ChipGroup>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/interval_1y" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/interval_5y"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/interval_5y" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/interval_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/interval_max" />
+        </com.google.android.material.tabs.TabLayout>
     </LinearLayout>
 </layout>

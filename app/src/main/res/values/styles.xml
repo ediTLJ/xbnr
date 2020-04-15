@@ -35,7 +35,6 @@
     <style name="App.TextAppearance.Title" parent="App.TextAppearance.Headline6">
         <item name="fontFamily">@font/fira_sans_condensed_medium</item>
         <item name="android:fontFamily">@font/fira_sans_condensed_medium</item>
-
     </style>
 
     <style name="App.TextAppearance.Subtitle" parent="App.TextAppearance.Subtitle1">
@@ -75,6 +74,10 @@
     <style name="App.TextAppearance.Button" parent="TextAppearance.MaterialComponents.Button">
         <item name="fontFamily">@font/fira_sans_condensed_medium</item>
         <item name="android:fontFamily">@font/fira_sans_condensed_medium</item>
+    </style>
+
+    <style name="App.TextAppearance.Tab" parent="App.TextAppearance.Button">
+
     </style>
 
     <style name="App.TextAppearance.Caption" parent="TextAppearance.MaterialComponents.Caption">
