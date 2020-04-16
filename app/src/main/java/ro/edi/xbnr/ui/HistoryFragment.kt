@@ -24,12 +24,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
+import com.github.mikephil.charting.charts.BarLineChartBase
+import com.github.mikephil.charting.charts.CandleStickChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.MarkerImage
@@ -40,6 +41,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.fragment_history.*
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentHistoryBinding
@@ -63,6 +65,8 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
     private lateinit var historyModel: HistoryViewModel
 
+    private val nf = NumberFormat.getNumberInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -82,18 +86,9 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
-
+    private fun initChart(view: View, chart: LineChart) {
         val tfFiraCondensed = ResourcesCompat.getFont(view.context, R.font.fira_sans_condensed)
-        val tfTitilliumWeb = ResourcesCompat.getFont(view.context, R.font.titillium_web)
 
-        val colorPrimary = ContextCompat.getColor(
-            view.context,
-            getColorRes(view.context, R.attr.colorPrimary)
-        )
         val textColorPrimary = ContextCompat.getColor(
             view.context,
             getColorRes(view.context, android.R.attr.textColorPrimary)
@@ -105,12 +100,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
         val textColorTrendUp = ContextCompat.getColor(view.context, R.color.textColorTrendUp)
         val textColorTrendDown = ContextCompat.getColor(view.context, R.color.textColorTrendDown)
 
-        val bkgChart = ContextCompat.getDrawable(view.context, R.drawable.bkg_chart)
-
-        val txtRonSymbol = getString(R.string.symbol_ron)
-
-        val lcHistory = view.findViewById<LineChart>(R.id.history)
-        lcHistory.apply {
+        chart.apply {
             isAutoScaleMinMaxEnabled = true
             isKeepPositionOnRotation = true
             legend.isEnabled = false
@@ -183,147 +173,170 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
             }
             setOnChartValueSelectedListener(clickListener)
         }
+    }
 
-        val tabs = view.findViewById<TabLayout>(R.id.interval)
+    private fun initChart(view: View, chart: CandleStickChart) {
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        nf.roundingMode = RoundingMode.HALF_UP
+        nf.minimumFractionDigits = 4
+        nf.maximumFractionDigits = 4
+
+        initChart(view, chart_lines)
+
         tabs.apply {
-            // FIXME do it in the XML?
-            getTabAt(0)?.tag = 1
-            getTabAt(1)?.tag = 6
-            getTabAt(2)?.tag = 12
-            getTabAt(3)?.tag = 60
-            getTabAt(4)?.tag = 0
-
-            // FIXME if tags set in xml, check by tag
+            val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
             when (sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)) {
                 1 -> selectTab(getTabAt(0))
                 3, 6 -> selectTab(getTabAt(1))
                 12 -> selectTab(getTabAt(2))
                 60 -> selectTab(getTabAt(3))
                 0 -> selectTab(getTabAt(4))
-                else -> selectTab(getTabAt(1))
+                else -> selectTab(getTabAt(0))
             }
 
             clearOnTabSelectedListeners()
             addOnTabSelectedListener(this@HistoryFragment)
         }
 
-        val pbLoading = view.findViewById<ContentLoadingProgressBar>(R.id.loading)
-        val vLoadingContainer = view.findViewById<View>(R.id.loading_container)
-
-        val nf = NumberFormat.getNumberInstance()
-        nf.roundingMode = RoundingMode.HALF_UP
-        nf.minimumFractionDigits = 4
-        nf.maximumFractionDigits = 4
-
-        historyModel.rates.observe(viewLifecycleOwner, Observer
-        { rates ->
+        historyModel.rates.observe(viewLifecycleOwner, Observer { rates ->
             logi("historyModel rates changed")
 
-            lcHistory.visibility = View.GONE
-            pbLoading.show()
-            vLoadingContainer.visibility = View.VISIBLE
-
-            if (rates.isNullOrEmpty()) {
-                return@Observer
-            }
+            hideChart(chart_lines)
 
             val entries = mutableListOf<Entry>()
             rates.forEachIndexed { index, rate ->
                 entries.add(Entry(index.toFloat(), rate.rate.toFloat(), rate))
             }
 
-            val dataSet = LineDataSet(entries, "rates").apply {
-                setDrawCircles(false)
-                setDrawValues(false)
-                setDrawHighlightIndicators(false)
-
-                axisDependency = YAxis.AxisDependency.LEFT
-                mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-
-                lineWidth = 2.0f
-                color = colorPrimary
-                setDrawFilled(true)
-                fillDrawable = bkgChart
-            }
-
-            lcHistory.apply {
-                data = LineData(dataSet)
-                notifyDataSetChanged()
-
-                val llMax = LimitLine(data.yMax, txtRonSymbol.plus(nf.format(data.yMax)))
-                llMax.lineWidth = 1f
-                llMax.lineColor = textColorTrendUp
-                // llMax.enableDashedLine(12f, 18f, 0f)
-                llMax.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
-                llMax.textSize = 16f
-                llMax.textColor = textColorTrendUp
-                tfTitilliumWeb?.let {
-                    llMax.typeface = it
-                }
-
-                val llMin = LimitLine(data.yMin, txtRonSymbol.plus(nf.format(data.yMin)))
-                llMin.lineWidth = 1f
-                llMin.lineColor = textColorTrendDown
-                // llMin.enableDashedLine(12f, 18f, 0f)
-                llMin.labelPosition = LimitLine.LimitLabelPosition.LEFT_BOTTOM
-                llMin.textSize = 16f
-                llMin.textColor = textColorTrendDown
-                tfTitilliumWeb?.let {
-                    llMin.typeface = it
-                }
-
-                axisLeft.removeAllLimitLines()
-
-                val dataX = historyModel.chartHighlight?.let {
-                    var x = -1f
-                    entries.forEachIndexed { _, entry ->
-                        val rate = entry.data as DateRate
-                        if (rate.id == it.id) {
-                            x = entry.x
-                            return@forEachIndexed
-                        }
-                    }
-
-                    if (x < 0) data.xMin else x
-                } ?: data.xMax
-
-                // if (historyModel.chartHighlightX < 0f) data.xMax else historyModel.chartHighlightX,
-                highlightValue(dataX, 0, true)
-
-                if (isResumed) {
-                    if (handler != null) {
-                        handler.post {
-                            axisLeft.addLimitLine(llMax)
-                            axisLeft.addLimitLine(llMin)
-
-                            pbLoading.hide()
-                            vLoadingContainer.visibility = View.GONE
-                            visibility = View.VISIBLE
-                            tabs.visibility = View.VISIBLE
-
-                            invalidate()
-                            // animateX(300, Easing.Linear)
-                        }
-                    }
-                } else {
-                    axisLeft.addLimitLine(llMax)
-                    axisLeft.addLimitLine(llMin)
-
-                    pbLoading.hide()
-                    vLoadingContainer.visibility = View.GONE
-                    visibility = View.VISIBLE
-                    tabs.visibility = View.VISIBLE
-
-                    invalidate()
-                }
-            }
+            updateChart(view, chart_lines, entries)
         })
     }
 
+    private fun updateChart(view: View, chart: LineChart, entries: MutableList<Entry>) {
+        // TODO load these async?
+        ////
+        val tfTitilliumWeb = ResourcesCompat.getFont(view.context, R.font.titillium_web)
+
+        val colorPrimary = ContextCompat.getColor(
+            view.context,
+            getColorRes(view.context, R.attr.colorPrimary)
+        )
+        val textColorTrendUp = ContextCompat.getColor(view.context, R.color.textColorTrendUp)
+        val textColorTrendDown = ContextCompat.getColor(view.context, R.color.textColorTrendDown)
+
+        val bkgChart = ContextCompat.getDrawable(view.context, R.drawable.bkg_chart)
+
+        val txtRonSymbol = getString(R.string.symbol_ron)
+        ////
+
+        val dataSet = LineDataSet(entries, "rates").apply {
+            setDrawCircles(false)
+            setDrawValues(false)
+            setDrawHighlightIndicators(false)
+
+            axisDependency = YAxis.AxisDependency.LEFT
+            mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+
+            lineWidth = 2.0f
+            color = colorPrimary
+            setDrawFilled(true)
+            fillDrawable = bkgChart
+        }
+
+        chart.apply {
+            data = LineData(dataSet)
+            notifyDataSetChanged()
+
+            val llMax = LimitLine(data.yMax, txtRonSymbol.plus(nf.format(data.yMax)))
+            llMax.lineWidth = 1f
+            llMax.lineColor = textColorTrendUp
+            // llMax.enableDashedLine(12f, 18f, 0f)
+            llMax.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
+            llMax.textSize = 16f
+            llMax.textColor = textColorTrendUp
+            tfTitilliumWeb?.let {
+                llMax.typeface = it
+            }
+
+            val llMin = LimitLine(data.yMin, txtRonSymbol.plus(nf.format(data.yMin)))
+            llMin.lineWidth = 1f
+            llMin.lineColor = textColorTrendDown
+            // llMin.enableDashedLine(12f, 18f, 0f)
+            llMin.labelPosition = LimitLine.LimitLabelPosition.LEFT_BOTTOM
+            llMin.textSize = 16f
+            llMin.textColor = textColorTrendDown
+            tfTitilliumWeb?.let {
+                llMin.typeface = it
+            }
+
+            axisLeft.removeAllLimitLines()
+
+            val dataX = historyModel.chartHighlight?.let {
+                var x = -1f
+                entries.forEachIndexed { _, entry ->
+                    val rate = entry.data as DateRate
+                    if (rate.id == it.id) {
+                        x = entry.x
+                        return@forEachIndexed
+                    }
+                }
+
+                if (x < 0) data.xMin else x
+            } ?: data.xMax
+
+            // if (historyModel.chartHighlightX < 0f) data.xMax else historyModel.chartHighlightX,
+            highlightValue(dataX, 0, true)
+
+            if (isResumed) {
+                if (handler != null) {
+                    handler.post {
+                        axisLeft.addLimitLine(llMax)
+                        axisLeft.addLimitLine(llMin)
+
+                        showChart(chart)
+                        // animateX(300, Easing.Linear)
+                    }
+                }
+            } else {
+                axisLeft.addLimitLine(llMax)
+                axisLeft.addLimitLine(llMin)
+
+                showChart(chart)
+            }
+        }
+    }
+
+    private fun showChart(chart: BarLineChartBase<LineData>) {
+        loading.hide()
+        tabs.visibility = View.VISIBLE
+
+        chart.visibility = View.VISIBLE
+        chart.invalidate()
+    }
+
+    private fun hideChart(chart: BarLineChartBase<LineData>) {
+        chart.visibility = View.GONE
+        loading.show()
+    }
+
     override fun onTabSelected(tab: TabLayout.Tab) {
+        val interval = when (tabs.selectedTabPosition) {
+            0 -> 1
+            1 -> 6
+            2 -> 12
+            3 -> 60
+            4 -> 0
+            else -> 1
+        }
+
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(tab.view.context)
         sharedPrefs.edit()
-            .putInt(PREFS_KEY_CHART_INTERVAL, tab.tag as Int)
+            .putInt(PREFS_KEY_CHART_INTERVAL, interval)
             .apply()
     }
 
