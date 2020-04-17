@@ -16,11 +16,11 @@
 package ro.edi.xbnr.ui
 
 import android.content.res.Configuration
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -30,15 +30,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.github.mikephil.charting.charts.BarLineChartBase
-import com.github.mikephil.charting.charts.CandleStickChart
-import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.MarkerImage
 import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.interfaces.datasets.ILineScatterCandleRadarDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_history.*
@@ -50,9 +47,14 @@ import ro.edi.xbnr.ui.viewmodel.HistoryViewModel
 import ro.edi.xbnr.ui.viewmodel.PREFS_KEY_CHART_INTERVAL
 import java.math.RoundingMode
 import java.text.NumberFormat
+import kotlinx.android.synthetic.main.activity_history.currency_date as tvDate
+import kotlinx.android.synthetic.main.activity_history.currency_trend as tvTrend
+import kotlinx.android.synthetic.main.activity_history.currency_value as tvRate
+import kotlinx.android.synthetic.main.fragment_history.chart_candlesticks as chartCandlesticks
+import kotlinx.android.synthetic.main.fragment_history.chart_lines as chartLines
 import timber.log.Timber.i as logi
 
-class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
+class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValueSelectedListener {
     companion object {
         const val ARG_CURRENCY_ID = "ro.edi.xbnr.ui.history.arg_currency_id"
 
@@ -86,19 +88,16 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
         return binding.root
     }
 
-    private fun initChart(view: View, chart: LineChart) {
+    private fun initChart(
+        view: View,
+        chart: BarLineChartBase<BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>>
+    ) {
         val tfFiraCondensed = ResourcesCompat.getFont(view.context, R.font.fira_sans_condensed)
 
-        val textColorPrimary = ContextCompat.getColor(
-            view.context,
-            getColorRes(view.context, android.R.attr.textColorPrimary)
-        )
         val textColorSecondary = ContextCompat.getColor(
             view.context,
             getColorRes(view.context, android.R.attr.textColorSecondary)
         )
-        val textColorTrendUp = ContextCompat.getColor(view.context, R.color.textColorTrendUp)
-        val textColorTrendDown = ContextCompat.getColor(view.context, R.color.textColorTrendDown)
 
         chart.apply {
             isAutoScaleMinMaxEnabled = true
@@ -128,68 +127,36 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
                 setNoDataTextTypeface(it)
             }
 
-            val clickListener = object : OnChartValueSelectedListener {
-                override fun onValueSelected(e: Entry, h: Highlight) {
-                    val rate = e.data as DateRate
-                    historyModel.chartHighlight = rate
-                    show(rate)
-                }
-
-                override fun onNothingSelected() {
-                    historyModel.chartHighlight = null
-                    historyModel.rates.value?.lastOrNull()?.let {
-                        show(it)
-                    }
-                }
-
-                private fun show(rate: DateRate) {
-                    activity?.run {
-                        findViewById<TextView>(R.id.currency_date).text =
-                            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                historyModel.getDisplayDate(rate).replaceFirst(' ', '\n')
-                            } else {
-                                // the date textview in portrait mode is actually in the fragment
-                                historyModel.getDisplayDate(rate)
-                            }
-                        findViewById<TextView>(R.id.currency_value).text =
-                            historyModel.getDisplayRate(rate)
-
-                        val tvTrend = findViewById<TextView>(R.id.currency_trend)
-                        val trend = historyModel.getDisplayTrend(rate)
-
-                        if (trend.isEmpty()) {
-                            tvTrend.visibility = View.GONE
-                        } else {
-                            tvTrend.visibility = View.VISIBLE
-                            tvTrend.text = trend
-                            when {
-                                trend.startsWith('+') -> tvTrend.setTextColor(textColorTrendUp)
-                                trend.startsWith('-') -> tvTrend.setTextColor(textColorTrendDown)
-                                else -> tvTrend.setTextColor(textColorPrimary)
-                            }
-                        }
-                    }
-                }
-            }
-            setOnChartValueSelectedListener(clickListener)
+            setOnChartValueSelectedListener(this@HistoryFragment)
         }
-    }
-
-    private fun initChart(view: View, chart: CandleStickChart) {
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val colorPrimary = ContextCompat.getColor(
+            view.context,
+            getColorRes(view.context, R.attr.colorPrimary)
+        )
+
         nf.roundingMode = RoundingMode.HALF_UP
         nf.minimumFractionDigits = 4
         nf.maximumFractionDigits = 4
 
-        initChart(view, chart_lines)
+        @Suppress("UNCHECKED_CAST")
+        initChart(
+            view,
+            chartLines as BarLineChartBase<BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>>
+        )
+        @Suppress("UNCHECKED_CAST")
+        initChart(
+            view,
+            chartCandlesticks as BarLineChartBase<BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>>
+        )
 
         tabs.apply {
-            val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
             when (sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)) {
                 1 -> selectTab(getTabAt(0))
                 3, 6 -> selectTab(getTabAt(1))
@@ -206,50 +173,146 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
         historyModel.rates.observe(viewLifecycleOwner, Observer { rates ->
             logi("historyModel rates changed")
 
-            hideChart(chart_lines)
+            chartLines.visibility = View.GONE
+            chartCandlesticks.visibility = View.GONE
+            loading.show()
 
-            val entries = mutableListOf<Entry>()
-            rates.forEachIndexed { index, rate ->
-                entries.add(Entry(index.toFloat(), rate.rate.toFloat(), rate))
+            when (sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)) {
+                1, 3, 6, 12 -> {
+                    val bkgChart = ContextCompat.getDrawable(view.context, R.drawable.bkg_chart)
+
+                    val entries = mutableListOf<Entry>()
+                    rates.forEachIndexed { index, rate ->
+                        entries.add(Entry(index.toFloat(), rate.rate.toFloat(), rate))
+                    }
+
+                    val dataSet = LineDataSet(entries, "rates").apply {
+                        setDrawCircles(false)
+                        setDrawValues(false)
+                        setDrawHighlightIndicators(false)
+
+                        axisDependency = YAxis.AxisDependency.LEFT
+                        mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+
+                        lineWidth = 2.0f
+                        color = colorPrimary
+                        setDrawFilled(true)
+                        fillDrawable = bkgChart
+                    }
+
+                    @Suppress("UNCHECKED_CAST")
+                    updateChart(
+                        view,
+                        chartLines as BarLineChartBase<BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>>,
+                        LineData(dataSet) as BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>,
+                        entries
+                    )
+                }
+                60 -> { // 5 years
+                    val entries = mutableListOf<CandleEntry>()
+                    var idx = 0F
+
+                    val bars = rates.groupBy { it.date.subSequence(0, 7) }
+                    bars.forEach { (_, monthRates) ->
+                        val bar = CandleEntry(
+                            idx++,
+                            monthRates.maxBy { it.rate }?.rate?.toFloat() ?: 0F,
+                            monthRates.minBy { it.rate }?.rate?.toFloat() ?: 0F,
+                            monthRates.first().rate.toFloat(),
+                            monthRates.last().rate.toFloat(),
+                            monthRates.last()
+                        )
+                        entries.add(bar)
+                    }
+
+                    val dataSet = CandleDataSet(entries, "rates").apply {
+                        setDrawValues(false)
+                        setDrawHighlightIndicators(false)
+
+                        axisDependency = YAxis.AxisDependency.LEFT
+
+                        shadowColor = colorPrimary
+                        shadowWidth = 2.0f
+                        decreasingColor = colorPrimary
+                        decreasingPaintStyle = Paint.Style.FILL
+                        increasingColor = colorPrimary
+                        increasingPaintStyle = Paint.Style.FILL
+                        neutralColor = colorPrimary
+                    }
+
+                    @Suppress("UNCHECKED_CAST")
+                    updateChart(
+                        view,
+                        chartCandlesticks as BarLineChartBase<BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>>,
+                        CandleData(dataSet) as BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>,
+                        entries as MutableList<Entry>
+                    )
+                }
+                0 -> { // MAX
+                    val entries = mutableListOf<CandleEntry>()
+                    var idx = 0F
+
+                    val bars = rates.groupBy { it.date.subSequence(0, 4) }
+                    bars.forEach { (_, yearRates) ->
+                        val bar = CandleEntry(
+                            idx++,
+                            yearRates.maxBy { it.rate }?.rate?.toFloat() ?: 0F,
+                            yearRates.minBy { it.rate }?.rate?.toFloat() ?: 0F,
+                            yearRates.first().rate.toFloat(),
+                            yearRates.last().rate.toFloat(),
+                            yearRates.last()
+                        )
+                        entries.add(bar)
+                    }
+
+                    val dataSet = CandleDataSet(entries, "rates").apply {
+                        setDrawValues(false)
+                        setDrawHighlightIndicators(false)
+
+                        axisDependency = YAxis.AxisDependency.LEFT
+
+                        shadowColor = colorPrimary
+                        shadowWidth = 2.0f
+                        decreasingColor = colorPrimary
+                        decreasingPaintStyle = Paint.Style.FILL
+                        increasingColor = colorPrimary
+                        increasingPaintStyle = Paint.Style.FILL
+                        neutralColor = colorPrimary
+                    }
+
+                    @Suppress("UNCHECKED_CAST")
+                    updateChart(
+                        view,
+                        chartCandlesticks as BarLineChartBase<BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>>,
+                        CandleData(dataSet) as BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>,
+                        entries as MutableList<Entry>
+                    )
+                }
+                else -> {
+                    // updateChart(view, chartLines, entries)
+                }
             }
-
-            updateChart(view, chart_lines, entries)
         })
     }
 
-    private fun updateChart(view: View, chart: LineChart, entries: MutableList<Entry>) {
+    private fun updateChart(
+        view: View,
+        chart: BarLineChartBase<BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>>,
+        chartData: BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>,
+        entries: MutableList<Entry>
+    ) {
         // TODO load these async?
         ////
         val tfTitilliumWeb = ResourcesCompat.getFont(view.context, R.font.titillium_web)
 
-        val colorPrimary = ContextCompat.getColor(
-            view.context,
-            getColorRes(view.context, R.attr.colorPrimary)
-        )
         val textColorTrendUp = ContextCompat.getColor(view.context, R.color.textColorTrendUp)
         val textColorTrendDown = ContextCompat.getColor(view.context, R.color.textColorTrendDown)
-
-        val bkgChart = ContextCompat.getDrawable(view.context, R.drawable.bkg_chart)
 
         val txtRonSymbol = getString(R.string.symbol_ron)
         ////
 
-        val dataSet = LineDataSet(entries, "rates").apply {
-            setDrawCircles(false)
-            setDrawValues(false)
-            setDrawHighlightIndicators(false)
-
-            axisDependency = YAxis.AxisDependency.LEFT
-            mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-
-            lineWidth = 2.0f
-            color = colorPrimary
-            setDrawFilled(true)
-            fillDrawable = bkgChart
-        }
-
         chart.apply {
-            data = LineData(dataSet)
+            data = chartData
             notifyDataSetChanged()
 
             val llMax = LimitLine(data.yMax, txtRonSymbol.plus(nf.format(data.yMax)))
@@ -298,7 +361,9 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
                         axisLeft.addLimitLine(llMax)
                         axisLeft.addLimitLine(llMin)
 
-                        showChart(chart)
+                        loading.hide()
+                        chart.visibility = View.VISIBLE
+                        chart.invalidate()
                         // animateX(300, Easing.Linear)
                     }
                 }
@@ -306,22 +371,11 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
                 axisLeft.addLimitLine(llMax)
                 axisLeft.addLimitLine(llMin)
 
-                showChart(chart)
+                loading.hide()
+                chart.visibility = View.VISIBLE
+                chart.invalidate()
             }
         }
-    }
-
-    private fun showChart(chart: BarLineChartBase<LineData>) {
-        loading.hide()
-        tabs.visibility = View.VISIBLE
-
-        chart.visibility = View.VISIBLE
-        chart.invalidate()
-    }
-
-    private fun hideChart(chart: BarLineChartBase<LineData>) {
-        chart.visibility = View.GONE
-        loading.show()
     }
 
     override fun onTabSelected(tab: TabLayout.Tab) {
@@ -346,6 +400,60 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
     override fun onTabUnselected(tab: TabLayout.Tab) {
 
+    }
+
+    override fun onValueSelected(e: Entry, h: Highlight) {
+        val rate = e.data as DateRate
+        historyModel.chartHighlight = rate
+        show(rate)
+    }
+
+    override fun onNothingSelected() {
+        historyModel.chartHighlight = null
+        historyModel.rates.value?.lastOrNull()?.let {
+            show(it)
+        }
+    }
+
+    // FIXME show something else when candlesticks chart selected
+    private fun show(rate: DateRate) {
+        activity?.run {
+            tvDate.text =
+                if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    historyModel.getDisplayDate(rate).replaceFirst(' ', '\n')
+                } else {
+                    // the date textview in portrait mode is actually in the fragment
+                    historyModel.getDisplayDate(rate)
+                }
+            tvRate.text = historyModel.getDisplayRate(rate)
+
+            val trend = historyModel.getDisplayTrend(rate)
+            if (trend.isEmpty()) {
+                tvTrend.visibility = View.GONE
+            } else {
+                tvTrend.visibility = View.VISIBLE
+                tvTrend.text = trend
+                when {
+                    trend.startsWith('+') -> {
+                        val textColorTrendUp =
+                            ContextCompat.getColor(this, R.color.textColorTrendUp)
+                        tvTrend.setTextColor(textColorTrendUp)
+                    }
+                    trend.startsWith('-') -> {
+                        val textColorTrendDown =
+                            ContextCompat.getColor(this, R.color.textColorTrendDown)
+                        tvTrend.setTextColor(textColorTrendDown)
+                    }
+                    else -> {
+                        val textColorPrimary = ContextCompat.getColor(
+                            this,
+                            getColorRes(this, android.R.attr.textColorPrimary)
+                        )
+                        tvTrend.setTextColor(textColorPrimary)
+                    }
+                }
+            }
+        }
     }
 
     private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
