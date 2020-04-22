@@ -42,7 +42,7 @@ import kotlinx.android.synthetic.main.fragment_history.*
 import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentHistoryBinding
-import ro.edi.xbnr.model.DateRate
+import ro.edi.xbnr.model.DayRate
 import ro.edi.xbnr.ui.viewmodel.HistoryViewModel
 import ro.edi.xbnr.ui.viewmodel.PREFS_KEY_CHART_INTERVAL
 import java.math.RoundingMode
@@ -182,8 +182,8 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
                     val bkgChart = ContextCompat.getDrawable(view.context, R.drawable.bkg_chart)
 
                     val entries = mutableListOf<Entry>()
-                    rates.forEachIndexed { index, rate ->
-                        entries.add(Entry(index.toFloat(), rate.rate.toFloat(), rate))
+                    rates.forEachIndexed { index, dayRate ->
+                        entries.add(Entry(index.toFloat(), dayRate.rate.toFloat(), dayRate))
                     }
 
                     val dataSet = LineDataSet(entries, "rates").apply {
@@ -342,7 +342,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
             val dataX = historyModel.chartHighlight?.let {
                 var x = -1f
                 entries.forEachIndexed { _, entry ->
-                    val rate = entry.data as DateRate
+                    val rate = entry.data as DayRate
                     if (rate.id == it.id) {
                         x = entry.x
                         return@forEachIndexed
@@ -403,7 +403,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
     }
 
     override fun onValueSelected(e: Entry, h: Highlight) {
-        val rate = e.data as DateRate
+        val rate = e.data as DayRate
         historyModel.chartHighlight = rate
         show(rate)
     }
@@ -416,7 +416,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
     }
 
     // FIXME show something else when candlesticks chart selected
-    private fun show(rate: DateRate) {
+    private fun show(rate: DayRate) {
         activity?.run {
             tvDate.text =
                 if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {

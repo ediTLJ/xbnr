@@ -26,21 +26,21 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 import ro.edi.xbnr.data.DataManager
-import ro.edi.xbnr.model.DateRate
+import ro.edi.xbnr.model.DayRate
 import java.math.RoundingMode
 import java.text.NumberFormat
-import kotlin.math.absoluteValue
+import kotlin.math.abs
 
 const val PREFS_KEY_CHART_INTERVAL = "chart_interval"
 
 class HistoryViewModel(application: Application) : AndroidViewModel(application) {
     private var currencyId = 0
-    var chartHighlight: DateRate? = null
+    var chartHighlight: DayRate? = null
 
     private val monthsCountLiveData = MutableLiveData<Int>()
     private lateinit var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener
 
-    val rates: LiveData<List<DateRate>> by lazy(LazyThreadSafetyMode.NONE) {
+    val rates: LiveData<List<DayRate>> by lazy(LazyThreadSafetyMode.NONE) {
         Transformations.switchMap(monthsCountLiveData) { monthsCount ->
             DataManager.getInstance(getApplication()).getRates(currencyId, monthsCount)
         }
@@ -79,11 +79,11 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         nfPercent.maximumFractionDigits = 2
     }
 
-    fun getDisplayRate(rate: DateRate): String {
+    fun getDisplayRate(rate: DayRate): String {
         return nf.format(rate.rate)
     }
 
-    fun getDisplayTrend(rate: DateRate): String {
+    fun getDisplayTrend(rate: DayRate): String {
         val trend = StringBuilder(16)
 
         rates.value?.let {
@@ -100,7 +100,7 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
             trend.append(nf.format(diff))
             trend.append(' ')
             trend.append('(')
-            trend.append(nfPercent.format(diff.times(100).div(rate.rate).absoluteValue))
+            trend.append(nfPercent.format(abs(diff).times(100).div(rate.rate)))
             trend.append('%')
             trend.append(')')
         }
@@ -108,7 +108,7 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         return trend.toString()
     }
 
-    fun getDisplayDate(rate: DateRate): String {
+    fun getDisplayDate(rate: DayRate): String {
         return LocalDate.parse(rate.date)
             .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
     }

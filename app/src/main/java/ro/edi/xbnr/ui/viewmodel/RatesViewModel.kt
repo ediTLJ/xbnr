@@ -26,14 +26,14 @@ import ro.edi.util.getColorRes
 import ro.edi.xbnr.R
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
-import ro.edi.xbnr.model.CurrencyRate
+import ro.edi.xbnr.model.Rate
 import ro.edi.xbnr.ui.util.Helper
 import java.math.RoundingMode
 import java.text.NumberFormat
 
 class RatesViewModel(application: Application) : AndroidViewModel(application) {
     val fetchingData = DataManager.getInstance(getApplication()).isFetching as LiveData<Boolean>
-    val previousRates: LiveData<List<CurrencyRate>> =
+    val previousRates: LiveData<List<Rate>> =
         DataManager.getInstance(getApplication()).getPreviousRates()
 
     val currencies: LiveData<List<Currency>> by lazy(LazyThreadSafetyMode.NONE) {

@@ -15,9 +15,8 @@
 */
 package ro.edi.xbnr.model
 
-import androidx.room.ColumnInfo
-
-data class CurrencyRate(
-    @ColumnInfo(name = "currency_id") val currencyId: Int,
+data class DayRate(
+    val id: Int,
+    val date: String,
     val rate: Double
 )

@@ -15,8 +15,9 @@
 */
 package ro.edi.xbnr.model
 
-data class DateRate(
-    val id: Int,
-    val date: String,
+import androidx.room.ColumnInfo
+
+data class Rate(
+    @ColumnInfo(name = "currency_id") val currencyId: Int,
     val rate: Double
 )

@@ -31,8 +31,8 @@ import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyMinimal
-import ro.edi.xbnr.model.CurrencyRate
-import ro.edi.xbnr.model.DateRate
+import ro.edi.xbnr.model.Rate
+import ro.edi.xbnr.model.DayRate
 import timber.log.Timber.d as logd
 import timber.log.Timber.e as loge
 import timber.log.Timber.i as logi
@@ -126,7 +126,7 @@ class DataManager private constructor(application: Application) {
     /**
      * Get previous available rates.
      */
-    fun getPreviousRates(): LiveData<List<CurrencyRate>> {
+    fun getPreviousRates(): LiveData<List<Rate>> {
         return db.rateDao().getPreviousRates()
     }
 
@@ -154,7 +154,7 @@ class DataManager private constructor(application: Application) {
         return db.rateDao().getCurrency(currencyId, date)
     }
 
-    fun getRates(currencyId: Int, monthsCount: Int): LiveData<List<DateRate>> {
+    fun getRates(currencyId: Int, monthsCount: Int): LiveData<List<DayRate>> {
         val zoneIdRomania = ZoneId.of("Europe/Bucharest")
         val today = LocalDate.now(zoneIdRomania)
 
