@@ -17,7 +17,6 @@ package ro.edi.xbnr
 
 import android.app.Application
 import androidx.preference.PreferenceManager
-import coil.util.CoilLogger
 import com.jakewharton.threetenabp.AndroidThreeTen
 import ro.edi.util.ReleaseTree
 import ro.edi.xbnr.ui.util.Helper
@@ -39,7 +38,5 @@ class MyApp : Application() {
         Helper.setTheme(theme)
 
         AndroidThreeTen.init(this)
-
-        CoilLogger.setEnabled(BuildConfig.DEBUG)
     }
 }
