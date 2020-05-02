@@ -5,6 +5,7 @@
     <color name="grey">#212321</color>
     <color name="grey_aCC">#CC212321</color>
     <color name="grey_a80">#80212321</color>
+    <color name="grey_a00">#00212321</color>
     <color name="grey_light">#717371</color>
     <color name="grey_light_a33">#33717371</color>
 
@@ -13,11 +14,13 @@
     <color name="white">#F1F3F1</color>
     <color name="white_aCC">#CCF1F3F1</color>
     <color name="white_a80">#80F1F3F1</color>
+    <color name="white_a00">#00F1F3F1</color>
 
     <color name="green_900">#00391E</color>
     <color name="green_800">#005F35</color>
     <color name="green_700">#007D51</color>
     <color name="green_700_a00">#00007D51</color>
+    <color name="green_600">#009C68</color>
     <color name="green_500">#1EB980</color>
     <color name="green_500_a00">#001EB980</color>
     <color name="green_400">#00E5A8</color>

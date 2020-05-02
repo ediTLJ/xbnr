@@ -22,7 +22,7 @@
     <!--<color name="colorControlActivated">@color/green_500</color>-->
     <color name="colorControlHighlight">@color/white_dark_a33</color>
 
-    <color name="colorChartGradientStart">@color/green_500_a00</color>
+    <color name="colorChartGradientStart">@color/white_a00</color>
     <color name="colorChartGradientEnd">@color/green_500</color>
     <color name="colorChartMarker">@color/grey</color>
 
