@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
@@ -12,7 +11,16 @@ android {
         targetSdkVersion 29 // Android 10
         versionCode 14
         versionName '1.5'
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        'room.schemaLocation'  : '$projectDir/schemas'.toString(),
+                        'room.incremental'     : 'true',
+                        'room.expandProjection': 'true']
+            }
+        }
     }
 
     buildTypes {
@@ -36,12 +44,12 @@ android {
     }
 
     dataBinding.enabled = true
-    viewBinding.enabled = true
+    // viewBinding.enabled = true
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = '1.8'
     }
 }
 
@@ -66,7 +74,7 @@ dependencies {
     // Architecture Components: LiveData, ViewModel...
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.2.0'
+    // kapt 'androidx.lifecycle:lifecycle-compiler:2.2.0'
     // kapt 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
