@@ -23,15 +23,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.preference.PreferenceManager
 import com.github.mikephil.charting.data.Entry
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.DayRate
 import ro.edi.xbnr.model.MonthRate
 import ro.edi.xbnr.model.YearRate
 import java.math.RoundingMode
 import java.text.NumberFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import kotlin.math.abs
 
 const val PREFS_KEY_CHART_INTERVAL = "chart_interval"

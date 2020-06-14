@@ -18,15 +18,15 @@ package ro.edi.xbnr.ui.viewmodel
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.*
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyMinimal
 import ro.edi.xbnr.ui.util.Helper
 import java.math.RoundingMode
 import java.text.NumberFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import timber.log.Timber.i as logi
 
 class ConverterViewModel(application: Application) : AndroidViewModel(application) {

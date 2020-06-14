@@ -17,11 +17,11 @@ package ro.edi.xbnr
 
 import android.app.Application
 import androidx.preference.PreferenceManager
-import com.jakewharton.threetenabp.AndroidThreeTen
 import ro.edi.util.ReleaseTree
 import ro.edi.xbnr.ui.util.Helper
 import timber.log.Timber
 
+@Suppress("unused")
 class MyApp : Application() {
 
     override fun onCreate() {
@@ -36,7 +36,5 @@ class MyApp : Application() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val theme = prefs.getString("key_theme", "dark")
         Helper.setTheme(theme)
-
-        AndroidThreeTen.init(this)
     }
 }

@@ -18,11 +18,6 @@ package ro.edi.xbnr.data
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalTime
-import org.threeten.bp.ZoneId
-import org.threeten.bp.format.DateTimeFormatter
 import ro.edi.util.AppExecutors
 import ro.edi.util.Singleton
 import ro.edi.xbnr.data.db.AppDatabase
@@ -30,6 +25,11 @@ import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
 import ro.edi.xbnr.model.*
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import timber.log.Timber.d as logd
 import timber.log.Timber.e as loge
 import timber.log.Timber.i as logi
@@ -89,6 +89,7 @@ class DataManager private constructor(application: Application) {
                 }
 
             // another option would be to use Period.between(latestDate, today)
+            // val period = Period.between(latestDate, today)
 
             // FIXME fetch data if not stored in the db:
             // FIXME - from newest date in the db to now (in case the newest date is older than 1-2 years ago)
@@ -97,7 +98,6 @@ class DataManager private constructor(application: Application) {
 
             // if latestDate == today => all good, don't do anything
             if (latestDate.isBefore(today.minusWeeks(1))) {
-                // add service to fetch data weekly? so we should never reach this
                 fetchRates(today.year)
                 fetchRates(today.year - 1)
             } else if (latestDate.isBefore(previousWorkday)) {
