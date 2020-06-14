@@ -89,7 +89,9 @@
                         android:text="@string/symbol_ron"
                         android:textAppearance="@style/App.TextAppearance.Subtitle.Symbol"
                         android:textColor="?android:attr/textColorSecondary"
-                        tools:ignore="RtlSymmetry" />
+                        android:visibility="invisible"
+                        tools:ignore="RtlSymmetry"
+                        tools:visibility="visible" />
 
                     <TextView
                         android:id="@+id/currency_value"
