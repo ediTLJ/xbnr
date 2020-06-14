@@ -29,10 +29,7 @@ import ro.edi.xbnr.data.db.AppDatabase
 import ro.edi.xbnr.data.db.entity.DbCurrency
 import ro.edi.xbnr.data.db.entity.DbRate
 import ro.edi.xbnr.data.remote.BnrService
-import ro.edi.xbnr.model.Currency
-import ro.edi.xbnr.model.CurrencyMinimal
-import ro.edi.xbnr.model.Rate
-import ro.edi.xbnr.model.DayRate
+import ro.edi.xbnr.model.*
 import timber.log.Timber.d as logd
 import timber.log.Timber.e as loge
 import timber.log.Timber.i as logi
@@ -93,7 +90,11 @@ class DataManager private constructor(application: Application) {
 
             // another option would be to use Period.between(latestDate, today)
 
-            // FIXME what if latest date is older than 1-2 years ago? :)
+            // FIXME fetch data if not stored in the db:
+            // FIXME - from newest date in the db to now (in case the newest date is older than 1-2 years ago)
+            // FIXME - from 2005 to oldest date in the db
+            // FIXME - don't do anything if oldest year in the db is 2005+
+
             // if latestDate == today => all good, don't do anything
             if (latestDate.isBefore(today.minusWeeks(1))) {
                 // add service to fetch data weekly? so we should never reach this
@@ -154,42 +155,36 @@ class DataManager private constructor(application: Application) {
         return db.rateDao().getCurrency(currencyId, date)
     }
 
-    fun getRates(currencyId: Int, monthsCount: Int): LiveData<List<DayRate>> {
+    fun getDayRates(currencyId: Int, monthsCount: Int): LiveData<List<DayRate>> {
         val zoneIdRomania = ZoneId.of("Europe/Bucharest")
         val today = LocalDate.now(zoneIdRomania)
 
         val since = when (monthsCount) {
-            0 -> {
-                // FIXME fetch data if not stored in the db
-                AppExecutors.networkIO().execute {
-                    // isFetching.postValue(true)
-                    // FIXME replace today.year - 1 with oldest year in the db & make sure it's >= 2005
-                    // FIXME don't do anything if oldest year in the db is 2005+
-                    //for (year in 2005 until today.year - 1 - 1) {
-                    //    fetchRates(year)
-                    //}
-                }
-                return db.rateDao().getRates(currencyId)
-            }
-            60 -> {
-                // FIXME fetch data if not stored in the db
-                AppExecutors.networkIO().execute {
-                    // isFetching.postValue(true)
-                    // FIXME replace today.year - 1 with oldest year in the db & make sure it's >= 2005
-                    // FIXME don't do anything if oldest year in the db is (today.year - 1 - 4)+
-                    //fetchRates(today.year - 1 - 4)
-                    //fetchRates(today.year - 1 - 3)
-                    //fetchRates(today.year - 1 - 2)
-                    //etchRates(today.year - 1 - 1)
-                }
-                today.minusYears(5).format(DateTimeFormatter.ISO_LOCAL_DATE)
-            }
             12 -> today.minusYears(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
             1, 6 -> today.minusMonths(monthsCount.toLong()).format(DateTimeFormatter.ISO_LOCAL_DATE)
             else -> today.minusMonths(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
         }
 
-        return db.rateDao().getRates(currencyId, since)
+        return db.rateDao().getDayRates(currencyId, since)
+    }
+
+    fun getMonthRates(currencyId: Int, monthsCount: Int): LiveData<List<MonthRate>> {
+        val zoneIdRomania = ZoneId.of("Europe/Bucharest")
+        val today = LocalDate.now(zoneIdRomania)
+
+        // we only have a 5Y option in the app, so far...
+        val since = when (monthsCount) {
+            60 -> today.minusYears(5).withDayOfMonth(1).minusDays(1)
+                .format(DateTimeFormatter.ISO_LOCAL_DATE)
+            else -> today.minusYears(5).withDayOfMonth(1).minusDays(1)
+                .format(DateTimeFormatter.ISO_LOCAL_DATE)
+        }
+
+        return db.rateDao().getMonthRates(currencyId, since)
+    }
+
+    fun getYearRates(currencyId: Int): LiveData<List<YearRate>> {
+        return db.rateDao().getYearRates(currencyId)
     }
 
     /**

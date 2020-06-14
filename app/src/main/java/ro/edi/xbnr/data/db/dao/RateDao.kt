@@ -20,9 +20,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import ro.edi.xbnr.data.db.entity.DbRate
-import ro.edi.xbnr.model.Currency
-import ro.edi.xbnr.model.Rate
-import ro.edi.xbnr.model.DayRate
+import ro.edi.xbnr.model.*
 
 @Dao
 abstract class RateDao : BaseDao<DbRate> {
@@ -30,6 +28,7 @@ abstract class RateDao : BaseDao<DbRate> {
     @Query("SELECT currency_id, code, multiplier, is_starred, date, rate FROM rates LEFT OUTER JOIN currencies ON rates.currency_id = currencies.id WHERE date = (SELECT max(date) FROM rates) ORDER BY is_starred DESC, code ASC")
     protected abstract fun query(): LiveData<List<Currency>>
 
+    @Transaction
     @Query("SELECT currency_id, rate FROM rates WHERE date = (SELECT max(date) AS date FROM rates WHERE date < (SELECT max(date) FROM rates))")
     protected abstract fun queryPrevious(): LiveData<List<Rate>>
 
@@ -39,14 +38,85 @@ abstract class RateDao : BaseDao<DbRate> {
     @Query("SELECT currency_id, code, multiplier, is_starred, date, rate FROM rates LEFT OUTER JOIN currencies ON rates.currency_id = currencies.id WHERE currency_id = :id AND date = :date")
     protected abstract fun query(id: Int, date: String): LiveData<Currency>
 
+    @Transaction
     @Query("SELECT id, date, rate FROM (SELECT id, date, rate FROM rates WHERE currency_id = :id ORDER BY date DESC LIMIT :count) ORDER BY date ASC")
-    protected abstract fun queryRates(id: Int, count: Int): LiveData<List<DayRate>>
-    
-    @Query("SELECT id, date, rate FROM (SELECT id, date, rate FROM rates WHERE currency_id = :id AND date > :since) ORDER BY date ASC")
-    protected abstract fun queryRates(id: Int, since: String): LiveData<List<DayRate>>
+    protected abstract fun queryDayRates(id: Int, count: Int): LiveData<List<DayRate>>
 
+    @Transaction
+    @Query("SELECT id, date, rate FROM (SELECT id, date, rate FROM rates WHERE currency_id = :id AND date > :since) ORDER BY date ASC")
+    protected abstract fun queryDayRates(id: Int, since: String): LiveData<List<DayRate>>
+
+    @Transaction
     @Query("SELECT id, date, rate FROM (SELECT id, date, rate FROM rates WHERE currency_id = :id) ORDER BY date ASC")
-    protected abstract fun queryRates(id: Int): LiveData<List<DayRate>>
+    protected abstract fun queryDayRates(id: Int): LiveData<List<DayRate>>
+
+    @Transaction
+    @Query(
+        "WITH\n" +
+            "\n" +
+            "q1 AS (SELECT\n" +
+            "  id,\n" +
+            "  strftime('%Y-%m', date) AS month,\n" +
+            "  (SELECT rate FROM rates AS q WHERE q.date = min(rates.date) AND currency_id = :id AND date > :since GROUP BY strftime('%Y-%m', q.date)) AS open,\n" +
+            "  (SELECT rate FROM rates AS q WHERE q.date = max(rates.date) AND currency_id = :id AND date > :since GROUP BY strftime('%Y-%m', q.date)) AS close\n" +
+            "FROM rates WHERE currency_id = :id AND date > :since\n" +
+            "GROUP BY month\n" +
+            "ORDER BY date ASC),\n" +
+            "\n" +
+            "q2 AS (SELECT\n" +
+            "  id,\n" +
+            "  strftime('%Y-%m', date) AS month,\n" +
+            "  min(rate) AS min,\n" +
+            "  max(rate) AS max\n" +
+            "FROM rates WHERE currency_id = :id AND date > :since\n" +
+            "GROUP BY month\n" +
+            "ORDER BY date ASC)\n" +
+            "\n" +
+            "SELECT\n" +
+            "  q1.id,\n" +
+            "  q1.month,\n" +
+            "  q1.open,\n" +
+            "  q1.close,\n" +
+            "  q2.min,\n" +
+            "  q2.max\n" +
+            "FROM q1 JOIN q2 ON q1.month=q2.month\n" +
+            "ORDER BY q1.month ASC"
+    )
+    protected abstract fun queryMonthRates(id: Int, since: String): LiveData<List<MonthRate>>
+
+    @Transaction
+    @Query(
+        "WITH\n" +
+            "\n" +
+            "q1 AS (SELECT\n" +
+            "  id,\n" +
+            "  strftime('%Y', date) AS year,\n" +
+            "  (SELECT rate FROM rates AS q WHERE q.date = min(rates.date) AND currency_id = :id GROUP BY strftime('%Y', q.date)) AS open,\n" +
+            "  (SELECT rate FROM rates AS q WHERE q.date = max(rates.date) AND currency_id = :id GROUP BY strftime('%Y', q.date)) AS close\n" +
+            "FROM rates WHERE currency_id = :id\n" +
+            "GROUP BY year\n" +
+            "ORDER BY date ASC),\n" +
+            "\n" +
+            "q2 AS (SELECT\n" +
+            "  id,\n" +
+            "  strftime('%Y', date) AS year,\n" +
+            "  min(rate) AS min,\n" +
+            "  max(rate) AS max\n" +
+            "FROM rates WHERE currency_id = :id\n" +
+            "GROUP BY year\n" +
+            "ORDER BY date ASC)\n" +
+            "\n" +
+            "SELECT\n" +
+            "  q1.id,\n" +
+            "  q1.year,\n" +
+            "  q1.open,\n" +
+            "  q1.close,\n" +
+            "  q2.min,\n" +
+            "  q2.max\n" +
+            "FROM q1 JOIN q2 ON q1.year=q2.year\n" +
+            "ORDER BY q1.year ASC"
+    )
+    protected abstract fun queryYearRates(id: Int): LiveData<List<YearRate>>
 
     @Query("SELECT max(date) FROM rates")
     abstract fun getLatestDate(): String?
@@ -81,8 +151,8 @@ abstract class RateDao : BaseDao<DbRate> {
      * @param id currency id
      * @param count days count
      */
-    fun getRates(id: Int, count: Int): LiveData<List<DayRate>> =
-        queryRates(id, count).getDistinct()
+    fun getDayRates(id: Int, count: Int): LiveData<List<DayRate>> =
+        queryDayRates(id, count).getDistinct()
 
     /**
      * Get rates since [since] for the specified currency.
@@ -90,16 +160,33 @@ abstract class RateDao : BaseDao<DbRate> {
      * @param id currency id
      * @param since date
      */
-    fun getRates(id: Int, since: String): LiveData<List<DayRate>> =
-        queryRates(id, since).getDistinct()
+    fun getDayRates(id: Int, since: String): LiveData<List<DayRate>> =
+        queryDayRates(id, since).getDistinct()
 
     /**
      * Get all rates for the specified currency.
      *
      * @param id currency id
      */
-    fun getRates(id: Int): LiveData<List<DayRate>> =
-        queryRates(id).getDistinct()
+    fun getDayRates(id: Int): LiveData<List<DayRate>> =
+        queryDayRates(id).getDistinct()
+
+    /**
+     * Get month rates since [since] for the specified currency.
+     *
+     * @param id currency id
+     * @param since date
+     */
+    fun getMonthRates(id: Int, since: String): LiveData<List<MonthRate>> =
+        queryMonthRates(id, since).getDistinct()
+
+    /**
+     * Get all year rates for the specified currency.
+     *
+     * @param id currency id
+     */
+    fun getYearRates(id: Int): LiveData<List<YearRate>> =
+        queryYearRates(id).getDistinct()
 
     @Query("DELETE FROM rates")
     abstract fun deleteAll()

@@ -22,11 +22,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.preference.PreferenceManager
+import com.github.mikephil.charting.data.Entry
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.DayRate
+import ro.edi.xbnr.model.MonthRate
+import ro.edi.xbnr.model.YearRate
 import java.math.RoundingMode
 import java.text.NumberFormat
 import kotlin.math.abs
@@ -35,14 +38,40 @@ const val PREFS_KEY_CHART_INTERVAL = "chart_interval"
 
 class HistoryViewModel(application: Application) : AndroidViewModel(application) {
     private var currencyId = 0
-    var chartHighlight: DayRate? = null
+
+    var highlightedEntry: Entry? = null
 
     private val monthsCountLiveData = MutableLiveData<Int>()
     private lateinit var prefsListener: SharedPreferences.OnSharedPreferenceChangeListener
 
-    val rates: LiveData<List<DayRate>> by lazy(LazyThreadSafetyMode.NONE) {
+    val dayRates: LiveData<List<DayRate>> by lazy(LazyThreadSafetyMode.NONE) {
         Transformations.switchMap(monthsCountLiveData) { monthsCount ->
-            DataManager.getInstance(getApplication()).getRates(currencyId, monthsCount)
+            if (monthsCount == 60 || monthsCount == -1) {
+                // return empty LiveData if 5Y or MAX data requested
+                return@switchMap MutableLiveData<List<DayRate>>()
+            }
+            DataManager.getInstance(getApplication()).getDayRates(currencyId, monthsCount)
+        }
+    }
+
+    val monthRates: LiveData<List<MonthRate>> by lazy(LazyThreadSafetyMode.NONE) {
+        Transformations.switchMap(monthsCountLiveData) { monthsCount ->
+            if (monthsCount != 60) {
+                // return empty LiveData if not 5Y data requested
+                return@switchMap MutableLiveData<List<MonthRate>>()
+            }
+            DataManager.getInstance(getApplication()).getMonthRates(currencyId, monthsCount)
+        }
+    }
+
+    val yearRates: LiveData<List<YearRate>> by lazy(LazyThreadSafetyMode.NONE) {
+        Transformations.switchMap(monthsCountLiveData) { monthsCount ->
+            if (monthsCount != -1) {
+                // return empty LiveData if not MAX data requested
+                return@switchMap MutableLiveData<List<YearRate>>()
+            }
+
+            DataManager.getInstance(getApplication()).getYearRates(currencyId)
         }
     }
 
@@ -79,14 +108,14 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         nfPercent.maximumFractionDigits = 2
     }
 
-    fun getDisplayRate(rate: DayRate): String {
-        return nf.format(rate.rate)
+    fun getDisplayRate(rate: Double): String {
+        return nf.format(rate)
     }
 
     fun getDisplayTrend(rate: DayRate): String {
         val trend = StringBuilder(16)
 
-        rates.value?.let {
+        dayRates.value?.let {
             val idxRate = it.indexOf(rate)
             if (idxRate <= 0) {
                 return@let
@@ -108,8 +137,15 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         return trend.toString()
     }
 
-    fun getDisplayDate(rate: DayRate): String {
-        return LocalDate.parse(rate.date)
+    fun getDisplayDate(date: String): String {
+        return LocalDate.parse(date)
             .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
+    }
+
+    fun getDisplayMonth(month: String): String {
+        // FIXME
+        return month
+        //return YearMonth.parse(month).
+        //    .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
     }
 }
