@@ -31,7 +31,9 @@ const val DB_NAME = "rates.db"
 abstract class AppDatabase : RoomDatabase() {
     companion object : Singleton<AppDatabase, Application>({
         Room.databaseBuilder(it, AppDatabase::class.java, DB_NAME)
-            .fallbackToDestructiveMigration().build()
+            .createFromAsset("database/rates-2020-06-14.db")
+            .fallbackToDestructiveMigration()
+            .build()
     })
 
     abstract fun currencyDao(): CurrencyDao

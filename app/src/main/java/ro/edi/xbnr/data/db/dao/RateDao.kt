@@ -118,6 +118,9 @@ abstract class RateDao : BaseDao<DbRate> {
     )
     protected abstract fun queryYearRates(id: Int): LiveData<List<YearRate>>
 
+    @Query("SELECT min(date) FROM rates")
+    abstract fun getOldestDate(): String?
+
     @Query("SELECT max(date) FROM rates")
     abstract fun getLatestDate(): String?
 

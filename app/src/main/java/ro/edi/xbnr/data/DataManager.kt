@@ -65,59 +65,96 @@ class DataManager private constructor(application: Application) {
         AppExecutors.networkIO().execute {
             isFetching.postValue(true)
 
-            val latestDateString = db.rateDao().getLatestDate()
+            val latestDbDate = LocalDate.parse(db.rateDao().getLatestDate())
+                .also { logi("latest date: %s", it) }
 
             val zoneIdRomania = ZoneId.of("Europe/Bucharest")
             val today = LocalDate.now(zoneIdRomania)
                 .also { logi("today: %s", it) }
 
-            if (latestDateString.isNullOrEmpty()) {
-                logi("no date in the db")
-                fetchRates(today.year)
-                fetchRates(today.year - 1)
-                return@execute
-            }
+            var fetchedCurrentYear = false
 
-            val latestDate = LocalDate.parse(latestDateString)
-                .also { logi("latest date: %s", it) }
+            if (latestDbDate.isBefore(today.minusDays(10))) {
+                logi("latest data is older than 10 days")
 
-            val previousWorkday =
-                if (today.dayOfWeek == DayOfWeek.MONDAY) {
-                    today.minusDays(3)
-                } else {
-                    today.minusDays(1)
+                // we should have taken weekends into accounts and if it's weekend today or if it's Monday before 1pm
+                // but let's keep it like this, so we can avoid any potential gaps
+
+                for (year in latestDbDate.year..today.year) {
+                    isFetching.postValue(true)
+                    fetchRates(year)
                 }
+                fetchedCurrentYear = true
+            } else {
+                val todayDayOfWeek = today.dayOfWeek
+                val previousWorkday =
+                    when (todayDayOfWeek) {
+                        DayOfWeek.MONDAY -> {
+                            today.minusDays(3)
+                        }
+                        DayOfWeek.SUNDAY -> {
+                            today.minusDays(2)
+                        }
+                        else -> {
+                            today.minusDays(1)
+                        }
+                    }
 
-            // another option would be to use Period.between(latestDate, today)
-            // val period = Period.between(latestDate, today)
+                if (latestDbDate.isBefore(previousWorkday)) {
+                    logi("latest data is older than a day")
 
-            // FIXME fetch data if not stored in the db:
-            // FIXME - from newest date in the db to now (in case the newest date is older than 1-2 years ago)
-            // FIXME - from 2005 to oldest date in the db
-            // FIXME - don't do anything if oldest year in the db is 2005+
+                    // if it's weekend today or it's Monday before 1pm, only 1 day needs to be fetched
+                    // but let's grab 10 days, so we can avoid any potential gaps
 
-            // if latestDate == today => all good, don't do anything
-            if (latestDate.isBefore(today.minusWeeks(1))) {
-                fetchRates(today.year)
-                fetchRates(today.year - 1)
-            } else if (latestDate.isBefore(previousWorkday)) {
-                fetchRates(10)
-            } else if (latestDate == previousWorkday) {
-                val now = LocalTime.now(zoneIdRomania)
-                    .also { logi("now: %s", it) }
-                val hour1pm = LocalTime.of(13, 0)
+                    fetchRates(10)
+                } else if (latestDbDate.isEqual(previousWorkday)) {
+                    logi("latest data is from last workday")
 
-                if (now.isAfter(hour1pm)) {
-                    fetchRates(1)
-                } else { // before 1pm
-                    // no rates published yet, no need to do anything
-                    logi("before 1pm => nothing to do")
+                    if (todayDayOfWeek == DayOfWeek.SATURDAY || todayDayOfWeek == DayOfWeek.SUNDAY) {
+                        // no rates published on weekends
+                        logi("weekend => nothing to do")
+                        isFetching.postValue(false)
+                    } else {
+                        val now = LocalTime.now(zoneIdRomania)
+                            .also { logi("now: %s", it) }
+                        val hour1pm = LocalTime.of(13, 0)
+
+                        if (now.isAfter(hour1pm)) {
+                            logi("after 1pm => fetch today's data")
+                            fetchRates(1)
+                        } else {
+                            // no rates published before 1pm
+                            logi("before 1pm => nothing to do")
+                            isFetching.postValue(false)
+                        }
+                    }
+                } else { // today
+                    logi("latest data is from today => nothing to do")
                     isFetching.postValue(false)
                 }
-            } else { // today
-                // all good, don't do anything
-                logi("today => nothing to do")
-                isFetching.postValue(false)
+            }
+
+            // fetch any missing oldest data... we assume there's no data gap, though
+            // this is for older app versions, that didn't have a pre-populated database with 2005-2020 rates
+            val oldestDbDate = LocalDate.parse(db.rateDao().getOldestDate())
+                .also { logi("oldest date: %s", it) }
+            if (oldestDbDate.isAfter(LocalDate.of(2005, 1, 3))) {
+                logi("oldest data is after 2015-01-03")
+
+                // FIXME get the rates stored in assets/database, instead of getting them from the server
+                //   and drop fetchedCurrentYear, we can get the stored rates up to oldestDbDate
+
+                val toYear =
+                    if (oldestDbDate.year == today.year && fetchedCurrentYear) {
+                        oldestDbDate.year - 1
+                    } else {
+                        oldestDbDate.year
+                    }
+
+                for (year in 2005..toYear) {
+                    isFetching.postValue(true)
+                    fetchRates(year)
+                }
             }
         }
 
