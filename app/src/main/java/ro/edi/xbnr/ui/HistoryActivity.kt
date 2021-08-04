@@ -1,5 +1,5 @@
 /*
-* Copyright 2019 Eduard Scarlat
+* Copyright 2019-2021 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import ro.edi.xbnr.R
@@ -34,6 +33,8 @@ class HistoryActivity : AppCompatActivity() {
         const val EXTRA_CURRENCY_ID = "ro.edi.xbnr.ui.history.extra_currency_id"
     }
 
+    lateinit var binding: ActivityHistoryBinding
+
     private val currencyModel: CurrencyViewModel by lazy(LazyThreadSafetyMode.NONE) {
         ViewModelProvider(this, factory).get(CurrencyViewModel::class.java)
     }
@@ -41,10 +42,12 @@ class HistoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding: ActivityHistoryBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_history)
-        binding.lifecycleOwner = this
-        binding.model = currencyModel
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_history)
+
+        binding.apply {
+            lifecycleOwner = this@HistoryActivity
+            model = currencyModel
+        }
 
         initView(binding)
 
@@ -84,7 +87,7 @@ class HistoryActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        currencyModel.currency.observe(this, Observer { currency ->
+        currencyModel.currency.observe(this, { currency ->
             logi("found currency: %s", currency)
             invalidateOptionsMenu()
             binding.invalidateAll()
