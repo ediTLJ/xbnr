@@ -1,5 +1,5 @@
 /*
-* Copyright 2019 Eduard Scarlat
+* Copyright 2019-2021 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -98,16 +98,16 @@ abstract class BaseAdapter<T>(itemCallback: DiffUtil.ItemCallback<T>) :
         override fun onClick(v: View?) {
             v?.let {
                 if (v.id == itemView.id) {
-                    onItemClick(it, adapterPosition)
+                    onItemClick(it, bindingAdapterPosition)
                 } else {
-                    onClick(it, adapterPosition)
+                    onClick(it, bindingAdapterPosition)
                 }
             }
         }
 
         override fun onLongClick(v: View?): Boolean {
             v?.let {
-                return onItemLongClick(it, adapterPosition)
+                return onItemLongClick(it, bindingAdapterPosition)
             }
 
             return false
