@@ -1,5 +1,5 @@
 /*
-* Copyright 2019 Eduard Scarlat
+* Copyright 2019-2021 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
@@ -55,7 +54,11 @@ class ConverterFragment : Fragment() {
     }
 
     private lateinit var converterModel: ConverterViewModel
-    private lateinit var binding: FragmentConverterBinding
+
+    private var _binding: FragmentConverterBinding? = null
+
+    // this property is only valid between onCreateView and onDestroyView
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,11 +70,14 @@ class ConverterFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentConverterBinding.inflate(inflater, container, false).apply {
+    ): View {
+        _binding = FragmentConverterBinding.inflate(inflater, container, false)
+
+        binding.apply {
             lifecycleOwner = viewLifecycleOwner
             model = converterModel
         }
+
         return binding.root
     }
 
@@ -150,29 +156,29 @@ class ConverterFragment : Fragment() {
 //            }
         }
 
-        converterModel.fromCurrency.observe(viewLifecycleOwner, Observer { currency ->
+        converterModel.fromCurrency.observe(viewLifecycleOwner, { currency ->
             logi("converterModel from currency changed: $currency")
 
             if (currency == null) {
-                return@Observer
+                return@observe
             }
         })
 
-        converterModel.toCurrency.observe(viewLifecycleOwner, Observer { currency ->
+        converterModel.toCurrency.observe(viewLifecycleOwner, { currency ->
             logi("converterModel to currency changed: $currency")
 
             if (currency == null) {
-                return@Observer
+                return@observe
             }
         })
 
-        converterModel.currencies.observe(viewLifecycleOwner, Observer { currencies ->
+        converterModel.currencies.observe(viewLifecycleOwner, { currencies ->
             logi("converterModel currencies changed")
 
             binding.invalidateAll()
 
             if (currencies.isNullOrEmpty()) {
-                return@Observer
+                return@observe
             }
 
             // TODO init spinners
@@ -181,6 +187,12 @@ class ConverterFragment : Fragment() {
                 view.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
         })
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+
+        super.onDestroyView()
     }
 
     private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

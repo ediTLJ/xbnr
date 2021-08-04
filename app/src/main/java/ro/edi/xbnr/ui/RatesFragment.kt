@@ -1,5 +1,5 @@
 /*
-* Copyright 2019 Eduard Scarlat
+* Copyright 2019-2021 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,13 +36,17 @@ import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
 import timber.log.Timber.i as logi
 
-
 class RatesFragment : Fragment() {
     companion object {
         fun newInstance() = RatesFragment()
     }
 
     private lateinit var ratesModel: RatesViewModel
+
+    private var _binding: FragmentRatesBinding? = null
+
+    // this property is only valid between onCreateView and onDestroyView
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,11 +58,14 @@ class RatesFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val binding = FragmentRatesBinding.inflate(inflater, container, false).apply {
+    ): View {
+        _binding = FragmentRatesBinding.inflate(inflater, container, false)
+
+        binding.apply {
             lifecycleOwner = viewLifecycleOwner
             model = ratesModel
         }
+
         return binding.root
     }
 
@@ -104,7 +110,7 @@ class RatesFragment : Fragment() {
         val pbLoading = view.findViewById<ContentLoadingProgressBar>(R.id.loading)
         val tvEmpty = view.findViewById<TextView>(R.id.empty)
 
-        ratesModel.fetchingData.observe(viewLifecycleOwner, Observer { fetchingData ->
+        ratesModel.fetchingData.observe(viewLifecycleOwner, { fetchingData ->
             logi("ratesModel fetchingData changed to %b", fetchingData)
 
             if (fetchingData) {
@@ -122,7 +128,7 @@ class RatesFragment : Fragment() {
             }
         })
 
-        ratesModel.currencies.observe(viewLifecycleOwner, Observer { ratesList ->
+        ratesModel.currencies.observe(viewLifecycleOwner, { ratesList ->
             logi("ratesModel currencies changed")
 
             if (ratesList.isEmpty()) {
@@ -167,7 +173,7 @@ class RatesFragment : Fragment() {
             }
         })
 
-        ratesModel.previousRates.observe(viewLifecycleOwner, Observer {
+        ratesModel.previousRates.observe(viewLifecycleOwner, {
             logi("ratesModel previous rates changed")
 
             val payload = mutableSetOf<String>()
@@ -176,5 +182,11 @@ class RatesFragment : Fragment() {
         })
 
         ViewCompat.requestApplyInsets(view)
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+
+        super.onDestroyView()
     }
 }
