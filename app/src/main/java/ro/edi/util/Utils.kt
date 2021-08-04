@@ -24,7 +24,7 @@ import android.widget.ImageView
 import androidx.annotation.AttrRes
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
-import coil.api.load
+import coil.load
 
 /**
  * @return Application's version name from `PackageManager`.
