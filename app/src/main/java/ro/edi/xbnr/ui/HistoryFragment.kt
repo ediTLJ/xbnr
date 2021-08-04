@@ -1,5 +1,5 @@
 /*
-* Copyright 2019 Eduard Scarlat
+* Copyright 2019-2021 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -61,14 +61,14 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
         }
     }
 
+    private val nf = NumberFormat.getNumberInstance()
+
+    private lateinit var historyModel: HistoryViewModel
+
     private var _binding: FragmentHistoryBinding? = null
 
     // this property is only valid between onCreateView and onDestroyView
     private val binding get() = _binding!!
-
-    private val nf = NumberFormat.getNumberInstance()
-
-    private lateinit var historyModel: HistoryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +80,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
         binding.apply {

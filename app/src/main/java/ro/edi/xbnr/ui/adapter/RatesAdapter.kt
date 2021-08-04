@@ -1,5 +1,5 @@
 /*
-* Copyright 2019 Eduard Scarlat
+* Copyright 2019-2021 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
         itemView.context.startActivity(i)
     }
 
-    override fun getClickableViewIds(): IntArray? {
+    override fun getClickableViewIds(): IntArray {
         val ids = IntArray(1)
         ids[0] = R.id.currency_flag
 
