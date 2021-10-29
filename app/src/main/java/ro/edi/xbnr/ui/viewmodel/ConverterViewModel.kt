@@ -27,7 +27,7 @@ import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import timber.log.Timber.i as logi
+import timber.log.Timber.Forest.i as logi
 
 class ConverterViewModel(application: Application) : AndroidViewModel(application) {
     private val fromCurrencyId = MutableLiveData<Int>()

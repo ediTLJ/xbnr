@@ -34,7 +34,7 @@ import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentRatesBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
-import timber.log.Timber.i as logi
+import timber.log.Timber.Forest.i as logi
 
 class RatesFragment : Fragment() {
     companion object {
@@ -51,7 +51,7 @@ class RatesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ratesModel = ViewModelProvider(this).get(RatesViewModel::class.java)
+        ratesModel = ViewModelProvider(this)[RatesViewModel::class.java]
     }
 
     override fun onCreateView(

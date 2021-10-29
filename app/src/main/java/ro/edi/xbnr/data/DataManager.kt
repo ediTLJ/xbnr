@@ -30,9 +30,9 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import timber.log.Timber.d as logd
-import timber.log.Timber.e as loge
-import timber.log.Timber.i as logi
+import timber.log.Timber.Forest.d as logd
+import timber.log.Timber.Forest.e as loge
+import timber.log.Timber.Forest.i as logi
 
 /**
  * This class manages the underlying data.

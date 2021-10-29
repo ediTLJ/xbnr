@@ -48,7 +48,7 @@ import ro.edi.xbnr.ui.viewmodel.HistoryViewModel
 import ro.edi.xbnr.ui.viewmodel.PREFS_KEY_CHART_INTERVAL
 import java.math.RoundingMode
 import java.text.NumberFormat
-import timber.log.Timber.i as logi
+import timber.log.Timber.Forest.i as logi
 
 class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValueSelectedListener {
     companion object {
@@ -73,7 +73,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        historyModel = ViewModelProvider(this, factory).get(HistoryViewModel::class.java)
+        historyModel = ViewModelProvider(this, factory)[HistoryViewModel::class.java]
     }
 
     override fun onCreateView(

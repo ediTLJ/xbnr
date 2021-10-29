@@ -26,7 +26,7 @@ import androidx.lifecycle.ViewModelProvider
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.ActivityHistoryBinding
 import ro.edi.xbnr.ui.viewmodel.CurrencyViewModel
-import timber.log.Timber.i as logi
+import timber.log.Timber.Forest.i as logi
 
 class HistoryActivity : AppCompatActivity() {
     companion object {

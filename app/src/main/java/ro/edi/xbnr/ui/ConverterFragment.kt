@@ -33,7 +33,7 @@ import ro.edi.xbnr.databinding.FragmentConverterBinding
 import ro.edi.xbnr.ui.viewmodel.ConverterViewModel
 import java.math.RoundingMode
 import java.text.NumberFormat
-import timber.log.Timber.i as logi
+import timber.log.Timber.Forest.i as logi
 
 // TODO use BigDecimal? do we need that kind of precision?
 // TODO fractional digits count on some currencies (e.g. Japanese Yen)... see https://en.wikipedia.org/wiki/ISO_4217
@@ -63,7 +63,7 @@ class ConverterFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        converterModel = ViewModelProvider(this, factory).get(ConverterViewModel::class.java)
+        converterModel = ViewModelProvider(this, factory)[ConverterViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -84,11 +84,7 @@ class ConverterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val fromInput = view.findViewById<TextInputLayout>(R.id.from_input)
-        fromInput.requestFocus()
-
-        val fromValue = view.findViewById<TextInputEditText>(R.id.from_value)
-        val toValue = view.findViewById<TextInputEditText>(R.id.to_value)
+        binding.fromInput.requestFocus()
 
         val nf = NumberFormat.getNumberInstance()
         nf.roundingMode =
@@ -98,81 +94,81 @@ class ConverterFragment : Fragment() {
 
         // FIXME auto-format input value (including when deleting separators)
 
-        fromValue.onAfterTextChanged { txtValue ->
-            if (!fromValue.hasFocus()) {
+        binding.fromValue.onAfterTextChanged { txtValue ->
+            if (!binding.fromValue.hasFocus()) {
                 return@onAfterTextChanged
             }
 
             txtValue ?: return@onAfterTextChanged
 
             if (txtValue.isEmpty()) {
-                toValue.setText("")
+                binding.toValue.setText("")
                 return@onAfterTextChanged
             }
 
             val value = nf.parse(txtValue)?.toDouble() ?: 0.0
 
             val result = value * converterModel.getRate()
-            toValue.setText(nf.format(result))
+            binding.toValue.setText(nf.format(result))
 
-//            val txtPrevResult = toValue.text.toString()
+//            val txtPrevResult = binding.toValue.text.toString()
 //            if (txtPrevResult.isEmpty()) {
-//                toValue.setText(nf.format(result))
+//                binding.toValue.setText(nf.format(result))
 //                return@onAfterTextChanged
 //            }
 //
 //            val prevResult = nf.parse(txtPrevResult)?.toDouble() ?: 0.0
 //            if ((prevResult * 100).roundToLong() != (result * 100).roundToLong()) {
-//                toValue.setText(nf.format(result))
+//                binding.toValue.setText(nf.format(result))
 //            }
         }
 
-        toValue.onAfterTextChanged { txtValue ->
-            if (!toValue.hasFocus()) {
+        binding.toValue.onAfterTextChanged { txtValue ->
+            if (!binding.toValue.hasFocus()) {
                 return@onAfterTextChanged
             }
 
             txtValue ?: return@onAfterTextChanged
 
             if (txtValue.isEmpty()) {
-                fromValue.setText("")
+                binding.fromValue.setText("")
                 return@onAfterTextChanged
             }
 
             val value = nf.parse(txtValue)?.toDouble() ?: 0.0
 
             val result = value / converterModel.getRate()
-            fromValue.setText(nf.format(result))
+            binding.fromValue.setText(nf.format(result))
 
-//            val txtPrevResult = fromValue.text.toString()
+//            val txtPrevResult = binding.fromValue.text.toString()
 //            if (txtPrevResult.isEmpty()) {
-//                fromValue.setText(nf.format(result))
+//                binding.fromValue.setText(nf.format(result))
 //                return@onAfterTextChanged
 //            }
 //
 //            val prevResult = nf.parse(txtPrevResult)?.toDouble() ?: 0.0
 //            if ((prevResult * 100).roundToLong() != (result * 100).roundToLong()) {
-//                fromValue.setText(nf.format(result))
+//                binding.fromValue.setText(nf.format(result))
 //            }
         }
 
-        converterModel.fromCurrency.observe(viewLifecycleOwner, { currency ->
+        converterModel.fromCurrency.observe(viewLifecycleOwner) { currency ->
             logi("converterModel from currency changed: $currency")
 
             if (currency == null) {
                 return@observe
             }
-        })
+        }
 
-        converterModel.toCurrency.observe(viewLifecycleOwner, { currency ->
+        converterModel.toCurrency.observe(viewLifecycleOwner) { currency ->
             logi("converterModel to currency changed: $currency")
 
             if (currency == null) {
                 return@observe
             }
-        })
+        }
 
-        converterModel.currencies.observe(viewLifecycleOwner, { currencies ->
+        converterModel.currencies.observe(viewLifecycleOwner) { currencies ->
             logi("converterModel currencies changed")
 
             binding.invalidateAll()
@@ -183,10 +179,10 @@ class ConverterFragment : Fragment() {
 
             // TODO init spinners
 
-            val imm =
-                view.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
-        })
+//            val imm =
+//                view.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+//            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
+        }
     }
 
     override fun onDestroyView() {
