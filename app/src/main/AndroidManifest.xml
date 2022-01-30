@@ -33,7 +33,8 @@
 
         <activity
             android:name=".ui.ConverterActivity"
-            android:parentActivityName=".ui.HistoryActivity" />
+            android:parentActivityName=".ui.HistoryActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
 
         <meta-data
             android:name="preloaded_fonts"
