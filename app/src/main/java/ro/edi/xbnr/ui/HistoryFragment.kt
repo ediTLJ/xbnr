@@ -105,6 +105,10 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
         nf.minimumFractionDigits = 4
         nf.maximumFractionDigits = 4
 
+        // binding.chartLines.visibility = View.GONE
+        // binding.chartCandlesticks.visibility = View.GONE
+        // binding.loading.show()
+
         @Suppress("UNCHECKED_CAST")
         initChart(
             view,
@@ -480,8 +484,14 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
                             historyModel.getDisplayDate(rate.date)
                         }
 
+                    binding.currencyRonMax.visibility = View.GONE
+                    binding.currencyRateMax.visibility = View.GONE
+                    binding.currencyRonMin.visibility = View.GONE
+                    binding.currencyRateMin.visibility = View.GONE
+
                     binding.currencyRon.visibility = View.VISIBLE
-                    binding.currencyValue.text = historyModel.getDisplayRate(rate.rate)
+                    binding.currencyRate.visibility = View.VISIBLE
+                    binding.currencyRate.text = historyModel.getDisplayRate(rate.rate)
 
                     val trend = historyModel.getDisplayTrend(rate)
                     if (trend.isEmpty()) {
@@ -519,16 +529,32 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
                             historyModel.getDisplayMonth(rate.month)
                         }
 
-                    // FIXME show min/max rates
-                    // binding.currencyRon.visibility = View.VISIBLE
-                    // binding.currencyValue.text = historyModel.getDisplayRate(rate.rate)
+                    binding.currencyRon.visibility = View.GONE
+                    binding.currencyRate.visibility = View.GONE
+                    binding.currencyTrend.visibility = View.GONE
+
+                    binding.currencyRonMax.visibility = View.VISIBLE
+                    binding.currencyRateMax.visibility = View.VISIBLE
+                    binding.currencyRonMin.visibility = View.VISIBLE
+                    binding.currencyRateMin.visibility = View.VISIBLE
+
+                    binding.currencyRateMax.text = historyModel.getDisplayRate(rate.max)
+                    binding.currencyRateMin.text = historyModel.getDisplayRate(rate.min)
                 }
                 is YearRate -> {
                     binding.currencyDate.text = rate.year
 
-                    // FIXME show min/max rates
-                    // binding.currencyRon.visibility = View.VISIBLE
-                    // binding.currencyValue.text = historyModel.getDisplayRate(rate.rate)
+                    binding.currencyRon.visibility = View.GONE
+                    binding.currencyRate.visibility = View.GONE
+                    binding.currencyTrend.visibility = View.GONE
+
+                    binding.currencyRonMax.visibility = View.VISIBLE
+                    binding.currencyRateMax.visibility = View.VISIBLE
+                    binding.currencyRonMin.visibility = View.VISIBLE
+                    binding.currencyRateMin.visibility = View.VISIBLE
+
+                    binding.currencyRateMax.text = historyModel.getDisplayRate(rate.max)
+                    binding.currencyRateMin.text = historyModel.getDisplayRate(rate.min)
                 }
             }
         }
