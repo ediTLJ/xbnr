@@ -30,8 +30,11 @@ import ro.edi.xbnr.model.YearRate
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.time.format.TextStyle
+import java.util.*
 import kotlin.math.abs
 
 const val PREFS_KEY_CHART_INTERVAL = "chart_interval"
@@ -143,9 +146,8 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun getDisplayMonth(month: String): String {
-        // FIXME
-        return month
-        //return YearMonth.parse(month).
-        //    .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
+        val yearMonth = YearMonth.parse(month)
+        return yearMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault()).plus(' ')
+            .plus(yearMonth.year)
     }
 }
