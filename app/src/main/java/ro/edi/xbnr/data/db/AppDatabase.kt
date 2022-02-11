@@ -27,11 +27,18 @@ import ro.edi.xbnr.data.db.entity.DbRate
 
 const val DB_NAME = "rates.db"
 
-@Database(entities = [DbCurrency::class, DbRate::class], version = 2, exportSchema = false)
+@Database(
+    entities = [DbCurrency::class, DbRate::class],
+    version = 3
+//    autoMigrations = [
+//        AutoMigration(from = 2, to = 3)
+//    ],
+//    exportSchema = true
+)
 abstract class AppDatabase : RoomDatabase() {
     companion object : Singleton<AppDatabase, Application>({
         Room.databaseBuilder(it, AppDatabase::class.java, DB_NAME)
-            .createFromAsset("database/rates-2020-06-14.db")
+            .createFromAsset("database/rates-v3-2022-02-11.db")
             .fallbackToDestructiveMigration()
             .build()
     })

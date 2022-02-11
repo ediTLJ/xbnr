@@ -65,14 +65,12 @@ class DataManager private constructor(application: Application) {
         AppExecutors.networkIO().execute {
             isFetching.postValue(true)
 
-            val latestDbDate = LocalDate.parse(db.rateDao().getLatestDate())
+            val latestDbDate = LocalDate.parse(db.rateDao().getLatestDate() ?: "2005-03-01")
                 .also { logi("latest date: %s", it) }
 
             val zoneIdRomania = ZoneId.of("Europe/Bucharest")
             val today = LocalDate.now(zoneIdRomania)
                 .also { logi("today: %s", it) }
-
-            var fetchedCurrentYear = false
 
             if (latestDbDate.isBefore(today.minusDays(10))) {
                 logi("latest data is older than 10 days")
@@ -84,7 +82,6 @@ class DataManager private constructor(application: Application) {
                     isFetching.postValue(true)
                     fetchRates(year)
                 }
-                fetchedCurrentYear = true
             } else {
                 val todayDayOfWeek = today.dayOfWeek
                 val previousWorkday =
@@ -131,29 +128,6 @@ class DataManager private constructor(application: Application) {
                 } else { // today
                     logi("latest data is from today => nothing to do")
                     isFetching.postValue(false)
-                }
-            }
-
-            // fetch any missing oldest data... we assume there's no data gap, though
-            // this is for older app versions, that didn't have a pre-populated database with 2005-2020 rates
-            val oldestDbDate = LocalDate.parse(db.rateDao().getOldestDate())
-                .also { logi("oldest date: %s", it) }
-            if (oldestDbDate.isAfter(LocalDate.of(2005, 1, 3))) {
-                logi("oldest data is after 2015-01-03")
-
-                // FIXME get the rates stored in assets/database, instead of getting them from the server
-                //   and drop fetchedCurrentYear, we can get the stored rates up to oldestDbDate
-
-                val toYear =
-                    if (oldestDbDate.year == today.year && fetchedCurrentYear) {
-                        oldestDbDate.year - 1
-                    } else {
-                        oldestDbDate.year
-                    }
-
-                for (year in 2005..toYear) {
-                    isFetching.postValue(true)
-                    fetchRates(year)
                 }
             }
         }
