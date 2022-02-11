@@ -76,15 +76,15 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     // implementation 'androidx.appcompat:appcompat-resources:1.4.1'
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     // Architecture Components: LiveData, ViewModel...
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
-    // kapt 'androidx.lifecycle:lifecycle-compiler:2.4.0'
-    // implementation 'androidx.lifecycle:lifecycle-common-java8:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    // kapt 'androidx.lifecycle:lifecycle-compiler:2.4.1'
+    // implementation 'androidx.lifecycle:lifecycle-common-java8:2.4.1'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
     // Room
@@ -97,7 +97,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.5.0'
 
     // OkHttp
-    implementation platform('com.squareup.okhttp3:okhttp-bom:4.9.2')
+    implementation platform('com.squareup.okhttp3:okhttp-bom:4.9.3')
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
     // implementation 'com.squareup.okio:okio:2.5.0'

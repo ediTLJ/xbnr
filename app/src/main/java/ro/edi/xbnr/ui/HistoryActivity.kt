@@ -36,7 +36,7 @@ class HistoryActivity : AppCompatActivity() {
     lateinit var binding: ActivityHistoryBinding
 
     private val currencyModel: CurrencyViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProvider(this, factory).get(CurrencyViewModel::class.java)
+        ViewModelProvider(this, factory)[CurrencyViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +87,7 @@ class HistoryActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        currencyModel.currency.observe(this, { currency ->
+        currencyModel.currency.observe(this) { currency ->
             logi("found currency: %s", currency)
             invalidateOptionsMenu()
             binding.invalidateAll()
@@ -105,7 +105,7 @@ class HistoryActivity : AppCompatActivity() {
                 i.putExtra(ConverterActivity.EXTRA_CURRENCY_DATE, currency.date)
                 startActivity(i)
             }
-        })
+        }
     }
 
     private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

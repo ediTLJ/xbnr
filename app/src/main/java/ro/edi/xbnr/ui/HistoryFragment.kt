@@ -94,7 +94,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(view.context)
 
         val colorPrimary = ContextCompat.getColor(
             view.context,
@@ -310,7 +310,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
             axisLeft.setDrawLabels(false)
 
             val marker = MarkerImage(context, R.drawable.ic_dot)
-            marker.setOffset(-10f, -10f) // drawable size + line width
+            marker.setOffset(-10f, -10f) // FIXME drawable size * dpi / 2?
             setMarker(marker)
 
             setNoDataText(getString(R.string.no_data_found))
