@@ -377,36 +377,29 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
                     val hRate = it.data
                     when (val rate = entry.data) {
                         is DayRate -> {
-                            x = if (hRate is DayRate && rate.id == hRate.id) {
-                                entry.x
-                            } else {
-                                data.xMax
+                            if (hRate is DayRate && rate.id == hRate.id) {
+                                x = entry.x
+                                return@forEachIndexed
                             }
-                            return@forEachIndexed
                         }
                         is MonthRate -> {
-                            x = if (hRate is MonthRate && rate.id == hRate.id) {
-                                entry.x
-                            } else {
-                                data.xMax
+                            if (hRate is MonthRate && rate.id == hRate.id) {
+                                x = entry.x
+                                return@forEachIndexed
                             }
-                            return@forEachIndexed
                         }
                         is YearRate -> {
-                            x = if (hRate is YearRate && rate.id == hRate.id) {
-                                entry.x
-                            } else {
-                                data.xMax
+                            if (hRate is YearRate && rate.id == hRate.id) {
+                                x = entry.x
+                                return@forEachIndexed
                             }
-                            return@forEachIndexed
                         }
                     }
                 }
 
-                if (x < 0) data.xMin else x
+                if (x < 0) data.xMax else x
             } ?: data.xMax
 
-            // if (historyModel.chartHighlightX < 0f) data.xMax else historyModel.chartHighlightX,
             highlightValue(dataX, 0, true)
 
             if (isResumed) {
@@ -457,11 +450,13 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
     }
 
     override fun onValueSelected(e: Entry, h: Highlight) {
+        // logi("@qqq: onValueSelected: $e")
         historyModel.highlightedEntry = e
         show(e)
     }
 
     override fun onNothingSelected() {
+        // logi("@qqq: onNothingSelected")
         historyModel.highlightedEntry = null
 
         // FIXME select previous
@@ -480,7 +475,6 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
                         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                             historyModel.getDisplayDate(rate.date).replaceFirst(' ', '\n')
                         } else {
-                            // the date textview in portrait mode is actually in the fragment
                             historyModel.getDisplayDate(rate.date)
                         }
 
@@ -525,7 +519,6 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
                         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                             historyModel.getDisplayMonth(rate.month).replaceFirst(' ', '\n')
                         } else {
-                            // the date textview in portrait mode is actually in the fragment
                             historyModel.getDisplayMonth(rate.month)
                         }
 
