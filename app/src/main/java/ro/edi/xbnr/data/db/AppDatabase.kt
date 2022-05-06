@@ -38,7 +38,7 @@ const val DB_NAME = "rates.db"
 abstract class AppDatabase : RoomDatabase() {
     companion object : Singleton<AppDatabase, Application>({
         Room.databaseBuilder(it, AppDatabase::class.java, DB_NAME)
-            .createFromAsset("database/rates-v3-2022-02-11.db")
+            .createFromAsset("database/rates-v3-2022-05-06.db")
             .fallbackToDestructiveMigration()
             .build()
     })
