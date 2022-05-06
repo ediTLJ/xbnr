@@ -110,7 +110,7 @@ class RatesFragment : Fragment() {
         val pbLoading = view.findViewById<ContentLoadingProgressBar>(R.id.loading)
         val tvEmpty = view.findViewById<TextView>(R.id.empty)
 
-        ratesModel.fetchingData.observe(viewLifecycleOwner, { fetchingData ->
+        ratesModel.fetchingData.observe(viewLifecycleOwner) { fetchingData ->
             logi("ratesModel fetchingData changed to %b", fetchingData)
 
             if (fetchingData) {
@@ -126,9 +126,9 @@ class RatesFragment : Fragment() {
                     rvRates.visibility = View.VISIBLE
                 }
             }
-        })
+        }
 
-        ratesModel.currencies.observe(viewLifecycleOwner, { ratesList ->
+        ratesModel.currencies.observe(viewLifecycleOwner) { ratesList ->
             logi("ratesModel currencies changed")
 
             if (ratesList.isEmpty()) {
@@ -171,15 +171,15 @@ class RatesFragment : Fragment() {
                     tvDate.text = txtDate
                 }
             }
-        })
+        }
 
-        ratesModel.previousRates.observe(viewLifecycleOwner, {
+        ratesModel.previousRates.observe(viewLifecycleOwner) {
             logi("ratesModel previous rates changed")
 
             val payload = mutableSetOf<String>()
             payload.add(RatesAdapter.CURRENCY_DATE)
             (rvRates.adapter as RatesAdapter).notifyItemRangeChanged(0, it.size, payload)
-        })
+        }
 
         ViewCompat.requestApplyInsets(view)
     }

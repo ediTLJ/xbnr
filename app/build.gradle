@@ -68,9 +68,9 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     // Kotlin
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-native-mt'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1-native-mt'
 
     // AndroidX
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -88,10 +88,10 @@ dependencies {
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
     // Room
-    implementation 'androidx.room:room-runtime:2.4.1'
-    kapt 'androidx.room:room-compiler:2.4.1'
-    implementation 'androidx.room:room-ktx:2.4.1'
-    testImplementation 'androidx.room:room-testing:2.4.1'
+    implementation 'androidx.room:room-runtime:2.4.2'
+    kapt 'androidx.room:room-compiler:2.4.2'
+    implementation 'androidx.room:room-ktx:2.4.2'
+    testImplementation 'androidx.room:room-testing:2.4.2'
 
     // Material Design
     implementation 'com.google.android.material:material:1.5.0'
