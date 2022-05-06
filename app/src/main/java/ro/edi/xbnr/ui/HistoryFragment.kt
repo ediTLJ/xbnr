@@ -456,21 +456,17 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
     }
 
     override fun onNothingSelected() {
-        // logi("@qqq: onNothingSelected")
         historyModel.highlightedEntry = null
-
-        // FIXME select previous
-        // historyModel.rates.value?.lastOrNull()?.let {
-        //     show(it)
-        // }
+        show(null)
     }
 
-    private fun show(entry: Entry) {
+    private fun show(entry: Entry?) {
         activity ?: return
 
         (activity as HistoryActivity).run {
-            when (val rate = entry.data) {
+            when (val rate = entry?.data) {
                 is DayRate -> {
+                    binding.currencyDate.visibility = View.VISIBLE
                     binding.currencyDate.text =
                         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                             historyModel.getDisplayDate(rate.date).replaceFirst(' ', '\n')
@@ -515,6 +511,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
                     }
                 }
                 is MonthRate -> {
+                    binding.currencyDate.visibility = View.VISIBLE
                     binding.currencyDate.text =
                         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                             historyModel.getDisplayMonth(rate.month).replaceFirst(' ', '\n')
@@ -535,6 +532,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
                     binding.currencyRateMin.text = historyModel.getDisplayRate(rate.min)
                 }
                 is YearRate -> {
+                    binding.currencyDate.visibility = View.VISIBLE
                     binding.currencyDate.text = rate.year
 
                     binding.currencyRon.visibility = View.GONE
@@ -548,6 +546,18 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
 
                     binding.currencyRateMax.text = historyModel.getDisplayRate(rate.max)
                     binding.currencyRateMin.text = historyModel.getDisplayRate(rate.min)
+                }
+                else -> {
+                    binding.currencyDate.visibility = View.INVISIBLE
+
+                    binding.currencyRon.visibility = View.GONE
+                    binding.currencyRate.visibility = View.GONE
+                    binding.currencyTrend.visibility = View.GONE
+
+                    binding.currencyRonMax.visibility = View.GONE
+                    binding.currencyRateMax.visibility = View.GONE
+                    binding.currencyRonMin.visibility = View.GONE
+                    binding.currencyRateMin.visibility = View.GONE
                 }
             }
         }
