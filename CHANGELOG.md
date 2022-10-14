@@ -4,6 +4,9 @@
 
 # Changelog
 
+## v1.7 [Oct 14, 2022]
+* misc fixes & optimizations
+
 ## v1.6 [May 7, 2022]
 * chart: added 5Y & MAX time interval options
 * history: show rate trend vs. previous day

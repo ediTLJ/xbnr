@@ -9,8 +9,8 @@ android {
         applicationId 'ro.edi.xbnr'
         minSdkVersion 24 // Android 7.0
         targetSdkVersion 33 // Android 13
-        versionCode 15
-        versionName '1.6'
+        versionCode 16
+        versionName '1.7'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
         javaCompileOptions {
