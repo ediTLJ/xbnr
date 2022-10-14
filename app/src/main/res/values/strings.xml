@@ -23,7 +23,7 @@
 
     <!-- INFO -->
     <string name="info">xbnr is a simple exchange rates app with a nice &amp; clean UI.
-        \n\nThe app uses data published by NBR (National Bank of Romania) every workday after 1pm EET.
+        \n\nThe app uses data published by NBR (National Bank of Romania) every banking day after 1pm EET.
         \nThis is NOT an official NBR app.
         \n\nThe currency icons are based on country flags designed by Freepik from Flaticon.
         \n\nv%1$s

@@ -21,7 +21,7 @@
 
     <!-- INFO -->
     <string name="info">xbnr este o aplicație de curs valutar, cu o interfață simplă și prietenoasă.
-        \n\nAplicația folosește datele publicate de BNR (Banca Națională a României) în fiecare zi lucrătoare, după ora 1pm EET.
+        \n\nAplicația folosește datele publicate de BNR (Banca Națională a României) în fiecare zi bancară, după ora 1pm EET.
         \nAceasta NU este o aplicație BNR oficială.
         \n\nIcon-urile de țări au fost create de Freepik și preluate de pe Flaticon.
         \n\nv%1$s
