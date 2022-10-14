@@ -37,13 +37,11 @@ class MainActivity : AppCompatActivity() {
 
         val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         if (nightMode == Configuration.UI_MODE_NIGHT_NO) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
-                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
-                            View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                }
+                        View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
             }
         }
 

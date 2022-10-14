@@ -37,6 +37,6 @@
     </style>
 
     <style name="App.Theme" parent="App.Base.Theme">
-
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

@@ -4,7 +4,7 @@
 
     <color name="action_tint">@color/grey</color>
 
-    <color name="colorStatusBar">@color/grey</color>
+    <color name="colorStatusBar">@android:color/transparent</color>
     <color name="colorToolbarBackground">@color/white_aCC</color>
     <color name="colorBackground">@color/white</color>
     <color name="colorNavigationBar">@color/grey_a80</color>
