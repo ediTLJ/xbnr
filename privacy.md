@@ -1,7 +1,3 @@
-layout: page
-title: "xbnr | Privacy Policy"
-permalink: /privacy
-
 ## Privacy Policy
 
 ### Application
