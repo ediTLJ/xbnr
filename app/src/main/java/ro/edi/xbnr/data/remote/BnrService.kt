@@ -25,7 +25,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import ro.edi.xbnr.BuildConfig
 import ro.edi.xbnr.data.remote.model.BnrDays
-import javax.net.ssl.HostnameVerifier
 
 interface BnrService {
     companion object {
@@ -43,7 +42,7 @@ interface BnrService {
                 okBuilder.addInterceptor(logging)
             }
 
-            okBuilder.hostnameVerifier(HostnameVerifier { hostname, _ -> hostname == "www.bnr.ro" })
+            okBuilder.hostnameVerifier { hostname, _ -> hostname == "www.bnr.ro" }
 
             val tikXml = TikXml.Builder()
                 .exceptionOnUnreadXml(false)

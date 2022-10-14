@@ -151,7 +151,7 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         to ?: return ""
 
         // RON date is set to "" in the constructor
-        val date = if (from.date.isEmpty()) to.date else from.date
+        val date = from.date.ifEmpty { to.date }
 
         return LocalDate.parse(date)
             .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))

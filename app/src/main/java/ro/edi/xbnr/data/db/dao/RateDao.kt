@@ -52,69 +52,69 @@ abstract class RateDao : BaseDao<DbRate> {
 
     @Transaction
     @Query(
-        "WITH\n" +
-            "\n" +
-            "q1 AS (SELECT\n" +
-            "  id,\n" +
-            "  strftime('%Y-%m', date) AS month,\n" +
-            "  (SELECT rate FROM rates AS q WHERE q.date = min(rates.date) AND currency_id = :id AND date > :since GROUP BY strftime('%Y-%m', q.date)) AS open,\n" +
-            "  (SELECT rate FROM rates AS q WHERE q.date = max(rates.date) AND currency_id = :id AND date > :since GROUP BY strftime('%Y-%m', q.date)) AS close\n" +
-            "FROM rates WHERE currency_id = :id AND date > :since\n" +
-            "GROUP BY month\n" +
-            "ORDER BY date ASC),\n" +
-            "\n" +
-            "q2 AS (SELECT\n" +
-            "  id,\n" +
-            "  strftime('%Y-%m', date) AS month,\n" +
-            "  min(rate) AS min,\n" +
-            "  max(rate) AS max\n" +
-            "FROM rates WHERE currency_id = :id AND date > :since\n" +
-            "GROUP BY month\n" +
-            "ORDER BY date ASC)\n" +
-            "\n" +
-            "SELECT\n" +
-            "  q1.id,\n" +
-            "  q1.month,\n" +
-            "  q1.open,\n" +
-            "  q1.close,\n" +
-            "  q2.min,\n" +
-            "  q2.max\n" +
-            "FROM q1 JOIN q2 ON q1.month=q2.month\n" +
-            "ORDER BY q1.month ASC"
+        """WITH
+        
+        q1 AS (SELECT
+          id,
+          strftime('%Y-%m', date) AS month,
+          (SELECT rate FROM rates AS q WHERE q.date = min(rates.date) AND currency_id = :id AND date > :since GROUP BY strftime('%Y-%m', q.date)) AS open,
+          (SELECT rate FROM rates AS q WHERE q.date = max(rates.date) AND currency_id = :id AND date > :since GROUP BY strftime('%Y-%m', q.date)) AS close
+        FROM rates WHERE currency_id = :id AND date > :since
+        GROUP BY month
+        ORDER BY date ASC),
+        
+        q2 AS (SELECT
+          id,
+          strftime('%Y-%m', date) AS month,
+          min(rate) AS min,
+          max(rate) AS max
+        FROM rates WHERE currency_id = :id AND date > :since
+        GROUP BY month
+        ORDER BY date ASC)
+        
+        SELECT
+          q1.id,
+          q1.month,
+          q1.open,
+          q1.close,
+          q2.min,
+          q2.max
+        FROM q1 JOIN q2 ON q1.month=q2.month
+        ORDER BY q1.month ASC"""
     )
     protected abstract fun queryMonthRates(id: Int, since: String): LiveData<List<MonthRate>>
 
     @Transaction
     @Query(
-        "WITH\n" +
-            "\n" +
-            "q1 AS (SELECT\n" +
-            "  id,\n" +
-            "  strftime('%Y', date) AS year,\n" +
-            "  (SELECT rate FROM rates AS q WHERE q.date = min(rates.date) AND currency_id = :id GROUP BY strftime('%Y', q.date)) AS open,\n" +
-            "  (SELECT rate FROM rates AS q WHERE q.date = max(rates.date) AND currency_id = :id GROUP BY strftime('%Y', q.date)) AS close\n" +
-            "FROM rates WHERE currency_id = :id\n" +
-            "GROUP BY year\n" +
-            "ORDER BY date ASC),\n" +
-            "\n" +
-            "q2 AS (SELECT\n" +
-            "  id,\n" +
-            "  strftime('%Y', date) AS year,\n" +
-            "  min(rate) AS min,\n" +
-            "  max(rate) AS max\n" +
-            "FROM rates WHERE currency_id = :id\n" +
-            "GROUP BY year\n" +
-            "ORDER BY date ASC)\n" +
-            "\n" +
-            "SELECT\n" +
-            "  q1.id,\n" +
-            "  q1.year,\n" +
-            "  q1.open,\n" +
-            "  q1.close,\n" +
-            "  q2.min,\n" +
-            "  q2.max\n" +
-            "FROM q1 JOIN q2 ON q1.year=q2.year\n" +
-            "ORDER BY q1.year ASC"
+        """WITH
+        
+        q1 AS (SELECT
+          id,
+          strftime('%Y', date) AS year,
+          (SELECT rate FROM rates AS q WHERE q.date = min(rates.date) AND currency_id = :id GROUP BY strftime('%Y', q.date)) AS open,
+          (SELECT rate FROM rates AS q WHERE q.date = max(rates.date) AND currency_id = :id GROUP BY strftime('%Y', q.date)) AS close
+        FROM rates WHERE currency_id = :id
+        GROUP BY year
+        ORDER BY date ASC),
+        
+        q2 AS (SELECT
+          id,
+          strftime('%Y', date) AS year,
+          min(rate) AS min,
+          max(rate) AS max
+        FROM rates WHERE currency_id = :id
+        GROUP BY year
+        ORDER BY date ASC)
+        
+        SELECT
+          q1.id,
+          q1.year,
+          q1.open,
+          q1.close,
+          q2.min,
+          q2.max
+        FROM q1 JOIN q2 ON q1.year=q2.year
+        ORDER BY q1.year ASC"""
     )
     protected abstract fun queryYearRates(id: Int): LiveData<List<YearRate>>
 
