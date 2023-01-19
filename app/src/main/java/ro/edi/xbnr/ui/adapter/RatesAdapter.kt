@@ -1,5 +1,5 @@
 /*
-* Copyright 2019-2021 Eduard Scarlat
+* Copyright 2019-2023 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package ro.edi.xbnr.ui.adapter
 
 import android.content.Intent
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
@@ -75,24 +74,23 @@ class RatesAdapter(private val ratesModel: RatesViewModel) :
             when (it) {
                 CURRENCY_RATE -> b.currencyValue.text = ratesModel.getCurrencyDisplayRate(position)
                 CURRENCY_DATE -> b.currencyValue.setTextColor(
-                    ContextCompat.getColor(
-                        binding.root.context,
-                        ratesModel.getTrendColorRes(binding.root.context, position)
+                    binding.root.context.getColor(
+                        ratesModel.getTrendColorRes(
+                            binding.root.context,
+                            position
+                        )
                     )
                 )
                 CURRENCY_IS_STARRED -> {
                     b.currencyCode.setTextColor(
-                        ContextCompat.getColor(
-                            binding.root.context,
+                        binding.root.context.getColor(
                             ratesModel.getCurrencyTextColorRes(
                                 binding.root.context, position, true
                             )
                         )
                     )
                     b.currencyName.setTextColor(
-                        ContextCompat.getColor(
-                            binding.root.context,
-                            ratesModel.getCurrencyTextColorRes(
+                        binding.root.context.getColor(ratesModel.getCurrencyTextColorRes(
                                 binding.root.context, position, false
                             )
                         )

@@ -1,5 +1,5 @@
 /*
-* Copyright 2019-2021 Eduard Scarlat
+* Copyright 2019-2023 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@ package ro.edi.xbnr.ui
 
 import android.content.res.Configuration
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -96,10 +97,15 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
 
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(view.context)
 
-        val colorPrimary = ContextCompat.getColor(
-            view.context,
-            getColorRes(view.context, R.attr.colorPrimary)
-        )
+        // TODO load this async?
+        val tfTitilliumWeb = ResourcesCompat.getFont(view.context, R.font.titillium_web)
+
+        val txtRonSymbol = getString(R.string.symbol_ron)
+        val textColorTrendUp = view.context.getColor(R.color.textColorTrendUp)
+        val textColorTrendDown = view.context.getColor(R.color.textColorTrendDown)
+
+        val bkgChart = AppCompatResources.getDrawable(view.context, R.drawable.bkg_chart)
+        val colorPrimary = view.context.getColor(getColorRes(view.context, R.attr.colorPrimary))
 
         nf.roundingMode = RoundingMode.HALF_UP
         nf.minimumFractionDigits = 4
@@ -147,8 +153,6 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
             binding.chartCandlesticks.visibility = View.GONE
             binding.loading.show()
 
-            val bkgChart = ContextCompat.getDrawable(view.context, R.drawable.bkg_chart)
-
             val entries = mutableListOf<Entry>()
             rates.forEachIndexed { index, rate ->
                 entries.add(Entry(index.toFloat(), rate.rate.toFloat(), rate))
@@ -170,10 +174,10 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
 
             @Suppress("UNCHECKED_CAST")
             updateChart(
-                view,
                 binding.chartLines as BarLineChartBase<BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>>,
                 LineData(dataSet) as BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>,
-                entries
+                entries,
+                tfTitilliumWeb, txtRonSymbol, textColorTrendUp, textColorTrendDown
             )
         })
 
@@ -220,10 +224,10 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
 
             @Suppress("UNCHECKED_CAST")
             updateChart(
-                view,
                 binding.chartCandlesticks as BarLineChartBase<BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>>,
                 CandleData(dataSet) as BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>,
-                entries as MutableList<Entry>
+                entries as MutableList<Entry>,
+                tfTitilliumWeb, txtRonSymbol, textColorTrendUp, textColorTrendDown
             )
         })
 
@@ -270,10 +274,10 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
 
             @Suppress("UNCHECKED_CAST")
             updateChart(
-                view,
                 binding.chartCandlesticks as BarLineChartBase<BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>>,
                 CandleData(dataSet) as BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>,
-                entries as MutableList<Entry>
+                entries as MutableList<Entry>,
+                tfTitilliumWeb, txtRonSymbol, textColorTrendUp, textColorTrendDown
             )
         })
     }
@@ -290,8 +294,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
     ) {
         val tfFiraCondensed = ResourcesCompat.getFont(view.context, R.font.fira_sans_condensed)
 
-        val textColorSecondary = ContextCompat.getColor(
-            view.context,
+        val textColorSecondary = view.context.getColor(
             getColorRes(view.context, android.R.attr.textColorSecondary)
         )
 
@@ -328,21 +331,14 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
     }
 
     private fun updateChart(
-        view: View,
         chart: BarLineChartBase<BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>>,
         chartData: BarLineScatterCandleBubbleData<ILineScatterCandleRadarDataSet<Entry>>,
-        entries: MutableList<Entry>
+        entries: MutableList<Entry>,
+        tfTitilliumWeb: Typeface?,
+        txtRonSymbol: String,
+        textColorTrendUp: Int,
+        textColorTrendDown: Int
     ) {
-        // TODO load these async?
-        ////
-        val tfTitilliumWeb = ResourcesCompat.getFont(view.context, R.font.titillium_web)
-
-        val textColorTrendUp = ContextCompat.getColor(view.context, R.color.textColorTrendUp)
-        val textColorTrendDown = ContextCompat.getColor(view.context, R.color.textColorTrendDown)
-
-        val txtRonSymbol = getString(R.string.symbol_ron)
-        ////
-
         chart.apply {
             data = chartData
             notifyDataSetChanged()
@@ -491,20 +487,16 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
                         binding.currencyTrend.text = trend
                         when {
                             trend.startsWith('+') -> {
-                                val textColorTrendUp =
-                                    ContextCompat.getColor(this, R.color.textColorTrendUp)
+                                val textColorTrendUp = getColor(R.color.textColorTrendUp)
                                 binding.currencyTrend.setTextColor(textColorTrendUp)
                             }
                             trend.startsWith('-') -> {
-                                val textColorTrendDown =
-                                    ContextCompat.getColor(this, R.color.textColorTrendDown)
+                                val textColorTrendDown = getColor(R.color.textColorTrendDown)
                                 binding.currencyTrend.setTextColor(textColorTrendDown)
                             }
                             else -> {
-                                val textColorPrimary = ContextCompat.getColor(
-                                    this,
-                                    getColorRes(this, android.R.attr.textColorPrimary)
-                                )
+                                val textColorPrimary =
+                                    getColor(getColorRes(this, android.R.attr.textColorPrimary))
                                 binding.currencyTrend.setTextColor(textColorPrimary)
                             }
                         }

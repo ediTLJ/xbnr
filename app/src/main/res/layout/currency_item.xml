@@ -7,10 +7,6 @@
 
     <data>
 
-        <import type="androidx.core.content.ContextCompat" />
-
-        <import type="ro.edi.util.UtilsKt" />
-
         <variable
             name="position"
             type="int" />
@@ -65,7 +61,7 @@
                 android:lines="1"
                 android:text="@{model.getCurrencyDisplayCode(position)}"
                 android:textAppearance="@style/App.TextAppearance.Title"
-                android:textColor="@{ContextCompat.getColor(context, model.getCurrencyTextColorRes(context, position, true))}"
+                android:textColor="@{context.getColor(model.getCurrencyTextColorRes(context, position, true))}"
                 tools:text="@sample/rates.json/data/code" />
 
             <TextView
@@ -75,7 +71,7 @@
                 android:lines="1"
                 android:text="@{model.getCurrencyNameRes(position)}"
                 android:textAppearance="@style/App.TextAppearance.Body2"
-                android:textColor="@{ContextCompat.getColor(context, model.getCurrencyTextColorRes(context, position, false))}"
+                android:textColor="@{context.getColor(model.getCurrencyTextColorRes(context, position, false))}"
                 tools:text="@sample/rates.json/data/name" />
         </LinearLayout>
 
@@ -101,7 +97,7 @@
             android:lines="1"
             android:text="@{model.getCurrencyDisplayRate(position)}"
             android:textAppearance="@style/App.TextAppearance.Subtitle"
-            android:textColor="@{ContextCompat.getColor(context, model.getTrendColorRes(context, position))}"
+            android:textColor="@{context.getColor(model.getTrendColorRes(context, position))}"
             tools:text="@sample/rates.json/data/value" />
     </RelativeLayout>
 </layout>

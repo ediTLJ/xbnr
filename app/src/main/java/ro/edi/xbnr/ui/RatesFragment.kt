@@ -1,5 +1,5 @@
 /*
-* Copyright 2019-2021 Eduard Scarlat
+* Copyright 2019-2023 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.ContentLoadingProgressBar
@@ -98,14 +97,9 @@ class RatesFragment : Fragment() {
             }
         }
 
-        val colorPrimary = ContextCompat.getColor(
-            view.context,
-            getColorRes(view.context, R.attr.colorPrimary)
-        )
-        val textColorSecondary = ContextCompat.getColor(
-            view.context,
-            getColorRes(view.context, android.R.attr.textColorSecondary)
-        )
+        val colorPrimary = view.context.getColor(getColorRes(view.context, R.attr.colorPrimary))
+        val textColorSecondary =
+            view.context.getColor(getColorRes(view.context, android.R.attr.textColorSecondary))
 
         val pbLoading = view.findViewById<ContentLoadingProgressBar>(R.id.loading)
         val tvEmpty = view.findViewById<TextView>(R.id.empty)
@@ -161,7 +155,7 @@ class RatesFragment : Fragment() {
 
                     val txtDate = ratesModel.getCurrencyDisplayDate(0)
 
-                    // TODO make it green if these are the latest rates?
+                    // FIXME make it green if these are the latest rates?
                     if (tvDate.text.isNullOrEmpty() || tvDate.text == txtDate) {
                         tvDate.setTextColor(textColorSecondary)
                     } else {
