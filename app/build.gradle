@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId 'ro.edi.xbnr'
-        minSdkVersion 24 // Android 7.0
+        minSdkVersion 28 // Android 9
         targetSdkVersion 33 // Android 13
         versionCode 16
         versionName '1.7'
@@ -65,17 +65,17 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Java 8+ API desugaring
+    // Java 8+ API de-sugaring
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 
     // Kotlin
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.21'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
     // AndroidX
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    // implementation 'androidx.appcompat:appcompat-resources:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    // implementation 'androidx.appcompat:appcompat-resources:1.6.0'
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
@@ -89,13 +89,13 @@ dependencies {
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
     // Room
-    implementation 'androidx.room:room-runtime:2.4.3'
-    kapt 'androidx.room:room-compiler:2.4.3'
-    implementation 'androidx.room:room-ktx:2.4.3'
-    testImplementation 'androidx.room:room-testing:2.4.3'
+    implementation 'androidx.room:room-runtime:2.5.0'
+    kapt 'androidx.room:room-compiler:2.5.0'
+    implementation 'androidx.room:room-ktx:2.5.0'
+    testImplementation 'androidx.room:room-testing:2.5.0'
 
     // Material Design
-    implementation 'com.google.android.material:material:1.7.0-rc01'
+    implementation 'com.google.android.material:material:1.8.0-rc01'
 
     // OkHttp
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.10'
@@ -121,9 +121,9 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     // testing dependencies
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
     testImplementation 'junit:junit:4.13.2'
 }

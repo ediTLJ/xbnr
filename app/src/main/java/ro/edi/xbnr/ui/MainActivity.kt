@@ -17,7 +17,6 @@ package ro.edi.xbnr.ui
 
 import android.content.Intent
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -39,10 +38,8 @@ class MainActivity : AppCompatActivity() {
         if (nightMode == Configuration.UI_MODE_NIGHT_NO) {
             window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
                     View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
-                        View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-            }
+            window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
+                    View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
 
         setContentView(R.layout.activity_main)

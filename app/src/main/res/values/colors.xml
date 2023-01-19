@@ -7,7 +7,7 @@
     <color name="colorStatusBar">@android:color/transparent</color>
     <color name="colorToolbarBackground">@color/white_aCC</color>
     <color name="colorBackground">@color/white</color>
-    <color name="colorNavigationBar">@color/grey_a80</color>
+    <color name="colorNavigationBar">@color/white_a80</color>
 
     <color name="colorPrimary">@color/green_700</color>
     <color name="colorPrimaryVariant">@color/green_500</color>
