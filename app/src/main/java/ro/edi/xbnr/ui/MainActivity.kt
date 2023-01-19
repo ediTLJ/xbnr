@@ -1,5 +1,5 @@
 /*
-* Copyright 2019-2021 Eduard Scarlat
+* Copyright 2019-2023 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -20,9 +20,8 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.ViewCompat
-import androidx.core.view.updateLayoutParams
+import com.google.android.material.appbar.MaterialToolbar
+import ro.edi.util.applyWindowInsetsMargins
 import ro.edi.xbnr.R
 
 class MainActivity : AppCompatActivity() {
@@ -70,24 +69,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        ViewCompat.setOnApplyWindowInsetsListener(toolbar) { _, insets ->
-            toolbar.setMargins(
-                insets.systemWindowInsetTop,
-                insets.systemWindowInsetLeft,
-                insets.systemWindowInsetRight
-            )
-            insets
-        }
+        toolbar.applyWindowInsetsMargins(
+            applyLeft = true,
+            applyTop = true,
+            applyRight = true,
+            applyBottom = false
+        )
     }
-
-    private fun View.setMargins(topValue: Int, leftValue: Int, rightValue: Int) =
-        updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            topMargin = topValue
-            leftMargin = leftValue
-            rightMargin = rightValue
-        }
 }

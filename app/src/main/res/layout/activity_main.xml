@@ -20,7 +20,7 @@
         app:liftOnScroll="true"
         app:liftOnScrollTargetViewId="@id/rates">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize">
@@ -49,6 +49,6 @@
                 android:textSize="16dp"
                 tools:ignore="SpUsage"
                 tools:text="Apr 8, 2019" />
-        </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
