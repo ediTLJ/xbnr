@@ -19,16 +19,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
-import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ro.edi.util.getColorRes
+import ro.edi.util.setMargins
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentRatesBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
@@ -70,27 +71,44 @@ class RatesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // logi("onViewCreated: %s", savedInstanceState)
+        // logi("onViewCreated: $savedInstanceState")
 
-        val rvRates = view.findViewById<RecyclerView>(R.id.rates)
+        binding.refresh.apply {
+            // FIXME find a better way
+            activity?.let {
+                val toolbar = it.findViewById<Toolbar>(R.id.toolbar)
 
-        activity?.apply {
-            val toolbar = findViewById<Toolbar>(R.id.toolbar)
+                // FIXME temp
+                binding.refresh.setProgressViewEndTarget(
+                    true,
+                    (2.5 * toolbar.layoutParams.height).toInt()
+                )
+            }
 
-            rvRates.apply {
-                ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
-                    updatePadding(
-                        insets.systemWindowInsetLeft,
-                        toolbar.layoutParams.height + insets.systemWindowInsetTop,
-                        insets.systemWindowInsetRight,
-                        insets.systemWindowInsetBottom
-                    )
-                    insets
-                }
+            setColorSchemeResources(getColorRes(view.context, R.attr.colorPrimaryVariant))
+            setOnRefreshListener {
+                ratesModel.refresh()
             }
         }
 
-        rvRates.apply {
+        binding.rates.apply {
+            // FIXME find a better way?
+            activity?.let {
+                val toolbar = it.findViewById<Toolbar>(R.id.toolbar)
+
+                binding.rates.apply {
+                    ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
+                        updatePadding(
+                            insets.systemWindowInsetLeft,
+                            toolbar.layoutParams.height + insets.systemWindowInsetTop,
+                            insets.systemWindowInsetRight,
+                            insets.systemWindowInsetBottom
+                        )
+                        insets
+                    }
+                }
+            }
+
             setHasFixedSize(true)
             adapter = RatesAdapter(ratesModel).apply {
                 setHasStableIds(true)
@@ -101,23 +119,22 @@ class RatesFragment : Fragment() {
         val textColorSecondary =
             view.context.getColor(getColorRes(view.context, android.R.attr.textColorSecondary))
 
-        val pbLoading = view.findViewById<ContentLoadingProgressBar>(R.id.loading)
-        val tvEmpty = view.findViewById<TextView>(R.id.empty)
+        ratesModel.isFetching.observe(viewLifecycleOwner) { isFetching ->
+            logi("ratesModel isFetching changed to $isFetching")
 
-        ratesModel.fetchingData.observe(viewLifecycleOwner) { fetchingData ->
-            logi("ratesModel fetchingData changed to %b", fetchingData)
-
-            if (fetchingData) {
-                pbLoading.show()
-            } else if (pbLoading.isShown) {
-                pbLoading.hide()
+            if (isFetching) {
+                binding.refresh.isRefreshing = true
+            } else { // else if (binding.refresh.isShown)
+                binding.refresh.isRefreshing = false
 
                 if (ratesModel.currencies.value.isNullOrEmpty()) {
-                    tvEmpty.visibility = View.VISIBLE
-                    rvRates.visibility = View.GONE
+                    logi("no currencies => show empty message")
+                    binding.empty.visibility = View.VISIBLE
+                    binding.rates.visibility = View.GONE
                 } else {
-                    tvEmpty.visibility = View.GONE
-                    rvRates.visibility = View.VISIBLE
+                    logi("we have currencies! => show them")
+                    binding.empty.visibility = View.GONE
+                    binding.rates.visibility = View.VISIBLE
                 }
             }
         }
@@ -126,43 +143,43 @@ class RatesFragment : Fragment() {
             logi("ratesModel currencies changed")
 
             if (ratesList.isEmpty()) {
-                tvEmpty.visibility =
-                    if (ratesModel.fetchingData.value == false) View.VISIBLE else View.GONE
-                rvRates.visibility = View.GONE
+                binding.empty.visibility =
+                    if (ratesModel.isFetching.value == false) View.VISIBLE else View.GONE
+                binding.rates.visibility = View.GONE
             } else {
-                pbLoading.hide()
-                tvEmpty.visibility = View.GONE
-                rvRates.visibility = View.VISIBLE
+                binding.empty.visibility = View.GONE
+                binding.rates.visibility = View.VISIBLE
 
-                val layoutManager = rvRates.layoutManager as LinearLayoutManager
-                val firstVisible = layoutManager.findFirstVisibleItemPosition()
-                val offset = (layoutManager.findViewByPosition(firstVisible)?.top
-                    ?: 0) - layoutManager.paddingTop
+                val rvAdapter = binding.rates.adapter as RatesAdapter
+                val llManager = binding.rates.layoutManager as LinearLayoutManager
+                val firstVisible = llManager.findFirstVisibleItemPosition()
+                val offset =
+                    (llManager.findViewByPosition(firstVisible)?.top ?: 0) - llManager.paddingTop
 
-                (rvRates.adapter as RatesAdapter).submitList(ratesList) {
+                rvAdapter.submitList(ratesList) {
                     if (firstVisible != RecyclerView.NO_POSITION) {
-                        layoutManager.scrollToPositionWithOffset(
+                        llManager.scrollToPositionWithOffset(
                             firstVisible,
                             offset
                         )
 
                         ViewCompat.requestApplyInsets(view)
                     }
-                }
 
-                activity?.apply {
-                    val tvDate = findViewById<TextView>(R.id.toolbar_date)
+                    activity?.let {
+                        val tvDate = it.findViewById<TextView>(R.id.toolbar_date)
 
-                    val txtDate = ratesModel.getCurrencyDisplayDate(0)
+                        val txtDate = ratesModel.getCurrencyDisplayDate(0)
 
-                    // FIXME make it green if these are the latest rates?
-                    if (tvDate.text.isNullOrEmpty() || tvDate.text == txtDate) {
-                        tvDate.setTextColor(textColorSecondary)
-                    } else {
-                        tvDate.setTextColor(colorPrimary)
+                        // FIXME make it green if these are the latest rates?
+                        if (tvDate.text.isNullOrEmpty() || tvDate.text == txtDate) {
+                            tvDate.setTextColor(textColorSecondary)
+                        } else {
+                            tvDate.setTextColor(colorPrimary)
+                        }
+
+                        tvDate.text = txtDate
                     }
-
-                    tvDate.text = txtDate
                 }
             }
         }
@@ -172,7 +189,9 @@ class RatesFragment : Fragment() {
 
             val payload = mutableSetOf<String>()
             payload.add(RatesAdapter.CURRENCY_DATE)
-            (rvRates.adapter as RatesAdapter).notifyItemRangeChanged(0, it.size, payload)
+
+            val rvAdapter = binding.rates.adapter as RatesAdapter
+            rvAdapter.notifyItemRangeChanged(0, it.size, payload)
         }
 
         ViewCompat.requestApplyInsets(view)

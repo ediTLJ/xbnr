@@ -1,5 +1,5 @@
 /*
-* Copyright 2019 Eduard Scarlat
+* Copyright 2019-2023 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 class RatesViewModel(application: Application) : AndroidViewModel(application) {
-    val fetchingData = DataManager.getInstance(getApplication()).isFetching as LiveData<Boolean>
+    val isFetching = DataManager.getInstance(getApplication()).isFetching as LiveData<Boolean>
     val previousRates: LiveData<List<Rate>> =
         DataManager.getInstance(getApplication()).getPreviousRates()
 
@@ -46,6 +46,10 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         nf.roundingMode = RoundingMode.HALF_UP
         nf.minimumFractionDigits = 4
         nf.maximumFractionDigits = 4
+    }
+
+    fun refresh() {
+        DataManager.getInstance(getApplication()).getRates()
     }
 
     fun getCurrency(position: Int): Currency? {
