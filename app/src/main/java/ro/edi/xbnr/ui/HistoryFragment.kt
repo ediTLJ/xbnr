@@ -22,13 +22,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.github.mikephil.charting.charts.BarLineChartBase
 import com.github.mikephil.charting.components.LimitLine
@@ -46,14 +44,13 @@ import ro.edi.xbnr.model.DayRate
 import ro.edi.xbnr.model.MonthRate
 import ro.edi.xbnr.model.YearRate
 import ro.edi.xbnr.ui.viewmodel.HistoryViewModel
-import ro.edi.xbnr.ui.viewmodel.PREFS_KEY_CHART_INTERVAL
 import java.math.RoundingMode
 import java.text.NumberFormat
 import timber.log.Timber.Forest.i as logi
 
 class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValueSelectedListener {
     companion object {
-        const val ARG_CURRENCY_ID = "ro.edi.xbnr.ui.history.arg_currency_id"
+        private const val ARG_CURRENCY_ID = "ro.edi.xbnr.ui.history.arg_currency_id"
 
         fun newInstance(currencyId: Int) = HistoryFragment().apply {
             arguments = Bundle().apply {
@@ -64,24 +61,20 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
 
     private val nf = NumberFormat.getNumberInstance()
 
-    private lateinit var historyModel: HistoryViewModel
+    private val historyModel: HistoryViewModel by viewModels { HistoryViewModel.FACTORY }
 
     private var _binding: FragmentHistoryBinding? = null
 
     // this property is only valid between onCreateView and onDestroyView
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        historyModel = ViewModelProvider(this, factory)[HistoryViewModel::class.java]
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        historyModel.currencyId = arguments?.getInt(ARG_CURRENCY_ID, 0) ?: 0
+
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
         binding.apply {
@@ -127,7 +120,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
         )
 
         binding.tabs.apply {
-            when (sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)) {
+            when (sharedPrefs.getInt(HistoryViewModel.PREFS_KEY_CHART_INTERVAL, 1)) {
                 1 -> selectTab(getTabAt(0))
                 3, 6 -> selectTab(getTabAt(1))
                 12 -> selectTab(getTabAt(2))
@@ -143,7 +136,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
         historyModel.dayRates.observe(viewLifecycleOwner, Observer { rates ->
             logi("historyModel day rates changed")
 
-            val monthsCount = sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)
+            val monthsCount = sharedPrefs.getInt(HistoryViewModel.PREFS_KEY_CHART_INTERVAL, 1)
             if (monthsCount == 60 || monthsCount == -1) {
                 // do nothing if 5Y or MAX selected
                 return@Observer
@@ -184,7 +177,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
         historyModel.monthRates.observe(viewLifecycleOwner, Observer { rates ->
             logi("historyModel month rates changed")
 
-            val monthsCount = sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)
+            val monthsCount = sharedPrefs.getInt(HistoryViewModel.PREFS_KEY_CHART_INTERVAL, 1)
             if (monthsCount != 60) {
                 // do nothing if 5Y not selected
                 return@Observer
@@ -234,7 +227,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
         historyModel.yearRates.observe(viewLifecycleOwner, Observer { rates ->
             logi("historyModel year rates changed")
 
-            val monthsCount = sharedPrefs.getInt(PREFS_KEY_CHART_INTERVAL, 1)
+            val monthsCount = sharedPrefs.getInt(HistoryViewModel.PREFS_KEY_CHART_INTERVAL, 1)
             if (monthsCount != -1) {
                 // do nothing if not MAX selected
                 return@Observer
@@ -433,7 +426,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
 
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(tab.view.context)
         sharedPrefs.edit()
-            .putInt(PREFS_KEY_CHART_INTERVAL, interval)
+            .putInt(HistoryViewModel.PREFS_KEY_CHART_INTERVAL, interval)
             .apply()
     }
 
@@ -552,16 +545,6 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
                     binding.currencyRateMin.visibility = View.GONE
                 }
             }
-        }
-    }
-
-    private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            @Suppress("UNCHECKED_CAST")
-            return HistoryViewModel(
-                (activity as AppCompatActivity).application,
-                arguments?.getInt(ARG_CURRENCY_ID, 0) ?: 0
-            ) as T
         }
     }
 }

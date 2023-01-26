@@ -19,17 +19,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ro.edi.util.getColorRes
-import ro.edi.util.setMargins
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentRatesBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
@@ -41,18 +39,12 @@ class RatesFragment : Fragment() {
         fun newInstance() = RatesFragment()
     }
 
-    private lateinit var ratesModel: RatesViewModel
+    private val ratesModel: RatesViewModel by viewModels()
 
     private var _binding: FragmentRatesBinding? = null
 
     // this property is only valid between onCreateView and onDestroyView
     private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        ratesModel = ViewModelProvider(this)[RatesViewModel::class.java]
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

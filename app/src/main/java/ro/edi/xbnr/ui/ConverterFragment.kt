@@ -1,5 +1,5 @@
 /*
-* Copyright 2019-2021 Eduard Scarlat
+* Copyright 2019-2023 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -19,10 +19,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import ro.edi.util.onAfterTextChanged
 import ro.edi.xbnr.databinding.FragmentConverterBinding
 import ro.edi.xbnr.ui.viewmodel.ConverterViewModel
@@ -48,24 +46,22 @@ class ConverterFragment : Fragment() {
             }
     }
 
-    private lateinit var converterModel: ConverterViewModel
+    private val converterModel: ConverterViewModel by viewModels { ConverterViewModel.FACTORY }
 
     private var _binding: FragmentConverterBinding? = null
 
     // this property is only valid between onCreateView and onDestroyView
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        converterModel = ViewModelProvider(this, factory)[ConverterViewModel::class.java]
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        converterModel.fromCurrencyId = arguments?.getInt(ARG_FROM_CURRENCY_ID, 0) ?: 0
+        converterModel.toCurrencyId = arguments?.getInt(ARG_TO_CURRENCY_ID, 0) ?: 0
+        converterModel.date = arguments?.getString(ARG_DATE)
+
         _binding = FragmentConverterBinding.inflate(inflater, container, false)
 
         binding.apply {
@@ -184,17 +180,5 @@ class ConverterFragment : Fragment() {
         _binding = null
 
         super.onDestroyView()
-    }
-
-    private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            @Suppress("UNCHECKED_CAST")
-            return ConverterViewModel(
-                (activity as AppCompatActivity).application,
-                arguments?.getInt(ARG_FROM_CURRENCY_ID, 0) ?: 0,
-                arguments?.getInt(ARG_TO_CURRENCY_ID, 0) ?: 0,
-                arguments?.getString(ARG_DATE)
-            ) as T
-        }
     }
 }

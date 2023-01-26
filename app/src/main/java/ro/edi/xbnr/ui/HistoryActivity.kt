@@ -1,5 +1,5 @@
 /*
-* Copyright 2019-2021 Eduard Scarlat
+* Copyright 2019-2023 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -19,10 +19,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.ActivityHistoryBinding
 import ro.edi.xbnr.ui.viewmodel.CurrencyViewModel
@@ -35,12 +34,14 @@ class HistoryActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityHistoryBinding
 
-    private val currencyModel: CurrencyViewModel by lazy(LazyThreadSafetyMode.NONE) {
-        ViewModelProvider(this, factory)[CurrencyViewModel::class.java]
-    }
+    private val currencyModel: CurrencyViewModel by viewModels { CurrencyViewModel.FACTORY }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val currencyId = intent.getIntExtra(EXTRA_CURRENCY_ID, 0)
+
+        currencyModel.currencyId = currencyId
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_history)
 
@@ -55,14 +56,14 @@ class HistoryActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(
                     R.id.container,
-                    HistoryFragment.newInstance(intent.getIntExtra(EXTRA_CURRENCY_ID, 0))
+                    HistoryFragment.newInstance(currencyId)
                 )
                 .commitNow()
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
         return true
     }
 
@@ -105,16 +106,6 @@ class HistoryActivity : AppCompatActivity() {
                 i.putExtra(ConverterActivity.EXTRA_CURRENCY_DATE, currency.date)
                 startActivity(i)
             }
-        }
-    }
-
-    private val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            @Suppress("UNCHECKED_CAST")
-            return CurrencyViewModel(
-                application,
-                intent.getIntExtra(EXTRA_CURRENCY_ID, 0)
-            ) as T
         }
     }
 }

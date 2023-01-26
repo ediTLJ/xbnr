@@ -74,9 +74,11 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
     // AndroidX
+    implementation 'androidx.activity:activity-ktx:1.6.1'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     // implementation 'androidx.appcompat:appcompat-resources:1.6.0'
     implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.fragment:fragment-ktx:1.5.5'
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -86,6 +88,7 @@ dependencies {
     // Architecture Components: LiveData, ViewModel...
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1'
     // kapt 'androidx.lifecycle:lifecycle-compiler:2.5.1'
     // implementation 'androidx.lifecycle:lifecycle-common-java8:2.5.1'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
@@ -97,7 +100,7 @@ dependencies {
     testImplementation 'androidx.room:room-testing:2.5.0'
 
     // Material Design
-    implementation 'com.google.android.material:material:1.8.0-rc01'
+    implementation 'com.google.android.material:material:1.8.0'
 
     // OkHttp
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.10'

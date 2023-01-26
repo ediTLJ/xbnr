@@ -119,7 +119,7 @@
                 android:lines="1"
                 android:paddingStart="6dp"
                 android:paddingBottom="0.5dp"
-                android:text="@{model.getDisplayRate(context)}"
+                android:text="@{model.getDisplayRate()}"
                 android:textAppearance="@style/App.TextAppearance.Subtitle.Symbol"
                 android:textColor="?android:textColorSecondary"
                 tools:ignore="RtlSymmetry"

@@ -1,5 +1,5 @@
 /*
-* Copyright 2019 Eduard Scarlat
+* Copyright 2019-2023 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,28 +16,33 @@
 package ro.edi.xbnr.ui.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.*
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import ro.edi.xbnr.R
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.ui.util.Helper
 
-class CurrencyViewModel(application: Application) : AndroidViewModel(application) {
-    private var currencyId = 0
+class CurrencyViewModel(
+    private val application: Application,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    var currencyId: Int
+        get() = savedStateHandle[CURRENCY_ID] ?: 0
+        set(id) {
+            savedStateHandle[CURRENCY_ID] = id
+        }
 
     val currency: LiveData<Currency> by lazy(LazyThreadSafetyMode.NONE) {
-        DataManager.getInstance(getApplication()).getCurrency(currencyId)
-    }
-
-    constructor(application: Application, currencyId: Int) : this(application) {
-        this.currencyId = currencyId
+        DataManager.getInstance(application).getCurrency(currencyId)
     }
 
     fun getCurrencyDisplayCode(): String? {
         return currency.value?.let {
             if (it.multiplier > 1) {
-                (getApplication() as Application).resources.getQuantityString(
+                application.resources.getQuantityString(
                     R.plurals.currency_multiplier,
                     it.multiplier,
                     it.multiplier,
@@ -57,7 +62,26 @@ class CurrencyViewModel(application: Application) : AndroidViewModel(application
 
     fun setIsStarred(isStarred: Boolean) {
         currency.value?.let {
-            DataManager.getInstance(getApplication()).update(it, isStarred)
+            DataManager.getInstance(application).update(it, isStarred)
+        }
+    }
+
+    companion object {
+        private const val CURRENCY_ID = "currency-id"
+
+        val FACTORY = viewModelFactory {
+            // the return type of the lambda automatically sets what class this lambda handles
+            initializer {
+                // get the Application object from extras provided to the lambda
+                val application = checkNotNull(this[APPLICATION_KEY])
+
+                val savedStateHandle = createSavedStateHandle()
+
+                CurrencyViewModel(
+                    application = application,
+                    savedStateHandle = savedStateHandle
+                )
+            }
         }
     }
 }

@@ -33,6 +33,7 @@ import java.time.format.FormatStyle
 
 class RatesViewModel(application: Application) : AndroidViewModel(application) {
     val isFetching = DataManager.getInstance(getApplication()).isFetching as LiveData<Boolean>
+
     val previousRates: LiveData<List<Rate>> =
         DataManager.getInstance(getApplication()).getPreviousRates()
 
@@ -40,12 +41,10 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         DataManager.getInstance(getApplication()).getRates()
     }
 
-    private val nf = NumberFormat.getNumberInstance()
-
-    init {
-        nf.roundingMode = RoundingMode.HALF_UP
-        nf.minimumFractionDigits = 4
-        nf.maximumFractionDigits = 4
+    private val nf = NumberFormat.getNumberInstance().apply {
+        roundingMode = RoundingMode.HALF_UP
+        minimumFractionDigits = 4
+        maximumFractionDigits = 4
     }
 
     fun refresh() {

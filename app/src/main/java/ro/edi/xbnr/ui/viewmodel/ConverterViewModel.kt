@@ -1,5 +1,5 @@
 /*
-* Copyright 2019 Eduard Scarlat
+* Copyright 2019-2023 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 package ro.edi.xbnr.ui.viewmodel
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.*
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import ro.edi.xbnr.data.DataManager
 import ro.edi.xbnr.model.Currency
 import ro.edi.xbnr.model.CurrencyMinimal
@@ -29,27 +30,50 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import timber.log.Timber.Forest.i as logi
 
-class ConverterViewModel(application: Application) : AndroidViewModel(application) {
-    private val fromCurrencyId = MutableLiveData<Int>()
-    private val toCurrencyId = MutableLiveData<Int>()
-    private var date = MutableLiveData<String>()
+class ConverterViewModel(
+    private val application: Application,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    var fromCurrencyId: Int
+        get() = savedStateHandle[FROM_CURRENCY_ID] ?: 0
+        set(id) {
+            savedStateHandle[FROM_CURRENCY_ID] = id
+        }
+
+    var toCurrencyId: Int
+        get() = savedStateHandle[TO_CURRENCY_ID] ?: 0
+        set(id) {
+            savedStateHandle[TO_CURRENCY_ID] = id
+        }
+
+    var date: String?
+        get() = savedStateHandle[DATE]
+        set(date) {
+            savedStateHandle[DATE] = date
+        }
 
     val currencies: LiveData<List<CurrencyMinimal>> by lazy(LazyThreadSafetyMode.NONE) {
         DataManager.getInstance(application).getCurrencies()
     }
 
     val fromCurrency: LiveData<Currency> by lazy(LazyThreadSafetyMode.NONE) {
-        Transformations.switchMap(RateLiveData(fromCurrencyId, date)) {
+        RateLiveData(
+            savedStateHandle.getLiveData<Int>(FROM_CURRENCY_ID),
+            savedStateHandle.getLiveData<String>(DATE)
+        ).switchMap { rate ->
             logi("from switchMap")
-            if (it.currencyId == null || it.currencyId == 0) {
+            if (rate.currencyId == null || rate.currencyId == 0) {
                 return@switchMap MutableLiveData(Currency(0, "RON", 1, false, "", 1.0))
             }
-            DataManager.getInstance(application).getCurrency(it.currencyId, it.date)
+            DataManager.getInstance(application).getCurrency(rate.currencyId, rate.date)
         }
     }
 
     val toCurrency: LiveData<Currency> by lazy(LazyThreadSafetyMode.NONE) {
-        Transformations.switchMap(RateLiveData(toCurrencyId, date)) {
+        RateLiveData(
+            savedStateHandle.getLiveData<Int>(TO_CURRENCY_ID),
+            savedStateHandle.getLiveData<String>(DATE)
+        ).switchMap {
             logi("to switchMap")
             if (it.currencyId == null || it.currencyId == 0) {
                 return@switchMap MutableLiveData(Currency(0, "RON", 1, false, "", 1.0))
@@ -58,31 +82,10 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    private val nf = NumberFormat.getNumberInstance()
-
-    constructor(
-        application: Application,
-        fromCurrencyId: Int,
-        toCurrencyId: Int,
-        date: String?
-    ) : this(application) {
-        this.fromCurrencyId.value = fromCurrencyId
-        this.toCurrencyId.value = toCurrencyId
-        this.date.value = date
-
-        // logi("from id: %s", fromCurrencyId)
-        // logi("to id: %s", toCurrencyId)
-        // logi("date: %s", date)
-
-        nf.roundingMode = RoundingMode.HALF_UP
-        nf.minimumFractionDigits = 4
-        nf.maximumFractionDigits = 4
-    }
-
-    fun updateSource(fromCurrencyId: Int, toCurrencyId: Int, date: String?) {
-        this.fromCurrencyId.value = fromCurrencyId
-        this.toCurrencyId.value = toCurrencyId
-        this.date.value = date
+    private val nf = NumberFormat.getNumberInstance().apply {
+        roundingMode = RoundingMode.HALF_UP
+        minimumFractionDigits = 4
+        maximumFractionDigits = 4
     }
 
     fun getFrom(): Currency? {
@@ -121,7 +124,7 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         return rate
     }
 
-    fun getDisplayRate(context: Context): String? {
+    fun getDisplayRate(): StringBuilder? {
         // e.g. €1 = lei4.7599
 
         val from = getFrom()
@@ -130,8 +133,8 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         val to = getTo()
         to ?: return null
 
-        val fromSymbol = context.getText(Helper.getCurrencySymbolRes(from.code))
-        val toSymbol = context.getText(Helper.getCurrencySymbolRes(to.code))
+        val fromSymbol = application.getText(Helper.getCurrencySymbolRes(from.code))
+        val toSymbol = application.getText(Helper.getCurrencySymbolRes(to.code))
 
         val sb = StringBuilder(32)
         sb.append(fromSymbol)
@@ -140,7 +143,7 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         sb.append(toSymbol)
         sb.append(nf.format(from.rate.div(to.rate)))
 
-        return sb.toString()
+        return sb
     }
 
     fun getDisplayDate(): String {
@@ -167,6 +170,27 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
         init {
             addSource(currencyId) { value = RateSource(it, date.value) }
             addSource(date) { value = RateSource(currencyId.value, it) }
+        }
+    }
+
+    companion object {
+        private const val FROM_CURRENCY_ID = "from-currency-id"
+        private const val TO_CURRENCY_ID = "to-currency-id"
+        private const val DATE = "date"
+
+        val FACTORY = viewModelFactory {
+            // the return type of the lambda automatically sets what class this lambda handles
+            initializer {
+                // get the Application object from extras provided to the lambda
+                val application = checkNotNull(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
+
+                val savedStateHandle = createSavedStateHandle()
+
+                ConverterViewModel(
+                    application = application,
+                    savedStateHandle = savedStateHandle
+                )
+            }
         }
     }
 }
