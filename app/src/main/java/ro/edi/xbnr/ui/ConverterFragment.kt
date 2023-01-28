@@ -53,15 +53,21 @@ class ConverterFragment : Fragment() {
     // this property is only valid between onCreateView and onDestroyView
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        converterModel.apply {
+            fromCurrencyId = arguments?.getInt(ARG_FROM_CURRENCY_ID, 0) ?: 0
+            toCurrencyId = arguments?.getInt(ARG_TO_CURRENCY_ID, 0) ?: 0
+            date = arguments?.getString(ARG_DATE)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        converterModel.fromCurrencyId = arguments?.getInt(ARG_FROM_CURRENCY_ID, 0) ?: 0
-        converterModel.toCurrencyId = arguments?.getInt(ARG_TO_CURRENCY_ID, 0) ?: 0
-        converterModel.date = arguments?.getString(ARG_DATE)
-
         _binding = FragmentConverterBinding.inflate(inflater, container, false)
 
         binding.apply {

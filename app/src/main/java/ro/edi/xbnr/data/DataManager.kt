@@ -58,10 +58,20 @@ class DataManager private constructor(application: Application) {
 
     /**
      * Get latest available rates.
-     *
      * This also triggers a call to get latest data from the server, if needed.
      */
     fun getRates(): LiveData<List<Currency>> {
+        logd("getRates()")
+        fetchRates()
+        return db.rateDao().getRates()
+    }
+
+    /**
+     * Fetch latest available rates.
+     * This makes a call to get latest data from the server, if needed.
+     */
+    fun fetchRates() {
+        logd("fetchRates()")
         AppExecutors.networkIO().execute {
             isFetching.postValue(true)
 
@@ -131,8 +141,6 @@ class DataManager private constructor(application: Application) {
                 }
             }
         }
-
-        return db.rateDao().getRates()
     }
 
     /**
@@ -199,7 +207,7 @@ class DataManager private constructor(application: Application) {
     }
 
     /**
-     * Get all rates for the specified interval.
+     * Fetch all rates for the specified interval.
      *
      * **Don't call this on the main UI thread!**
      *

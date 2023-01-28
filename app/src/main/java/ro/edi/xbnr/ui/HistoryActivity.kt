@@ -40,11 +40,9 @@ class HistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val currencyId = intent.getIntExtra(EXTRA_CURRENCY_ID, 0)
-
         currencyModel.currencyId = currencyId
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_history)
-
         binding.apply {
             lifecycleOwner = this@HistoryActivity
             model = currencyModel

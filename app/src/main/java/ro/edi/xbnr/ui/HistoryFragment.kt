@@ -68,13 +68,17 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
     // this property is only valid between onCreateView and onDestroyView
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        historyModel.currencyId = arguments?.getInt(ARG_CURRENCY_ID, 0) ?: 0
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        historyModel.currencyId = arguments?.getInt(ARG_CURRENCY_ID, 0) ?: 0
-
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
         binding.apply {
@@ -455,94 +459,102 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
         (activity as HistoryActivity).run {
             when (val rate = entry?.data) {
                 is DayRate -> {
-                    binding.currencyDate.visibility = View.VISIBLE
-                    binding.currencyDate.text =
-                        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            historyModel.getDisplayDate(rate.date).replaceFirst(' ', '\n')
+                    binding.apply {
+                        currencyDate.visibility = View.VISIBLE
+                        currencyDate.text =
+                            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                historyModel.getDisplayDate(rate.date).replaceFirst(' ', '\n')
+                            } else {
+                                historyModel.getDisplayDate(rate.date)
+                            }
+
+                        currencyRonMax.visibility = View.GONE
+                        currencyRateMax.visibility = View.GONE
+                        currencyRonMin.visibility = View.GONE
+                        currencyRateMin.visibility = View.GONE
+
+                        currencyRon.visibility = View.VISIBLE
+                        currencyRate.visibility = View.VISIBLE
+                        currencyRate.text = historyModel.getDisplayRate(rate.rate)
+
+                        val trend = historyModel.getDisplayTrend(rate)
+                        if (trend.isEmpty()) {
+                            currencyTrend.visibility = View.GONE
                         } else {
-                            historyModel.getDisplayDate(rate.date)
-                        }
-
-                    binding.currencyRonMax.visibility = View.GONE
-                    binding.currencyRateMax.visibility = View.GONE
-                    binding.currencyRonMin.visibility = View.GONE
-                    binding.currencyRateMin.visibility = View.GONE
-
-                    binding.currencyRon.visibility = View.VISIBLE
-                    binding.currencyRate.visibility = View.VISIBLE
-                    binding.currencyRate.text = historyModel.getDisplayRate(rate.rate)
-
-                    val trend = historyModel.getDisplayTrend(rate)
-                    if (trend.isEmpty()) {
-                        binding.currencyTrend.visibility = View.GONE
-                    } else {
-                        binding.currencyTrend.visibility = View.VISIBLE
-                        binding.currencyTrend.text = trend
-                        when {
-                            trend.startsWith('+') -> {
-                                val textColorTrendUp = getColor(R.color.textColorTrendUp)
-                                binding.currencyTrend.setTextColor(textColorTrendUp)
-                            }
-                            trend.startsWith('-') -> {
-                                val textColorTrendDown = getColor(R.color.textColorTrendDown)
-                                binding.currencyTrend.setTextColor(textColorTrendDown)
-                            }
-                            else -> {
-                                val textColorPrimary =
-                                    getColor(getColorRes(this, android.R.attr.textColorPrimary))
-                                binding.currencyTrend.setTextColor(textColorPrimary)
+                            currencyTrend.visibility = View.VISIBLE
+                            currencyTrend.text = trend
+                            when {
+                                trend.startsWith('+') -> {
+                                    val textColorTrendUp = getColor(R.color.textColorTrendUp)
+                                    currencyTrend.setTextColor(textColorTrendUp)
+                                }
+                                trend.startsWith('-') -> {
+                                    val textColorTrendDown = getColor(R.color.textColorTrendDown)
+                                    currencyTrend.setTextColor(textColorTrendDown)
+                                }
+                                else -> {
+                                    val textColorPrimary =
+                                        getColor(getColorRes(this@run, android.R.attr.textColorPrimary))
+                                    currencyTrend.setTextColor(textColorPrimary)
+                                }
                             }
                         }
                     }
                 }
                 is MonthRate -> {
-                    binding.currencyDate.visibility = View.VISIBLE
-                    binding.currencyDate.text =
-                        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            historyModel.getDisplayMonth(rate.month).replaceFirst(' ', '\n')
-                        } else {
-                            historyModel.getDisplayMonth(rate.month)
-                        }
+                    binding.apply {
+                        currencyDate.visibility = View.VISIBLE
+                        currencyDate.text =
+                            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                historyModel.getDisplayMonth(rate.month).replaceFirst(' ', '\n')
+                            } else {
+                                historyModel.getDisplayMonth(rate.month)
+                            }
 
-                    binding.currencyRon.visibility = View.GONE
-                    binding.currencyRate.visibility = View.GONE
-                    binding.currencyTrend.visibility = View.GONE
+                        currencyRon.visibility = View.GONE
+                        currencyRate.visibility = View.GONE
+                        currencyTrend.visibility = View.GONE
 
-                    binding.currencyRonMax.visibility = View.VISIBLE
-                    binding.currencyRateMax.visibility = View.VISIBLE
-                    binding.currencyRonMin.visibility = View.VISIBLE
-                    binding.currencyRateMin.visibility = View.VISIBLE
+                        currencyRonMax.visibility = View.VISIBLE
+                        currencyRateMax.visibility = View.VISIBLE
+                        currencyRonMin.visibility = View.VISIBLE
+                        currencyRateMin.visibility = View.VISIBLE
 
-                    binding.currencyRateMax.text = historyModel.getDisplayRate(rate.max)
-                    binding.currencyRateMin.text = historyModel.getDisplayRate(rate.min)
+                        currencyRateMax.text = historyModel.getDisplayRate(rate.max)
+                        currencyRateMin.text = historyModel.getDisplayRate(rate.min)
+                    }
                 }
                 is YearRate -> {
-                    binding.currencyDate.visibility = View.VISIBLE
-                    binding.currencyDate.text = rate.year
+                    binding.apply {
+                        currencyDate.visibility = View.VISIBLE
+                        currencyDate.text = rate.year
 
-                    binding.currencyRon.visibility = View.GONE
-                    binding.currencyRate.visibility = View.GONE
-                    binding.currencyTrend.visibility = View.GONE
+                        currencyRon.visibility = View.GONE
+                        currencyRate.visibility = View.GONE
+                        currencyTrend.visibility = View.GONE
 
-                    binding.currencyRonMax.visibility = View.VISIBLE
-                    binding.currencyRateMax.visibility = View.VISIBLE
-                    binding.currencyRonMin.visibility = View.VISIBLE
-                    binding.currencyRateMin.visibility = View.VISIBLE
+                        currencyRonMax.visibility = View.VISIBLE
+                        currencyRateMax.visibility = View.VISIBLE
+                        currencyRonMin.visibility = View.VISIBLE
+                        currencyRateMin.visibility = View.VISIBLE
 
-                    binding.currencyRateMax.text = historyModel.getDisplayRate(rate.max)
-                    binding.currencyRateMin.text = historyModel.getDisplayRate(rate.min)
+                        currencyRateMax.text = historyModel.getDisplayRate(rate.max)
+                        currencyRateMin.text = historyModel.getDisplayRate(rate.min)
+                    }
                 }
                 else -> {
-                    binding.currencyDate.visibility = View.INVISIBLE
+                    binding.apply {
+                        currencyDate.visibility = View.INVISIBLE
 
-                    binding.currencyRon.visibility = View.GONE
-                    binding.currencyRate.visibility = View.GONE
-                    binding.currencyTrend.visibility = View.GONE
+                        currencyRon.visibility = View.GONE
+                        currencyRate.visibility = View.GONE
+                        currencyTrend.visibility = View.GONE
 
-                    binding.currencyRonMax.visibility = View.GONE
-                    binding.currencyRateMax.visibility = View.GONE
-                    binding.currencyRonMin.visibility = View.GONE
-                    binding.currencyRateMin.visibility = View.GONE
+                        currencyRonMax.visibility = View.GONE
+                        currencyRateMax.visibility = View.GONE
+                        currencyRonMin.visibility = View.GONE
+                        currencyRateMin.visibility = View.GONE
+                    }
                 }
             }
         }

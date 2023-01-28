@@ -48,7 +48,7 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun refresh() {
-        DataManager.getInstance(getApplication()).getRates()
+        DataManager.getInstance(getApplication()).fetchRates()
     }
 
     fun getCurrency(position: Int): Currency? {

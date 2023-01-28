@@ -35,21 +35,21 @@ class ConverterViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     var fromCurrencyId: Int
-        get() = savedStateHandle[FROM_CURRENCY_ID] ?: 0
+        get() = savedStateHandle[KEY_FROM_CURRENCY_ID] ?: 0
         set(id) {
-            savedStateHandle[FROM_CURRENCY_ID] = id
+            savedStateHandle[KEY_FROM_CURRENCY_ID] = id
         }
 
     var toCurrencyId: Int
-        get() = savedStateHandle[TO_CURRENCY_ID] ?: 0
+        get() = savedStateHandle[KEY_TO_CURRENCY_ID] ?: 0
         set(id) {
-            savedStateHandle[TO_CURRENCY_ID] = id
+            savedStateHandle[KEY_TO_CURRENCY_ID] = id
         }
 
     var date: String?
-        get() = savedStateHandle[DATE]
+        get() = savedStateHandle[KEY_DATE]
         set(date) {
-            savedStateHandle[DATE] = date
+            savedStateHandle[KEY_DATE] = date
         }
 
     val currencies: LiveData<List<CurrencyMinimal>> by lazy(LazyThreadSafetyMode.NONE) {
@@ -58,8 +58,8 @@ class ConverterViewModel(
 
     val fromCurrency: LiveData<Currency> by lazy(LazyThreadSafetyMode.NONE) {
         RateLiveData(
-            savedStateHandle.getLiveData<Int>(FROM_CURRENCY_ID),
-            savedStateHandle.getLiveData<String>(DATE)
+            savedStateHandle.getLiveData<Int>(KEY_FROM_CURRENCY_ID),
+            savedStateHandle.getLiveData<String>(KEY_DATE)
         ).switchMap { rate ->
             logi("from switchMap")
             if (rate.currencyId == null || rate.currencyId == 0) {
@@ -71,8 +71,8 @@ class ConverterViewModel(
 
     val toCurrency: LiveData<Currency> by lazy(LazyThreadSafetyMode.NONE) {
         RateLiveData(
-            savedStateHandle.getLiveData<Int>(TO_CURRENCY_ID),
-            savedStateHandle.getLiveData<String>(DATE)
+            savedStateHandle.getLiveData<Int>(KEY_TO_CURRENCY_ID),
+            savedStateHandle.getLiveData<String>(KEY_DATE)
         ).switchMap {
             logi("to switchMap")
             if (it.currencyId == null || it.currencyId == 0) {
@@ -174,9 +174,9 @@ class ConverterViewModel(
     }
 
     companion object {
-        private const val FROM_CURRENCY_ID = "from-currency-id"
-        private const val TO_CURRENCY_ID = "to-currency-id"
-        private const val DATE = "date"
+        private const val KEY_FROM_CURRENCY_ID = "from-currency-id"
+        private const val KEY_TO_CURRENCY_ID = "to-currency-id"
+        private const val KEY_DATE = "date"
 
         val FACTORY = viewModelFactory {
             // the return type of the lambda automatically sets what class this lambda handles

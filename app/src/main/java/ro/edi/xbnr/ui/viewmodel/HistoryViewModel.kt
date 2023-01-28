@@ -42,9 +42,9 @@ class HistoryViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     var currencyId: Int
-        get() = savedStateHandle[CURRENCY_ID] ?: 0
+        get() = savedStateHandle[KEY_CURRENCY_ID] ?: 0
         set(id) {
-            savedStateHandle[CURRENCY_ID] = id
+            savedStateHandle[KEY_CURRENCY_ID] = id
         }
 
     private val sharedPrefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
@@ -155,7 +155,7 @@ class HistoryViewModel(
     }
 
     companion object {
-        private const val CURRENCY_ID = "currency-id"
+        private const val KEY_CURRENCY_ID = "currency-id"
 
         const val PREFS_KEY_CHART_INTERVAL = "chart_interval"
 
