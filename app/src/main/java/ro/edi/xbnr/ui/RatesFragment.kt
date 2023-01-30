@@ -32,6 +32,10 @@ import ro.edi.xbnr.R
 import ro.edi.xbnr.databinding.FragmentRatesBinding
 import ro.edi.xbnr.ui.adapter.RatesAdapter
 import ro.edi.xbnr.ui.viewmodel.RatesViewModel
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
 import timber.log.Timber.Forest.i as logi
 
 class RatesFragment : Fragment() {
@@ -163,11 +167,57 @@ class RatesFragment : Fragment() {
 
                         val txtDate = ratesModel.getCurrencyDisplayDate(0)
 
-                        // FIXME make it green if these are the latest rates?
-                        if (tvDate.text.isNullOrEmpty() || tvDate.text == txtDate) {
-                            tvDate.setTextColor(textColorSecondary)
-                        } else {
-                            tvDate.setTextColor(colorPrimary)
+                        val zoneIdRomania = ZoneId.of("Europe/Bucharest")
+                        val today = LocalDate.now(zoneIdRomania)
+
+                        ratesModel.getCurrencyDate(0)?.let { date ->
+                            // "if" matching the one in DataManager
+                            if (date.isBefore(today.minusDays(10))) {
+                                // logi("rates older than 10 days")
+                                tvDate.setTextColor(textColorSecondary)
+                            } else {
+                                val todayDayOfWeek = today.dayOfWeek
+                                val previousWorkday =
+                                    when (todayDayOfWeek) {
+                                        DayOfWeek.MONDAY -> {
+                                            today.minusDays(3)
+                                        }
+                                        DayOfWeek.SUNDAY -> {
+                                            today.minusDays(2)
+                                        }
+                                        else -> {
+                                            today.minusDays(1)
+                                        }
+                                    }
+
+                                if (date.isBefore(previousWorkday)) {
+                                    // logi("rates older than a day")
+                                    tvDate.setTextColor(textColorSecondary)
+                                } else if (date.isEqual(previousWorkday)) {
+                                    // logi("rates from last workday")
+
+                                    if (todayDayOfWeek == DayOfWeek.SATURDAY || todayDayOfWeek == DayOfWeek.SUNDAY) {
+                                        // no rates published on weekends
+                                        // logi("weekend => we have latest rates")
+                                        tvDate.setTextColor(colorPrimary)
+                                    } else {
+                                        val now = LocalTime.now(zoneIdRomania)
+                                        val hour1pm = LocalTime.of(13, 0)
+
+                                        if (now.isAfter(hour1pm)) {
+                                            // logi("after 1pm => we don't have latest rates yet")
+                                            tvDate.setTextColor(textColorSecondary)
+                                        } else {
+                                            // no rates published before 1pm
+                                            // logi("before 1pm => we have latest rates")
+                                            tvDate.setTextColor(colorPrimary)
+                                        }
+                                    }
+                                } else { // today
+                                    // logi("rates from today")
+                                    tvDate.setTextColor(colorPrimary)
+                                }
+                            }
                         }
 
                         tvDate.text = txtDate

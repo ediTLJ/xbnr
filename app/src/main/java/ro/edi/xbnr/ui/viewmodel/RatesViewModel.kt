@@ -94,9 +94,15 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
         return Helper.getCurrencyNameRes(currency?.code)
     }
 
-    fun getCurrencyDisplayDate(position: Int): String? {
+    fun getCurrencyDate(position: Int): LocalDate? {
         return getCurrency(position)?.let {
-            LocalDate.parse(it.date).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+            LocalDate.parse(it.date)
+        }
+    }
+
+    fun getCurrencyDisplayDate(position: Int): String? {
+        return getCurrencyDate(position)?.let { date ->
+            date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
         }
     }
 
