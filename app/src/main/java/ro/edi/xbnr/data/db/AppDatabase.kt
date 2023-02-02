@@ -1,5 +1,5 @@
 /*
-* Copyright 2019 Eduard Scarlat
+* Copyright 2019-2023 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ const val DB_NAME = "rates.db"
 abstract class AppDatabase : RoomDatabase() {
     companion object : Singleton<AppDatabase, Application>({
         Room.databaseBuilder(it, AppDatabase::class.java, DB_NAME)
-            .createFromAsset("database/rates-v3-2022-05-06.db")
+            .createFromAsset("database/rates-v3-2023-02-02.db")
             .fallbackToDestructiveMigration()
             .build()
     })
