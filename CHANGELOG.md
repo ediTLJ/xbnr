@@ -4,6 +4,10 @@
 
 # Changelog
 
+## v1.8 [Feb 2, 2023]
+* swipe down to get newest currency rates
+* misc fixes & optimizations
+
 ## v1.7 [Oct 14, 2022]
 * misc fixes & optimizations
 
