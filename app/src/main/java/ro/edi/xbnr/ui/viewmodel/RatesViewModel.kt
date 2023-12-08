@@ -101,9 +101,7 @@ class RatesViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getCurrencyDisplayDate(position: Int): String? {
-        return getCurrencyDate(position)?.let { date ->
-            date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
-        }
+        return getCurrencyDate(position)?.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
     }
 
     private fun getTrend(position: Int): Int {

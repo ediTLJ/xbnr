@@ -50,10 +50,6 @@ class DataManager private constructor(application: Application) {
 
     val isFetching = MutableLiveData<Boolean>()
 
-    init {
-        isFetching.value = true
-    }
-
     companion object : Singleton<DataManager, Application>(::DataManager)
 
     /**
@@ -72,9 +68,10 @@ class DataManager private constructor(application: Application) {
      */
     fun fetchRates() {
         logd("fetchRates()")
-        AppExecutors.networkIO().execute {
-            isFetching.postValue(true)
 
+        isFetching.value = true
+
+        AppExecutors.networkIO().execute {
             val latestDbDate = LocalDate.parse(db.rateDao().getLatestDate() ?: "2005-03-01")
                 .also { logi("latest date: %s", it) }
 
