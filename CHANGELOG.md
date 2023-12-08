@@ -4,6 +4,9 @@
 
 # Changelog
 
+## v1.9 [Dec 9, 2023]
+* Android 14 compatibility
+
 ## v1.8 [Feb 2, 2023]
 * swipe down to get newest currency rates
 * misc fixes & optimizations

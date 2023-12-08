@@ -11,8 +11,8 @@ android {
         applicationId 'ro.edi.xbnr'
         minSdkVersion 28 // Android 9
         targetSdkVersion 34 // Android 14
-        versionCode 17
-        versionName '1.8'
+        versionCode 18
+        versionName '1.9'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         javaCompileOptions {
             annotationProcessorOptions {
