@@ -102,7 +102,7 @@ class HistoryFragment : Fragment(), TabLayout.OnTabSelectedListener, OnChartValu
         val textColorTrendDown = view.context.getColor(R.color.textColorTrendDown)
 
         val bkgChart = AppCompatResources.getDrawable(view.context, R.drawable.bkg_chart)
-        val colorPrimary = view.context.getColor(getColorRes(view.context, R.attr.colorPrimary))
+        val colorPrimary = view.context.getColor(getColorRes(view.context, androidx.appcompat.R.attr.colorPrimary))
 
         nf.roundingMode = RoundingMode.HALF_UP
         nf.minimumFractionDigits = 4

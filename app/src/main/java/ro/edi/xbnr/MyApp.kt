@@ -1,5 +1,5 @@
 /*
-* Copyright 2019 Eduard Scarlat
+* Copyright 2019-2023 Eduard Scarlat
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import ro.edi.util.ReleaseTree
 import ro.edi.xbnr.ui.util.Helper
 import timber.log.Timber
 
-@Suppress("unused")
 class MyApp : Application() {
 
     override fun onCreate() {

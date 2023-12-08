@@ -81,7 +81,7 @@ class RatesFragment : Fragment() {
                 )
             }
 
-            setColorSchemeResources(getColorRes(view.context, R.attr.colorPrimaryVariant))
+            setColorSchemeResources(getColorRes(view.context, com.google.android.material.R.attr.colorPrimaryVariant))
             setOnRefreshListener {
                 ratesModel.refresh()
             }
@@ -111,7 +111,7 @@ class RatesFragment : Fragment() {
             }
         }
 
-        val colorPrimary = view.context.getColor(getColorRes(view.context, R.attr.colorPrimary))
+        val colorPrimary = view.context.getColor(getColorRes(view.context, androidx.appcompat.R.attr.colorPrimary))
         val textColorSecondary =
             view.context.getColor(getColorRes(view.context, android.R.attr.textColorSecondary))
 
